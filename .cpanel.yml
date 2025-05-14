@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/robsr2d2/public_html/download-set-times.robsrobots.co.uk
+    - /bin/cp -r * $DEPLOYPATH
