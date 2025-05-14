@@ -89,26 +89,83 @@
 			</div>
 		</div>
 
-		<!-- Day Selector -->
-		<div class="flex gap-2 mb-4 overflow-x-auto">
-			<button
-				onclick="showDay('friday')"
-				class="day-btn bg-gray-700 px-4 py-2 rounded"
-			>
-				Friday
-			</button>
-			<button
-				onclick="showDay('saturday')"
-				class="day-btn bg-gray-700 px-4 py-2 rounded"
-			>
-				Saturday
-			</button>
-			<button
-				onclick="showDay('sunday')"
-				class="day-btn bg-gray-700 px-4 py-2 rounded"
-			>
-				Sunday
-			</button>
+		<div class="mb-8">
+			<!-- Arena Bands Section -->
+			<h2 class="text-xl font-bold mb-3 border-b border-gray-700 pb-2">
+				Arena Bands
+			</h2>
+
+			<!-- Day Selector -->
+			<div class="flex gap-2 mb-4 overflow-x-auto">
+				<button
+					onclick="showDay('friday')"
+					class="day-btn bg-gray-700 px-4 py-2 rounded"
+				>
+					Friday
+				</button>
+				<button
+					onclick="showDay('saturday')"
+					class="day-btn bg-gray-700 px-4 py-2 rounded"
+				>
+					Saturday
+				</button>
+				<button
+					onclick="showDay('sunday')"
+					class="day-btn bg-gray-700 px-4 py-2 rounded"
+				>
+					Sunday
+				</button>
+			</div>
+
+			<!-- Stage Filter -->
+			<div
+				id="stage-buttons"
+				class="flex gap-2 mb-4 overflow-x-auto"
+			></div>
+
+			<!-- Schedule Container -->
+			<div class="overflow-x-auto">
+				<div
+					class="relative"
+					id="schedule"
+					style="min-width: 800px"
+				></div>
+			</div>
+		</div>
+
+		<!-- District X Bands Section -->
+		<div class="mt-12">
+			<h2 class="text-xl font-bold mb-3 border-b border-gray-700 pb-2">
+				District X Bands
+			</h2>
+
+			<!-- Day Selector -->
+			<div class="flex gap-2 mb-4 overflow-x-auto">
+				<button class="day-btn bg-gray-700 px-4 py-2 rounded">
+					Wednesday
+				</button>
+				<button class="day-btn bg-gray-700 px-4 py-2 rounded">
+					Thursday
+				</button>
+				<button class="day-btn bg-gray-700 px-4 py-2 rounded">
+					Friday
+				</button>
+				<button class="day-btn bg-gray-700 px-4 py-2 rounded">
+					Saturday
+				</button>
+				<button class="day-btn bg-gray-700 px-4 py-2 rounded">
+					Sunday
+				</button>
+			</div>
+
+			<!-- Coming Soon Notice -->
+			<div class="bg-gray-800 rounded-lg p-8 text-center">
+				<p class="text-xl font-bold text-cyan-500 mb-2">Coming Soon!</p>
+				<p class="text-gray-300">
+					District X lineup and scheduling information will be coming
+					shortly.
+				</p>
+			</div>
 		</div>
 
 		<!-- Stage Filter -->
