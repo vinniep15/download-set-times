@@ -1,0 +1,124 @@
+.time-slot {
+    min-width: 60px;
+}
+
+.set-block {
+    position: absolute;
+    height: 40px;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background-color: #06b6d4;
+    color: black;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.active-btn {
+    background-color: #06b6d4;
+    color: black;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5), 0 0 0 1px #06b6d4;
+    transform: scale(1.05);
+    font-weight: bold;
+    position: relative;
+    z-index: 5;
+}
+
+/* New styles for better alignment */
+.stage-row {
+    height: 60px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+/* ...existing code... */
+
+.stage-name {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    left: 0;
+    z-index: 20;
+    background-color: black; /* Match your background */
+    border-right: 1px solid #4b5563; /* Match your existing border */
+    width: 160px; /* Match your current width */
+}
+
+/* Ensure the time header corner stays above everything */
+.time-header .w-40 {
+    position: sticky;
+    left: 0;
+    z-index: 30;
+    background-color: black;
+}
+
+/* Artist Modal Styles */
+#favorites-modal {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.conflict-block {
+    background-color: #dc2626 !important; /* Red */
+}
+
+.favorite-block {
+    border: 2px solid white;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Make checkboxes more visible */
+.artist-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: #06b6d4;
+}
+
+.day-tab {
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.active-tab {
+    border-bottom: 2px solid #06b6d4;
+    color: white;
+    font-weight: bold;
+}
+
+.heart-icon {
+    cursor: pointer;
+    transition: transform 0.1s;
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.heart-icon:hover {
+    transform: scale(1.2);
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

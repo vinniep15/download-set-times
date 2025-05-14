@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Download Set Times</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="stylesheet" href="styles.css" />
+		<script src="script.js"></script>
+	</head>
+	<body class="bg-black text-white p-4">
+		<h1 class="text-2xl font-bold mb-4">Download Festival - Set Times</h1>
+
+		<!-- Favorites Button -->
+		<div class="fixed top-4 right-4 z-30">
+			<button
+				id="open-favorites"
+				class="bg-cyan-600 px-3 py-2 rounded flex items-center"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="16"
+					height="16"
+					fill="currentColor"
+					class="mr-2"
+					viewBox="0 0 16 16"
+				>
+					<path
+						d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+					/>
+				</svg>
+				My Artists
+			</button>
+		</div>
+
+		<!-- Artist Favorites Modal -->
+		<div
+			id="favorites-modal"
+			class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-40 hidden"
+		>
+			<div
+				class="bg-gray-800 p-6 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+			>
+				<div class="flex justify-between items-center mb-4">
+					<h2 class="text-xl font-bold">
+						Select Your Favorite Artists
+					</h2>
+					<button
+						id="close-favorites"
+						class="text-gray-400 hover:text-white"
+					>
+						&times;
+					</button>
+				</div>
+
+				<!-- Day Tabs -->
+				<div class="mb-4">
+					<div class="flex border-b border-gray-600">
+						<button
+							class="day-tab py-2 px-4 active-tab"
+							data-day="friday"
+						>
+							Friday
+						</button>
+						<button class="day-tab py-2 px-4" data-day="saturday">
+							Saturday
+						</button>
+						<button class="day-tab py-2 px-4" data-day="sunday">
+							Sunday
+						</button>
+					</div>
+				</div>
+
+				<!-- Tab Content -->
+				<div class="space-y-4">
+					<div id="friday-artists" class="day-content"></div>
+					<div id="saturday-artists" class="day-content hidden"></div>
+					<div id="sunday-artists" class="day-content hidden"></div>
+				</div>
+
+				<div class="mt-6 flex justify-between">
+					<button
+						id="save-favorites"
+						class="bg-cyan-600 px-4 py-2 rounded"
+					>
+						Save Selections
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Day Selector -->
+		<div class="flex gap-2 mb-4 overflow-x-auto">
+			<button
+				onclick="showDay('friday')"
+				class="day-btn bg-gray-700 px-4 py-2 rounded"
+			>
+				Friday
+			</button>
+			<button
+				onclick="showDay('saturday')"
+				class="day-btn bg-gray-700 px-4 py-2 rounded"
+			>
+				Saturday
+			</button>
+			<button
+				onclick="showDay('sunday')"
+				class="day-btn bg-gray-700 px-4 py-2 rounded"
+			>
+				Sunday
+			</button>
+		</div>
+
+		<!-- Stage Filter -->
+		<div id="stage-buttons" class="flex gap-2 mb-4 overflow-x-auto"></div>
+
+		<!-- Schedule Container -->
+		<div class="overflow-x-auto">
+			<div class="relative" id="schedule" style="min-width: 800px"></div>
+		</div>
+	</body>
+</html>
