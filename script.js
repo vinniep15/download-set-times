@@ -24,13 +24,17 @@ const FAVORITES_KEY = "downloadFestivalFavorites";
 const VISITED_KEY = "downloadFestivalVisited";
 let eventModal = null;
 
-function showEventDetails(event, set, stage, day, venue) {
+function showEventDetails(event, set, stage, day, venue, isMobile) {
 	// Remove any existing modal
 	hideEventDetails();
 
 	// Create modal element
 	eventModal = document.createElement("div");
 	eventModal.className = "event-details-modal";
+
+	if (isMobile) {
+		eventModal.classList.add("mobile");
+	}
 
 	// Calculate position based on the block's position
 	const block = event.currentTarget;
@@ -40,6 +44,11 @@ function showEventDetails(event, set, stage, day, venue) {
 
 	// Find conflicts for this event
 	const conflicts = findConflictsForSet(set, stage, day, venue);
+
+	// Create content (include close button for mobile)
+	let closeButton = isMobile
+		? `<button class="modal-close-btn">×</button>`
+		: "";
 
 	// Create conflict HTML if any
 	let conflictHtml = "";
@@ -75,6 +84,7 @@ function showEventDetails(event, set, stage, day, venue) {
 
 	// Create content
 	eventModal.innerHTML = `
+        ${closeButton}
         <div class="arrow"></div>
         <h3>${set.artist}</h3>
         <p><span class="time">${formatTimeDisplay(
@@ -89,43 +99,59 @@ function showEventDetails(event, set, stage, day, venue) {
         ${conflictHtml}
     `;
 
-	// Rest of the positioning code...
 	document.body.appendChild(eventModal);
 
-	// Position it relative to the block
-	const modalRect = eventModal.getBoundingClientRect();
-	let top = rect.top + scrollTop - modalRect.height - 15;
-	let arrowClass = "arrow-bottom";
-	if (top < scrollTop + 10) {
-		top = rect.bottom + scrollTop + 15;
-		arrowClass = "arrow-top";
-	}
-	let left = rect.left + scrollLeft + rect.width / 2 - modalRect.width / 2;
-	if (left < scrollLeft + 10) {
-		left = scrollLeft + 10;
-	} else if (left + modalRect.width > scrollLeft + window.innerWidth - 10) {
-		left = scrollLeft + window.innerWidth - modalRect.width - 10;
-	}
-	eventModal.style.top = `${top}px`;
-	eventModal.style.left = `${left}px`;
-	eventModal.classList.add(arrowClass);
-}
+	// Position it - different for mobile vs desktop
+	if (isMobile) {
+		// Center on screen for mobile
+		eventModal.style.left = "50%";
+		eventModal.style.top = "50%";
+		eventModal.style.transform = "translate(-50%, -50%)";
+		eventModal.style.maxWidth = "90%";
+		eventModal.style.width = "320px";
 
-// Add this new function to find conflicts for a specific set
-// Update the findConflictsForSet function with more robust cross-venue checking
+		// Add backdrop
+		const backdrop = document.createElement("div");
+		backdrop.className = "modal-backdrop";
+		document.body.appendChild(backdrop);
+
+		// Add close button event handler
+		const closeBtn = eventModal.querySelector(".modal-close-btn");
+		if (closeBtn) {
+			closeBtn.addEventListener("click", (e) => {
+				e.stopPropagation();
+				hideEventDetails();
+			});
+		}
+	} else {
+		// Desktop positioning (unchanged)
+		const modalRect = eventModal.getBoundingClientRect();
+		let top = rect.top + scrollTop - modalRect.height - 15;
+		let arrowClass = "arrow-bottom";
+		if (top < scrollTop + 10) {
+			top = rect.bottom + scrollTop + 15;
+			arrowClass = "arrow-top";
+		}
+		let left =
+			rect.left + scrollLeft + rect.width / 2 - modalRect.width / 2;
+		if (left < scrollLeft + 10) {
+			left = scrollLeft + 10;
+		} else if (
+			left + modalRect.width >
+			scrollLeft + window.innerWidth - 10
+		) {
+			left = scrollLeft + window.innerWidth - modalRect.width - 10;
+		}
+		eventModal.style.top = `${top}px`;
+		eventModal.style.left = `${left}px`;
+		eventModal.classList.add(arrowClass);
+	}
+}
 
 function findConflictsForSet(set, stage, day, venue) {
 	const conflicts = [];
 	const startMin = timeToMinutes(set.start);
 	const endMin = timeToMinutes(set.end);
-
-	// For debugging purposes
-	console.log(
-		`Checking conflicts for ${set.artist} at ${stage} on ${day} (${venue})`
-	);
-	console.log(
-		`Time range: ${set.start}-${set.end} (${startMin}-${endMin} minutes)`
-	);
 
 	// Check for conflicts in same venue (different stages)
 	if (data[venue] && data[venue][day]) {
@@ -148,9 +174,6 @@ function findConflictsForSet(set, stage, day, venue) {
 							end: otherSet.end,
 							venue: venue === "arena" ? "Arena" : "District X",
 						});
-						console.log(
-							`Found conflict with ${otherSet.artist} (same venue)`
-						);
 					}
 				});
 			}
@@ -162,8 +185,6 @@ function findConflictsForSet(set, stage, day, venue) {
 
 	// Always check the other venue for the same day
 	if (data[otherVenue] && data[otherVenue][day]) {
-		console.log(`Checking ${otherVenue} for conflicts on ${day}`);
-
 		Object.keys(data[otherVenue][day]).forEach((otherStage) => {
 			if (Array.isArray(data[otherVenue][day][otherStage])) {
 				data[otherVenue][day][otherStage].forEach((otherSet) => {
@@ -172,10 +193,6 @@ function findConflictsForSet(set, stage, day, venue) {
 
 					const otherStart = timeToMinutes(otherSet.start);
 					const otherEnd = timeToMinutes(otherSet.end);
-
-					console.log(
-						`Comparing: ${set.artist} (${startMin}-${endMin}) vs ${otherSet.artist} (${otherStart}-${otherEnd})`
-					);
 
 					if (startMin < otherEnd && endMin > otherStart) {
 						conflicts.push({
@@ -186,9 +203,6 @@ function findConflictsForSet(set, stage, day, venue) {
 							venue:
 								otherVenue === "arena" ? "Arena" : "District X",
 						});
-						console.log(
-							`Found cross-venue conflict with ${otherSet.artist}`
-						);
 					}
 				});
 			}
@@ -196,65 +210,90 @@ function findConflictsForSet(set, stage, day, venue) {
 	} else {
 		console.log(`No ${otherVenue} data available for ${day}`);
 	}
-
-	console.log(`Total conflicts found: ${conflicts.length}`);
 	return conflicts;
 }
 
 function hideEventDetails() {
-	// Only hide if modal exists and mouse isn't over it
-	const modal = eventModal;
-	if (modal) {
-		// Check if we should actually hide it
-		const isHoveringModal = document.querySelector(
-			".event-details-modal:hover"
-		);
-		if (!isHoveringModal) {
-			modal.remove();
-			eventModal = null;
-		}
+	// Remove any backdrop
+	const backdrop = document.querySelector(".modal-backdrop");
+	if (backdrop) {
+		backdrop.remove();
+	}
+
+	// Remove modal
+	if (eventModal) {
+		eventModal.remove();
+		eventModal = null;
 	}
 }
 
 // Add this to your block creation code for both arena and district X blocks
 function setupBlockHoverEvents(block, set, stage, day, venue) {
-	// Track if we're currently hovering the modal or block
-	let isHoveringBlock = false;
-	let isHoveringModal = false;
+	// Detect if device is touch-capable
+	const isTouchDevice =
+		"ontouchstart" in window || navigator.maxTouchPoints > 0;
 
-	block.addEventListener("mouseenter", (event) => {
-		isHoveringBlock = true;
-		showEventDetails(event, set, stage, day, venue);
+	// Track if a tooltip is currently shown
+	let tooltipActive = false;
 
-		// Add mouse enter/leave handlers to the modal
-		if (eventModal) {
-			eventModal.addEventListener("mouseenter", () => {
-				isHoveringModal = true;
-			});
+	if (isTouchDevice) {
+		// Mobile device behavior - use click/tap events
+		block.addEventListener("click", (event) => {
+			event.stopPropagation(); // Prevent document click from firing
 
-			eventModal.addEventListener("mouseleave", () => {
-				isHoveringModal = false;
-				// Only hide if we're not hovering the block either
-				if (!isHoveringBlock) {
+			if (tooltipActive) {
+				hideEventDetails();
+				tooltipActive = false;
+				return;
+			}
+
+			showEventDetails(event, set, stage, day, venue, true);
+			tooltipActive = true;
+		});
+
+		// Add document click listener to close tooltip when clicking elsewhere
+		document.addEventListener("click", () => {
+			if (tooltipActive) {
+				hideEventDetails();
+				tooltipActive = false;
+			}
+		});
+	} else {
+		// Desktop behavior - use hover
+		let isHoveringBlock = false;
+		let isHoveringModal = false;
+
+		block.addEventListener("mouseenter", (event) => {
+			isHoveringBlock = true;
+			showEventDetails(event, set, stage, day, venue, false);
+
+			if (eventModal) {
+				eventModal.addEventListener("mouseenter", () => {
+					isHoveringModal = true;
+				});
+
+				eventModal.addEventListener("mouseleave", () => {
+					isHoveringModal = false;
+					if (!isHoveringBlock) {
+						hideEventDetails();
+					}
+				});
+			}
+		});
+
+		block.addEventListener("mouseleave", (event) => {
+			isHoveringBlock = false;
+			setTimeout(() => {
+				if (!isHoveringModal) {
 					hideEventDetails();
 				}
-			});
-		}
-	});
-
-	block.addEventListener("mouseleave", (event) => {
-		isHoveringBlock = false;
-		// Short delay to allow mouse to enter modal
-		setTimeout(() => {
-			if (!isHoveringModal) {
-				hideEventDetails();
-			}
-		}, 100);
-	});
+			}, 100);
+		});
+	}
 }
 
 // Cookie utility functions
-function setCookie(name, value, days = 30) {
+https: function setCookie(name, value, days = 30) {
 	const date = new Date();
 	date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
 	const expires = "expires=" + date.toUTCString();

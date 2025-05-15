@@ -335,3 +335,41 @@
     margin-left: 4px;
     color: #fbbf24;
 }
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 90;
+}
+
+.event-details-modal.mobile {
+    z-index: 95;
+    position: fixed;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-close-btn {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.event-details-modal.mobile .conflict-list {
+    max-height: 30vh;
+}
