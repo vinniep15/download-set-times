@@ -25,6 +25,16 @@ const FAVORITES_FILTER_KEY = "downloadFestivalFavoritesFilter";
 const VISITED_KEY = "downloadFestivalVisited";
 let eventModal = null;
 let showFavoritesOnly = false;
+// const WEATHER_API_KEY = "d6edad0953eef502f6d2743dd8323123"; // Get a free key from openweathermap.org
+// const DONINGTON_LAT = "52.8308"; // Donington Park coordinates
+// const DONINGTON_LONG = "-1.3789";
+// const FESTIVAL_DATES = {
+// 	wednesday: "2025-06-11",
+// 	thursday: "2025-06-12",
+// 	friday: "2025-06-13",
+// 	saturday: "2025-06-14",
+// 	sunday: "2025-06-15",
+// };
 
 function loadFilterState() {
 	// Try to load from localStorage first, then cookie
@@ -804,58 +814,104 @@ function checkForConflicts() {
 }
 
 function showConflictAlert(conflicts) {
+	// Remove any existing conflict alerts first
+	document.querySelectorAll(".conflict-alert").forEach((el) => el.remove());
+
+	// Create alert container
 	const alertDiv = document.createElement("div");
 	alertDiv.className =
-		"fixed top-20 right-4 bg-red-600 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm";
-	alertDiv.style.animation = "fadeIn 0.3s ease-out";
+		"fixed top-20 right-4 bg-red-600 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm conflict-alert";
+	alertDiv.style.opacity = "0";
+	alertDiv.style.transition = "opacity 0.3s ease-out";
 
-	let alertHtml =
-		'<h3 class="text-lg font-bold mb-2">Schedule Conflicts</h3>';
-	alertHtml +=
-		'<p class="mb-2">You have scheduling conflicts with your favorite artists:</p>';
-	alertHtml += '<ul class="list-disc pl-5 mb-3">';
+	// Create header
+	const header = document.createElement("div");
+	header.className = "flex justify-between items-start mb-2";
+
+	const title = document.createElement("h3");
+	title.className = "text-lg font-bold";
+	title.textContent = "Schedule Conflicts";
+
+	// Create close button as an X in the corner
+	const closeX = document.createElement("button");
+	closeX.className =
+		"text-white hover:text-gray-200 font-bold text-xl leading-none -mt-1";
+	closeX.textContent = "×";
+	closeX.setAttribute("type", "button");
+
+	// Add click event directly to the button
+	const closeAlert = function () {
+		alertDiv.style.opacity = "0";
+		// Ensure we remove it after animation completes
+		setTimeout(function () {
+			if (document.body.contains(alertDiv)) {
+				document.body.removeChild(alertDiv);
+			}
+		}, 300);
+	};
+
+	closeX.addEventListener("click", closeAlert, false);
+
+	// Assemble header
+	header.appendChild(title);
+	header.appendChild(closeX);
+	alertDiv.appendChild(header);
+
+	// Add description
+	const desc = document.createElement("p");
+	desc.className = "mb-2";
+	desc.textContent =
+		"You have scheduling conflicts with your favorite artists:";
+	alertDiv.appendChild(desc);
+
+	// Create conflict list
+	const list = document.createElement("ul");
+	list.className = "list-disc pl-5 mb-3";
 
 	conflicts.forEach((conflict, i) => {
 		if (i < 5) {
-			// Limit to 5 conflicts to avoid overwhelming
-			alertHtml += `<li class="mb-1 text-sm"><span class="font-bold">${conflict.artist1}</span> (${conflict.time1} at ${conflict.stage1}) 
-                          and <span class="font-bold">${conflict.artist2}</span> (${conflict.time2} at ${conflict.stage2}) 
-                          on <span class="capitalize">${conflict.day}</span></li>`;
+			const item = document.createElement("li");
+			item.className = "mb-1 text-sm";
+			item.innerHTML = `<span class="font-bold">${conflict.artist1}</span> (${conflict.time1} at ${conflict.stage1}) 
+		  and <span class="font-bold">${conflict.artist2}</span> (${conflict.time2} at ${conflict.stage2}) 
+		  on <span class="capitalize">${conflict.day}</span>`;
+			list.appendChild(item);
 		}
 	});
 
 	if (conflicts.length > 5) {
-		alertHtml += `<li class="text-sm">...and ${
-			conflicts.length - 5
-		} more</li>`;
+		const moreItem = document.createElement("li");
+		moreItem.className = "text-sm";
+		moreItem.textContent = `...and ${conflicts.length - 5} more`;
+		list.appendChild(moreItem);
 	}
 
-	alertHtml += "</ul>";
-	alertHtml +=
-		'<div class="flex justify-end"><button id="close-alert" class="bg-white text-red-600 px-3 py-1 rounded text-sm font-bold">Close</button></div>';
-	alertDiv.innerHTML = alertHtml;
+	alertDiv.appendChild(list);
 
+	// Add dismiss button at bottom
+	const btnContainer = document.createElement("div");
+	btnContainer.className = "flex justify-end";
+
+	const dismissBtn = document.createElement("button");
+	dismissBtn.className =
+		"bg-white hover:bg-gray-200 active:bg-gray-300 text-red-600 px-3 py-1 rounded text-sm font-bold";
+	dismissBtn.textContent = "Dismiss";
+	dismissBtn.setAttribute("type", "button");
+	dismissBtn.addEventListener("click", closeAlert, false);
+
+	btnContainer.appendChild(dismissBtn);
+	alertDiv.appendChild(btnContainer);
+
+	// Add to document
 	document.body.appendChild(alertDiv);
 
-	// Add close button functionality
-	document.getElementById("close-alert").addEventListener("click", () => {
-		alertDiv.style.animation = "fadeOut 0.3s ease-out forwards";
-		setTimeout(() => {
-			document.body.removeChild(alertDiv);
-		}, 300);
-	});
+	// Make visible after a brief delay to ensure CSS transition works
+	setTimeout(() => {
+		alertDiv.style.opacity = "1";
+	}, 10);
 
 	// Auto-close after 15 seconds
-	setTimeout(() => {
-		if (document.body.contains(alertDiv)) {
-			alertDiv.style.animation = "fadeOut 0.3s ease-out forwards";
-			setTimeout(() => {
-				if (document.body.contains(alertDiv)) {
-					document.body.removeChild(alertDiv);
-				}
-			}, 300);
-		}
-	}, 15000);
+	setTimeout(closeAlert, 15000);
 }
 
 async function loadData() {
@@ -897,6 +953,29 @@ async function loadData() {
 		showDay("friday");
 		showDistrictXDay("wednesday"); // Start with Wednesday for District X
 		checkFirstVisit();
+		// const weatherContainer = document.getElementById("weather-forecast");
+		// weatherContainer.innerHTML = `
+		//   <div class="loading-spinner"></div>
+		//   <span class="text-sm ml-2">Loading weather...</span>
+		// `;
+		// const weatherData = await fetchWeatherForecast();
+		// displayWeatherForecast(weatherData);
+
+		if (!document.getElementById("generate-poster")) {
+			const floatingBtn = document.createElement("button");
+			floatingBtn.id = "generate-poster";
+			floatingBtn.className =
+				"fixed right-4 bottom-4 bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-4 rounded-lg flex items-center shadow-lg z-20";
+			floatingBtn.innerHTML = `
+			  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+			  </svg>
+			  My Poster
+			`;
+			document.body.appendChild(floatingBtn);
+			floatingBtn.addEventListener("click", generatePersonalizedPoster);
+			console.log("Added floating poster button");
+		}
 	} catch (error) {
 		console.error("Error loading set times:", error);
 		document.getElementById("schedule").innerHTML = `
@@ -1601,3 +1680,873 @@ function animateBlocksForFiltering() {
 			}
 		});
 }
+
+// async function fetchWeatherForecast() {
+// 	try {
+// 		// Add logging to see request details
+// 		console.log(`Fetching weather data for Donington Park...`);
+
+// 		const response = await fetch(
+// 			`https://api.openweathermap.org/data/2.5/forecast?lat=${DONINGTON_LAT}&lon=${DONINGTON_LONG}&units=metric&appid=${WEATHER_API_KEY}`
+// 		);
+
+// 		if (!response.ok) {
+// 			console.warn(
+// 				`Weather API error: ${response.status}. Using mock data instead.`
+// 			);
+// 			return generateMockWeatherData();
+// 		}
+
+// 		const data = await response.json();
+// 		console.log("Weather API response:", data);
+
+// 		// Process the data
+// 		const processedData = processWeatherData(data);
+
+// 		// Check if any days are missing
+// 		const festivalDays = Object.keys(FESTIVAL_DATES);
+// 		const availableDays = Object.keys(processedData);
+
+// 		if (
+// 			availableDays.length === 0 ||
+// 			festivalDays.some((day) => !processedData[day])
+// 		) {
+// 			console.warn(
+// 				"Missing weather data for some festival days. Using mock data."
+// 			);
+// 			return generateMockWeatherData();
+// 		}
+
+// 		return processedData;
+// 	} catch (error) {
+// 		console.error("Failed to fetch weather:", error);
+// 		return generateMockWeatherData();
+// 	}
+// }
+
+// function generateMockWeatherData() {
+// 	console.log("Generating mock weather data");
+// 	// Create perfect festival weather data - warm and sunny!
+// 	const mockData = {};
+
+// 	Object.keys(FESTIVAL_DATES).forEach((day) => {
+// 		// Slightly random but always nice temperatures
+// 		const baseTemp = 22 + Math.random() * 2; // Base temperature between 22-24°C
+
+// 		// Create perfect weather for the festival
+// 		mockData[day] = {
+// 			date: FESTIVAL_DATES[day],
+// 			avgTemp: Math.round(baseTemp),
+// 			maxTemp: Math.round(baseTemp + 2 + Math.random() * 2), // 24-28°C
+// 			minTemp: Math.round(baseTemp - 5 - Math.random() * 2), // 15-19°C
+// 			rainChance: Math.round(Math.random() * 5), // 0-5% (tiny chance of rain)
+// 			condition: Math.random() > 0.3 ? "Clear" : "Clouds", // Mostly clear with occasional clouds
+// 			icon: Math.random() > 0.3 ? "☀️" : "⛅", // Mostly sunny icons
+// 			isMock: true, // Flag to indicate mock data
+// 		};
+// 	});
+
+// 	console.log("Mock weather data:", mockData);
+// 	return mockData;
+// }
+
+// function processWeatherData(data) {
+// 	const festivalWeather = {};
+
+// 	// Extract relevant data for festival days
+// 	Object.entries(FESTIVAL_DATES).forEach(([day, date]) => {
+// 		// Find forecasts for this day
+// 		const dayForecasts = data.list.filter((item) =>
+// 			item.dt_txt.startsWith(date)
+// 		);
+
+// 		if (dayForecasts.length > 0) {
+// 			// Get daytime forecasts (9am to 9pm)
+// 			const daytimeForecasts = dayForecasts.filter((item) => {
+// 				const hour = parseInt(item.dt_txt.split(" ")[1].split(":")[0]);
+// 				return hour >= 9 && hour <= 21;
+// 			});
+
+// 			// Calculate averages and find most common weather condition
+// 			let totalTemp = 0;
+// 			let maxTemp = -100;
+// 			let minTemp = 100;
+// 			let totalRainChance = 0;
+// 			const conditions = {};
+
+// 			daytimeForecasts.forEach((forecast) => {
+// 				const temp = forecast.main.temp;
+// 				totalTemp += temp;
+// 				maxTemp = Math.max(maxTemp, temp);
+// 				minTemp = Math.min(minTemp, temp);
+
+// 				// Calculate rain probability
+// 				const rainProb = forecast.pop || 0; // Probability of precipitation
+// 				totalRainChance += rainProb;
+
+// 				// Track weather conditions
+// 				const condition = forecast.weather[0].main;
+// 				conditions[condition] = (conditions[condition] || 0) + 1;
+// 			});
+
+// 			// Find most common condition
+// 			let commonCondition = "Clear";
+// 			let maxCount = 0;
+
+// 			Object.entries(conditions).forEach(([condition, count]) => {
+// 				if (count > maxCount) {
+// 					maxCount = count;
+// 					commonCondition = condition;
+// 				}
+// 			});
+
+// 			// Create summary
+// 			festivalWeather[day] = {
+// 				date: date,
+// 				avgTemp: Math.round(totalTemp / daytimeForecasts.length),
+// 				maxTemp: Math.round(maxTemp),
+// 				minTemp: Math.round(minTemp),
+// 				rainChance: Math.round(
+// 					(totalRainChance / daytimeForecasts.length) * 100
+// 				),
+// 				condition: commonCondition,
+// 				icon: getWeatherIcon(commonCondition),
+// 			};
+// 		}
+// 	});
+
+// 	return festivalWeather;
+// }
+
+// function getWeatherIcon(condition) {
+// 	// Map weather conditions to appropriate icons (using emoji for simplicity)
+// 	switch (condition.toLowerCase()) {
+// 		case "clear":
+// 			return "☀️";
+// 		case "clouds":
+// 			return "⛅";
+// 		case "rain":
+// 			return "🌧️";
+// 		case "drizzle":
+// 			return "🌦️";
+// 		case "thunderstorm":
+// 			return "⛈️";
+// 		case "snow":
+// 			return "❄️";
+// 		case "mist":
+// 			return "🌫️";
+// 		case "wind":
+// 		case "windy":
+// 		case "squall":
+// 			return "💨";
+// 		case "tornado":
+// 			return "🌪️";
+// 		case "dust":
+// 		case "sand":
+// 			return "🌫️";
+// 		default:
+// 			return "🌤️";
+// 	}
+// }
+
+// function displayWeatherForecast(weatherData) {
+// 	console.log("Displaying weather data:", weatherData);
+// 	const container = document.getElementById("weather-forecast");
+
+// 	// Clear the container
+// 	container.innerHTML = "";
+
+// 	if (!weatherData || Object.keys(weatherData).length === 0) {
+// 		container.innerHTML =
+// 			'<p class="text-sm text-gray-400">Weather forecast unavailable</p>';
+// 		console.warn("No weather data to display");
+// 		return;
+// 	}
+
+// 	if (Object.values(weatherData)[0]?.isMock) {
+// 		// Add a note indicating this is simulated data
+// 		const mockNote = document.createElement("div");
+// 		mockNote.className = "text-xs text-amber-500 mb-2";
+// 		mockNote.innerHTML = "⚠️ Using simulated weather data";
+// 		container.appendChild(mockNote);
+// 	}
+
+// 	// Create a weather card for each festival day
+// 	Object.entries(weatherData).forEach(([day, forecast]) => {
+// 		if (!forecast) return; // Skip if no forecast for this day
+
+// 		const dayElement = document.createElement("div");
+// 		dayElement.className =
+// 			"weather-day p-2 bg-gray-700 rounded flex flex-col items-center";
+// 		dayElement.dataset.day = day;
+
+// 		// Add color indication for rain chance
+// 		let rainClass = "bg-green-700";
+// 		if (forecast.rainChance > 60) rainClass = "bg-red-700";
+// 		else if (forecast.rainChance > 30) rainClass = "bg-yellow-700";
+
+// 		dayElement.innerHTML = `
+// 		<div class="capitalize font-bold text-sm mb-1">${day}</div>
+// 		<div class="text-2xl mb-1">${forecast.icon || "⛅"}</div>
+// 		<div class="text-sm">${forecast.minTemp || 15}°C - ${
+// 			forecast.maxTemp || 25
+// 		}°C</div>
+// 		<div class="mt-1 px-2 py-1 rounded text-xs ${rainClass}">
+// 		  ${forecast.rainChance || 0}% rain
+// 		</div>
+// 	  `;
+
+// 		// Highlight current day
+// 		if (day === currentDay || day === districtXCurrentDay) {
+// 			dayElement.classList.add("border-2", "border-cyan-500");
+// 		}
+
+// 		container.appendChild(dayElement);
+// 	});
+// }
+
+// Poster Generator
+function generatePersonalizedPoster() {
+	console.log("Generating poster...");
+
+	// Check if we have favorites
+	if (favoriteArtists.length === 0) {
+		alert("Please add some favorite artists first!");
+		return;
+	}
+
+	// Create name input popup
+	showNameInputDialog().then((name) => {
+		// Use the name (or default) to create the poster
+		createPersonalizedPoster(name || "My");
+	});
+}
+
+// New function to show a name input dialog
+function showNameInputDialog() {
+	return new Promise((resolve) => {
+		// Create modal for the name input
+		const modal = document.createElement("div");
+		modal.className =
+			"fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50";
+		modal.id = "name-input-modal";
+
+		// Create input container
+		const container = document.createElement("div");
+		container.className =
+			"bg-gray-800 rounded-lg p-6 max-w-md mx-auto text-center border-2 border-cyan-500 shadow-lg";
+
+		// Add title
+		const title = document.createElement("h2");
+		title.className = "text-xl font-bold text-cyan-400 mb-4";
+		title.innerText = "Personalize Your Poster";
+
+		// Create input field
+		const inputWrapper = document.createElement("div");
+		inputWrapper.className = "mb-6";
+
+		const label = document.createElement("label");
+		label.className =
+			"block text-left text-sm font-medium text-gray-300 mb-2";
+		label.htmlFor = "name-input";
+		label.innerText = "Enter your name:";
+
+		const input = document.createElement("input");
+		input.type = "text";
+		input.id = "name-input";
+		input.className =
+			"w-full px-3 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-cyan-500";
+		input.placeholder = "Your name";
+		input.maxLength = 30;
+
+		inputWrapper.appendChild(label);
+		inputWrapper.appendChild(input);
+
+		// Create buttons
+		const buttonGroup = document.createElement("div");
+		buttonGroup.className = "flex space-x-4 justify-center";
+
+		const skipButton = document.createElement("button");
+		skipButton.className =
+			"px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition";
+		skipButton.innerText = "Skip";
+		skipButton.onclick = () => {
+			modal.remove();
+			resolve("");
+		};
+
+		const confirmButton = document.createElement("button");
+		confirmButton.className =
+			"px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-500 transition";
+		confirmButton.innerText = "Continue";
+		confirmButton.onclick = () => {
+			const name = input.value.trim();
+			modal.remove();
+			resolve(name);
+		};
+
+		// Add keyboard event listener
+		input.addEventListener("keyup", (event) => {
+			if (event.key === "Enter") {
+				confirmButton.click();
+			}
+		});
+
+		// Set focus on input
+		setTimeout(() => input.focus(), 100);
+
+		// Assemble the modal
+		buttonGroup.appendChild(skipButton);
+		buttonGroup.appendChild(confirmButton);
+
+		container.appendChild(title);
+		container.appendChild(inputWrapper);
+		container.appendChild(buttonGroup);
+		modal.appendChild(container);
+
+		document.body.appendChild(modal);
+	});
+}
+
+// Modified function to create the poster with a name
+function generatePersonalizedPoster() {
+	console.log("Generating poster...");
+
+	// Check if we have favorites
+	if (favoriteArtists.length === 0) {
+		alert("Please add some favorite artists first!");
+		return;
+	}
+
+	// Create name input popup
+	showNameInputDialog().then((name) => {
+		// Use the name (or default) to create the poster
+		createPersonalizedPoster(name || "My");
+	});
+}
+
+// New function to show a name input dialog
+function showNameInputDialog() {
+	return new Promise((resolve) => {
+		// Create modal for the name input
+		const modal = document.createElement("div");
+		modal.className =
+			"fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50";
+		modal.id = "name-input-modal";
+
+		// Create input container
+		const container = document.createElement("div");
+		container.className =
+			"bg-gray-800 rounded-lg p-6 max-w-md mx-auto text-center border-2 border-cyan-500 shadow-lg";
+
+		// Add title
+		const title = document.createElement("h2");
+		title.className = "text-xl font-bold text-cyan-400 mb-4";
+		title.innerText = "Personalize Your Poster";
+
+		// Create input field
+		const inputWrapper = document.createElement("div");
+		inputWrapper.className = "mb-6";
+
+		const label = document.createElement("label");
+		label.className =
+			"block text-left text-sm font-medium text-gray-300 mb-2";
+		label.htmlFor = "name-input";
+		label.innerText = "Enter your name:";
+
+		const input = document.createElement("input");
+		input.type = "text";
+		input.id = "name-input";
+		input.className =
+			"w-full px-3 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-cyan-500";
+		input.placeholder = "Your name";
+		input.maxLength = 30;
+
+		inputWrapper.appendChild(label);
+		inputWrapper.appendChild(input);
+
+		// Create buttons
+		const buttonGroup = document.createElement("div");
+		buttonGroup.className = "flex space-x-4 justify-center";
+
+		const skipButton = document.createElement("button");
+		skipButton.className =
+			"px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition";
+		skipButton.innerText = "Skip";
+		skipButton.onclick = () => {
+			modal.remove();
+			resolve("");
+		};
+
+		const confirmButton = document.createElement("button");
+		confirmButton.className =
+			"px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-500 transition";
+		confirmButton.innerText = "Continue";
+		confirmButton.onclick = () => {
+			const name = input.value.trim();
+			modal.remove();
+			resolve(name);
+		};
+
+		// Add keyboard event listener
+		input.addEventListener("keyup", (event) => {
+			if (event.key === "Enter") {
+				confirmButton.click();
+			}
+		});
+
+		// Set focus on input
+		setTimeout(() => input.focus(), 100);
+
+		// Assemble the modal
+		buttonGroup.appendChild(skipButton);
+		buttonGroup.appendChild(confirmButton);
+
+		container.appendChild(title);
+		container.appendChild(inputWrapper);
+		container.appendChild(buttonGroup);
+		modal.appendChild(container);
+
+		document.body.appendChild(modal);
+	});
+}
+
+// Modified function to create the poster with a name
+function createPersonalizedPoster(name) {
+	// Create modal for the poster
+	const modal = document.createElement("div");
+	modal.className =
+		"fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50";
+	modal.id = "poster-modal";
+
+	// Create poster container - THIS WAS MISSING
+	const posterContainer = document.createElement("div");
+	posterContainer.className =
+		"relative p-6 rounded-lg max-w-3xl max-h-[90vh] overflow-auto";
+
+	// Create poster content
+	const posterContent = document.createElement("div");
+	posterContent.id = "poster-content";
+	posterContent.className = "text-center download-poster-style";
+	posterContent.style.padding = "40px 20px";
+	posterContent.style.borderRadius = "8px";
+	posterContent.style.position = "relative";
+	posterContent.style.overflow = "hidden";
+	posterContent.style.minHeight = "800px";
+
+	// Format the name properly for display
+	const displayName = name === "My" ? "My" : `${name}'s`;
+
+	// Add enhanced abstract background layers
+	posterContent.innerHTML = `
+	  <div class="poster-bg-main"></div>
+	  <div class="poster-bg-effect"></div>
+	  <div class="poster-bg-bubbles"></div>
+	  <div class="poster-bg-swirl"></div>
+	  <div class="poster-bg-noise"></div>
+	  <div class="mb-8 relative z-10">
+		<h1 class="text-5xl font-extrabold text-white mb-2 download-logo-text">DOWNLOAD FESTIVAL 2025</h1>
+		<div class="text-lg text-cyan-100 mt-2">DONINGTON PARK • 11-15 JUNE</div>
+		<div class="mt-2 mb-6 text-sm text-cyan-500 uppercase font-bold">${displayName} Personal Lineup</div>
+	  </div>
+	`;
+
+	// Create close button
+	const closeBtn = document.createElement("button");
+	closeBtn.innerHTML = "×";
+	closeBtn.className =
+		"absolute top-2 right-4 text-white text-3xl hover:text-gray-400 z-10";
+	closeBtn.onclick = () => document.getElementById("poster-modal").remove();
+
+	// Create poster content
+	function showConflictAlert(conflicts) {
+		// Remove any existing conflict alerts first
+		document
+			.querySelectorAll(".conflict-alert")
+			.forEach((el) => el.remove());
+
+		// Create alert container
+		const alertDiv = document.createElement("div");
+		alertDiv.className =
+			"fixed top-20 right-4 bg-red-600 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm conflict-alert";
+		alertDiv.style.opacity = "0";
+		alertDiv.style.transition = "opacity 0.3s ease-out";
+
+		// Create header
+		const header = document.createElement("div");
+		header.className = "flex justify-between items-start mb-2";
+
+		const title = document.createElement("h3");
+		title.className = "text-lg font-bold";
+		title.textContent = "Schedule Conflicts";
+
+		// Create close button as an X in the corner
+		const closeX = document.createElement("button");
+		closeX.className =
+			"text-white hover:text-gray-200 font-bold text-xl leading-none -mt-1";
+		closeX.textContent = "×";
+		closeX.setAttribute("type", "button");
+
+		// Add click event directly to the button
+		const closeAlert = function () {
+			alertDiv.style.opacity = "0";
+			// Ensure we remove it after animation completes
+			setTimeout(function () {
+				if (document.body.contains(alertDiv)) {
+					document.body.removeChild(alertDiv);
+				}
+			}, 300);
+		};
+
+		closeX.addEventListener("click", closeAlert, false);
+
+		// Assemble header
+		header.appendChild(title);
+		header.appendChild(closeX);
+		alertDiv.appendChild(header);
+
+		// Add description
+		const desc = document.createElement("p");
+		desc.className = "mb-2";
+		desc.textContent =
+			"You have scheduling conflicts with your favorite artists:";
+		alertDiv.appendChild(desc);
+
+		// Create conflict list
+		const list = document.createElement("ul");
+		list.className = "list-disc pl-5 mb-3";
+
+		conflicts.forEach((conflict, i) => {
+			if (i < 5) {
+				const item = document.createElement("li");
+				item.className = "mb-1 text-sm";
+				item.innerHTML = `<span class="font-bold">${conflict.artist1}</span> (${conflict.time1} at ${conflict.stage1}) 
+			  and <span class="font-bold">${conflict.artist2}</span> (${conflict.time2} at ${conflict.stage2}) 
+			  on <span class="capitalize">${conflict.day}</span>`;
+				list.appendChild(item);
+			}
+		});
+
+		if (conflicts.length > 5) {
+			const moreItem = document.createElement("li");
+			moreItem.className = "text-sm";
+			moreItem.textContent = `...and ${conflicts.length - 5} more`;
+			list.appendChild(moreItem);
+		}
+
+		alertDiv.appendChild(list);
+
+		// Add dismiss button at bottom
+		const btnContainer = document.createElement("div");
+		btnContainer.className = "flex justify-end";
+
+		const dismissBtn = document.createElement("button");
+		dismissBtn.className =
+			"bg-white hover:bg-gray-200 active:bg-gray-300 text-red-600 px-3 py-1 rounded text-sm font-bold";
+		dismissBtn.textContent = "Dismiss";
+		dismissBtn.setAttribute("type", "button");
+		dismissBtn.addEventListener("click", closeAlert, false);
+
+		btnContainer.appendChild(dismissBtn);
+		alertDiv.appendChild(btnContainer);
+
+		// Add to document
+		document.body.appendChild(alertDiv);
+
+		// Make visible after a brief delay to ensure CSS transition works
+		setTimeout(() => {
+			alertDiv.style.opacity = "1";
+		}, 10);
+
+		// Auto-close after 15 seconds
+		setTimeout(closeAlert, 15000);
+	}
+
+	// Sort artists by venue and headliner status
+	const arenaArtists = [];
+	const districtArtists = [];
+
+	// Extract all favorited artists with their venues
+	Object.keys(data.arena).forEach((day) => {
+		// Same extraction code...
+		Object.keys(data.arena[day]).forEach((stage) => {
+			data.arena[day][stage].forEach((set) => {
+				if (favoriteArtists.includes(set.artist)) {
+					arenaArtists.push({
+						artist: set.artist,
+						stage: stage,
+						day: day,
+						time: set.start,
+					});
+				}
+			});
+		});
+	});
+
+	// Do the same for District X
+	Object.keys(data.districtX).forEach((day) => {
+		if (!data.districtX[day]) return;
+		Object.keys(data.districtX[day]).forEach((stage) => {
+			if (Array.isArray(data.districtX[day][stage])) {
+				data.districtX[day][stage].forEach((set) => {
+					if (favoriteArtists.includes(set.artist)) {
+						districtArtists.push({
+							artist: set.artist,
+							stage: stage,
+							day: day,
+							time: set.start,
+						});
+					}
+				});
+			}
+		});
+	});
+
+	// Sort by headliner status (using time as proxy - headliners play later)
+	arenaArtists.sort((a, b) => {
+		if (!a.time || !b.time) return 0;
+		const aTime = timeToMinutes(a.time);
+		const bTime = timeToMinutes(b.time);
+		return bTime - aTime; // Later times (headliners) first
+	});
+
+	districtArtists.sort((a, b) => {
+		if (!a.time || !b.time) return 0;
+		const aTime = timeToMinutes(a.time);
+		const bTime = timeToMinutes(b.time);
+		return bTime - aTime;
+	});
+
+	// Create Arena artists section
+	if (arenaArtists.length > 0) {
+		const arenaSection = document.createElement("div");
+		arenaSection.className = "mb-10 relative";
+
+		// Divide artists into tiers
+		let tierCount = Math.min(4, Math.ceil(arenaArtists.length / 4));
+
+		for (let i = 0; i < tierCount; i++) {
+			const startIndex = Math.floor(
+				(i * arenaArtists.length) / tierCount
+			);
+			const endIndex = Math.floor(
+				((i + 1) * arenaArtists.length) / tierCount
+			);
+			const tierArtists = arenaArtists.slice(startIndex, endIndex);
+
+			const tier = document.createElement("div");
+			tier.className = `poster-tier tier-${i + 1} mb-5`;
+
+			// Size based on tier
+			const fontSize = 28 - i * 5;
+			const glowIntensity = 5 - i;
+
+			tierArtists.forEach((artist) => {
+				const artistSpan = document.createElement("span");
+				artistSpan.className = `artist-name inline-block mx-3 my-2`;
+				artistSpan.style.fontSize = `${fontSize}px`;
+				artistSpan.style.fontWeight = "800";
+				artistSpan.style.color = "#FFFFFF";
+				artistSpan.style.textShadow = `0 0 ${glowIntensity}px #0ff, 0 0 ${
+					glowIntensity + 2
+				}px rgba(0,255,255,0.8)`;
+				artistSpan.style.letterSpacing = "1px";
+				artistSpan.innerText = artist.artist.toUpperCase();
+				tier.appendChild(artistSpan);
+			});
+
+			arenaSection.appendChild(tier);
+
+			// Add divider lines
+			if (i < tierCount - 1 && i < 2) {
+				const divider = document.createElement("div");
+				divider.className = "my-6 mx-auto w-3/4 opacity-60";
+				divider.style.height = "2px";
+				divider.style.background =
+					"linear-gradient(90deg, rgba(0,255,255,0) 0%, #0ff 50%, rgba(0,255,255,0) 100%)";
+				arenaSection.appendChild(divider);
+			}
+		}
+
+		posterContent.appendChild(arenaSection);
+	}
+
+	// Create District X artists section
+	if (districtArtists.length > 0) {
+		const districtSection = document.createElement("div");
+		districtSection.className = "mb-8 mt-4";
+
+		const districtArtistDiv = document.createElement("div");
+		districtArtistDiv.className = "flex flex-wrap justify-center";
+
+		districtArtists.forEach((artist) => {
+			const artistSpan = document.createElement("span");
+			artistSpan.className = `artist-name inline-block mx-2 my-1`;
+			artistSpan.style.fontSize = "13px";
+			artistSpan.style.fontWeight = "600";
+			artistSpan.style.letterSpacing = "0.5px";
+			artistSpan.style.color = "#FFFFFF";
+			artistSpan.style.textShadow =
+				"0 0 3px #0ff, 0 0 5px rgba(0,255,255,0.6)";
+			artistSpan.innerText = artist.artist.toUpperCase();
+			districtArtistDiv.appendChild(artistSpan);
+		});
+
+		districtSection.appendChild(districtArtistDiv);
+		posterContent.appendChild(districtSection);
+	}
+
+	// Add footer with personalized name
+	const footer = document.createElement("div");
+	footer.className = "text-sm text-cyan-200 mt-10";
+	footer.innerHTML = `
+	  <p>DONINGTON PARK 11-15 JUNE 2025</p>
+	  <p class="text-xs mt-4 opacity-60">Created with Download Festival Set Times App</p>
+	`;
+	posterContent.appendChild(footer);
+
+	// Add download button
+	const downloadBtn = document.createElement("button");
+	downloadBtn.className =
+		"mt-6 bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-6 rounded-lg flex items-center mx-auto";
+	downloadBtn.innerHTML = `
+	  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+	  </svg>
+	  Download ${displayName} Poster
+	`;
+
+	downloadBtn.onclick = () => {
+		console.log("Download button clicked");
+		if (typeof html2canvas !== "undefined") {
+			const content = document.getElementById("poster-content");
+
+			html2canvas(content, {
+				backgroundColor: "#030b1f",
+				scale: 2,
+				logging: true,
+				allowTaint: true,
+				useCORS: true,
+			})
+				.then((canvas) => {
+					console.log("Canvas generated");
+					const link = document.createElement("a");
+					link.download = `${
+						name === "My" ? "my" : name.toLowerCase()
+					}-download-festival-lineup.png`;
+					link.href = canvas.toDataURL("image/png");
+					link.click();
+				})
+				.catch((err) => {
+					console.error("Error generating canvas:", err);
+					alert(
+						"Sorry, there was an error creating your poster: " +
+							err.message
+					);
+				});
+		} else {
+			console.error("html2canvas not found");
+			alert("Cannot generate download - html2canvas library not loaded.");
+		}
+	};
+
+	// Add everything to the DOM
+	posterContainer.appendChild(closeBtn);
+	posterContainer.appendChild(posterContent);
+	posterContainer.appendChild(downloadBtn);
+	modal.appendChild(posterContainer);
+	document.body.appendChild(modal);
+	console.log("Poster modal added to DOM");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+	loadData().then(() => {
+		// Add event listeners
+		document
+			.getElementById("open-favorites")
+			.addEventListener("click", showFavoritesModal);
+		document
+			.getElementById("close-favorites")
+			.addEventListener("click", () => {
+				document
+					.getElementById("favorites-modal")
+					.classList.add("hidden");
+			});
+		document
+			.getElementById("save-favorites")
+			.addEventListener("click", saveFavorites);
+
+		const globalToggle = document.getElementById("global-favorites-toggle");
+		if (globalToggle) {
+			globalToggle.addEventListener("change", function () {
+				showFavoritesOnly = this.checked;
+
+				// Save filter state
+				localStorage.setItem("showFavoritesOnly", showFavoritesOnly);
+				setCookie(FAVORITES_FILTER_KEY, showFavoritesOnly);
+
+				if (showFavoritesOnly) {
+					// Going from all artists to favorites only
+					// Just animate out non-favorites
+					const arenaBlocks = document.querySelectorAll(
+						"#schedule .set-block"
+					);
+					const districtBlocks = document.querySelectorAll(
+						"#districtx-schedule .set-block"
+					);
+
+					let nonFavoriteCount = 0;
+
+					// Process arena blocks
+					arenaBlocks.forEach((block) => {
+						const artistName = block
+							.querySelector("div")
+							.textContent.trim();
+						if (!favoriteArtists.includes(artistName)) {
+							nonFavoriteCount++;
+							block.classList.add("fade-out");
+							// Remove after animation
+							setTimeout(() => {
+								if (block.parentNode)
+									block.parentNode.removeChild(block);
+							}, 400);
+						}
+					});
+
+					// Process district X blocks
+					districtBlocks.forEach((block) => {
+						const artistName = block
+							.querySelector("div")
+							.textContent.trim();
+						if (!favoriteArtists.includes(artistName)) {
+							nonFavoriteCount++;
+							block.classList.add("fade-out");
+							// Remove after animation
+							setTimeout(() => {
+								if (block.parentNode)
+									block.parentNode.removeChild(block);
+							}, 400);
+						}
+					});
+				} else {
+					// Going from favorites only to all artists
+					// Need to redraw everything to add the missing bands
+					showDay(currentDay);
+					if (data.districtX && data.districtX[districtXCurrentDay]) {
+						showDistrictXDay(districtXCurrentDay);
+					}
+				}
+			});
+		}
+
+		// Add poster button event listener
+		console.log("Looking for poster button");
+		const posterButton = document.getElementById("generate-poster");
+		if (posterButton) {
+			console.log("Poster button found, attaching event listener");
+			posterButton.addEventListener("click", generatePersonalizedPoster);
+		} else {
+			console.warn("Poster button not found in the DOM");
+		}
+	});
+});

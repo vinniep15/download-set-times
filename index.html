@@ -6,6 +6,7 @@
 		<title>Download Set Times</title>
 		<script src="https://cdn.tailwindcss.com"></script>
 		<link rel="stylesheet" href="styles.css" />
+		<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 		<script src="script.js"></script>
 	</head>
 	<body class="bg-black text-white p-4">
@@ -19,24 +20,46 @@
 		</header>
 		<!-- Favorites Button -->
 		<div class="fixed top-4 right-4 z-30">
-			<button
-				id="open-favorites"
-				class="bg-cyan-600 px-3 py-2 rounded flex items-center"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="16"
-					height="16"
-					fill="currentColor"
-					class="mr-2"
-					viewBox="0 0 16 16"
+			<div class="flex gap-2 items-center">
+				<button
+					id="open-favorites"
+					class="bg-cyan-600 px-3 py-2 rounded flex items-center"
 				>
-					<path
-						d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
-					/>
-				</svg>
-				My Artists
-			</button>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="16"
+						height="16"
+						fill="currentColor"
+						class="mr-2"
+						viewBox="0 0 16 16"
+					>
+						<path
+							d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+						/>
+					</svg>
+					My Artists
+				</button>
+				<button
+					id="generate-poster"
+					class="ml-2 bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-4 rounded-lg flex items-center"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5 mr-1"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+						/>
+					</svg>
+					Generate Poster
+				</button>
+			</div>
 		</div>
 
 		<!-- Artist Favorites Modal -->
@@ -101,6 +124,16 @@
 			<h2 class="text-xl font-bold mb-3 border-b border-gray-700 pb-2">
 				Arena Bands
 			</h2>
+			<!-- Weather forecast section -->
+			<!-- <div class="weather-container mb-4 p-3 rounded-lg bg-gray-800">
+				<h3 class="text-sm font-bold mb-2 text-cyan-500">
+					Festival Weather
+				</h3>
+				<div class="flex flex-wrap gap-3" id="weather-forecast">
+					<div class="loading-spinner"></div>
+					<span class="text-sm">Loading weather...</span>
+				</div>
+			</div> -->
 			<div class="flex justify-between items-center">
 				<div
 					id="stage-buttons"
