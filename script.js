@@ -21,8 +21,31 @@ let currentStage = "all";
 let districtXCurrentStage = "all";
 let favoriteArtists = [];
 const FAVORITES_KEY = "downloadFestivalFavorites";
+const FAVORITES_FILTER_KEY = "downloadFestivalFavoritesFilter";
 const VISITED_KEY = "downloadFestivalVisited";
 let eventModal = null;
+let showFavoritesOnly = false;
+
+function loadFilterState() {
+	// Try to load from localStorage first, then cookie
+	const localFilterState = localStorage.getItem(FAVORITES_FILTER_KEY);
+	const cookieFilterState = getCookie(FAVORITES_FILTER_KEY);
+
+	// Parse the value (convert string to boolean)
+	if (localFilterState !== null) {
+		showFavoritesOnly = localFilterState === "true";
+	} else if (cookieFilterState !== null) {
+		showFavoritesOnly = cookieFilterState === true;
+		// Also set localStorage for next time
+		localStorage.setItem(FAVORITES_FILTER_KEY, showFavoritesOnly);
+	}
+
+	// Update checkbox state
+	const globalToggle = document.getElementById("global-favorites-toggle");
+	if (globalToggle) {
+		globalToggle.checked = showFavoritesOnly;
+	}
+}
 
 function showEventDetails(event, set, stage, day, venue, isMobile) {
 	// Remove any existing modal
@@ -870,6 +893,7 @@ async function loadData() {
 
 		// Load favorites first, then show the schedules
 		loadFavorites();
+		loadFilterState();
 		showDay("friday");
 		showDistrictXDay("wednesday"); // Start with Wednesday for District X
 		checkFirstVisit();
@@ -993,7 +1017,14 @@ function showDay(day) {
 				)
 				.join("");
 
-		data.arena[day][stage].forEach((set) => {
+		// Filter sets if showFavoritesOnly is true
+		const setsToShow = showFavoritesOnly
+			? data.arena[day][stage].filter((set) =>
+					favoriteArtists.includes(set.artist)
+			  )
+			: data.arena[day][stage];
+
+		setsToShow.forEach((set) => {
 			if (!set.start || !set.end) return; // Skip entries without times
 
 			// Calculate positions with fixed slot width
@@ -1070,6 +1101,15 @@ function showDay(day) {
 			artistName.className = "text-sm font-bold";
 			artistName.innerText = set.artist;
 			block.appendChild(artistName);
+
+			if (showFavoritesOnly) {
+				// Delay appearance slightly to create a cascade effect
+				setTimeout(() => {
+					block.classList.add("fade-in");
+				}, startMin % 50); // Vary animation timing based on start time
+			} else {
+				block.classList.add("fade-in");
+			}
 
 			row.appendChild(block);
 
@@ -1247,7 +1287,13 @@ function showDistrictXDay(day) {
 				.join("");
 
 		// Add set blocks
-		data.districtX[day][stage].forEach((set) => {
+		const setsToShow = showFavoritesOnly
+			? data.districtX[day][stage].filter((set) =>
+					favoriteArtists.includes(set.artist)
+			  )
+			: data.districtX[day][stage];
+
+		setsToShow.forEach((set) => {
 			if (!set.start || !set.end) return;
 
 			const startMin = timeToMinutes(set.start);
@@ -1402,9 +1448,17 @@ function showDistrictXDay(day) {
 			block.dataset.end = endMin;
 			block.dataset.stage = stage;
 
+			if (showFavoritesOnly) {
+				// Delay appearance slightly to create a cascade effect
+				setTimeout(() => {
+					block.classList.add("fade-in");
+				}, startMin % 50); // Vary animation timing based on start time
+			} else {
+				block.classList.add("fade-in");
+			}
+
 			row.appendChild(block);
 		});
-
 		container.appendChild(row);
 
 		setTimeout(() => {
@@ -1456,5 +1510,94 @@ document.addEventListener("DOMContentLoaded", () => {
 		document
 			.getElementById("save-favorites")
 			.addEventListener("click", saveFavorites);
+
+		const globalToggle = document.getElementById("global-favorites-toggle");
+		if (globalToggle) {
+			globalToggle.addEventListener("change", function () {
+				showFavoritesOnly = this.checked;
+
+				// Save filter state
+				localStorage.setItem("showFavoritesOnly", showFavoritesOnly);
+				setCookie(FAVORITES_FILTER_KEY, showFavoritesOnly);
+
+				if (showFavoritesOnly) {
+					// Going from all artists to favorites only
+					// Just animate out non-favorites
+					const arenaBlocks = document.querySelectorAll(
+						"#schedule .set-block"
+					);
+					const districtBlocks = document.querySelectorAll(
+						"#districtx-schedule .set-block"
+					);
+
+					let nonFavoriteCount = 0;
+
+					// Process arena blocks
+					arenaBlocks.forEach((block) => {
+						const artistName = block
+							.querySelector("div")
+							.textContent.trim();
+						if (!favoriteArtists.includes(artistName)) {
+							nonFavoriteCount++;
+							block.classList.add("fade-out");
+							// Remove after animation
+							setTimeout(() => {
+								if (block.parentNode)
+									block.parentNode.removeChild(block);
+							}, 400);
+						}
+					});
+
+					// Process district X blocks
+					districtBlocks.forEach((block) => {
+						const artistName = block
+							.querySelector("div")
+							.textContent.trim();
+						if (!favoriteArtists.includes(artistName)) {
+							nonFavoriteCount++;
+							block.classList.add("fade-out");
+							// Remove after animation
+							setTimeout(() => {
+								if (block.parentNode)
+									block.parentNode.removeChild(block);
+							}, 400);
+						}
+					});
+				} else {
+					// Going from favorites only to all artists
+					// Need to redraw everything to add the missing bands
+					showDay(currentDay);
+					if (data.districtX && data.districtX[districtXCurrentDay]) {
+						showDistrictXDay(districtXCurrentDay);
+					}
+				}
+			});
+		}
 	});
 });
+
+function animateBlocksForFiltering() {
+	// Arena section
+	document.querySelectorAll("#schedule .set-block").forEach((block) => {
+		const artistName = block.textContent.trim();
+		const shouldRemove =
+			showFavoritesOnly && !favoriteArtists.includes(artistName);
+
+		if (shouldRemove) {
+			block.classList.add("fade-out");
+		}
+	});
+
+	// District X section
+	document
+		.querySelectorAll("#districtx-schedule .set-block")
+		.forEach((block) => {
+			const artistName = block.textContent.trim();
+			const shouldRemove =
+				showFavoritesOnly && !favoriteArtists.includes(artistName);
+
+			if (shouldRemove) {
+				block.classList.add("fade-out");
+			}
+		});
+}
