@@ -1,56 +1,40 @@
+/* ============================================
+   LAYOUT AND CONTAINERS
+   ============================================ */
+   #schedule, #districtx-schedule {
+    overflow-x: auto;
+    max-width: 100%;
+    padding-bottom: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ============================================
+   TIMELINE GRID
+   ============================================ */
 .time-slot {
-    min-width: 60px;
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
+    flex: 0 0 60px !important;
+    box-sizing: border-box;
+    border-right: 1px solid #374151;
+    height: 100%;
+    background-color: rgba(17, 24, 39, 0.2);
 }
 
-.set-block {
-    position: absolute;
-    height: 40px;
-    border-radius: 0.5rem;
-    padding: 0.25rem 0.5rem;
-    background-color: #06b6d4;
-    color: black;
-    font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.time-header {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-}
-
-.active-btn {
-    background-color: #06b6d4;
-    color: black;
-    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5), 0 0 0 1px #06b6d4;
-    transform: scale(1.05);
-    font-weight: bold;
-    position: relative;
-    z-index: 5;
-}
-
-/* New styles for better alignment */
-.stage-row {
-    height: 60px;
-    margin-bottom: 10px;
-    position: relative;
-}
-
-/* ...existing code... */
-
-.stage-name {
-    height: 60px;
-    display: flex;
-    align-items: center;
+    width: max-content;
     position: sticky;
-    left: 0;
+    top: 0;
     z-index: 20;
-    background-color: black; /* Match your background */
-    border-right: 1px solid #4b5563; /* Match your existing border */
-    width: 160px; /* Match your current width */
+    background-color: black;
+    border-bottom: 2px solid #4b5563;
 }
 
-/* Ensure the time header corner stays above everything */
 .time-header .w-40 {
     position: sticky;
     left: 0;
@@ -58,9 +42,101 @@
     background-color: black;
 }
 
-/* Artist Modal Styles */
-#favorites-modal {
-    animation: fadeIn 0.2s ease-in-out;
+.time-slot.next-day {
+    position: relative;
+}
+  
+.time-slot.next-day::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 5px,
+        rgba(0, 0, 0, 0.2) 5px,
+        rgba(0, 0, 0, 0.2) 10px
+    );
+    z-index: -1;
+}
+
+/* ============================================
+   STAGE AND SET BLOCKS
+   ============================================ */
+.stage-row {
+    display: flex;
+    width: max-content;
+    height: 80px;
+    margin-bottom: 10px;
+    position: relative;
+    border-bottom: 1px solid #374151;
+    background-color: rgba(17, 24, 39, 0.1);
+}
+
+.stage-name {
+    width: 160px !important;
+    min-width: 160px !important;
+    flex-shrink: 0;
+    position: sticky;
+    left: 0;
+    z-index: 15;
+    background-color: black;
+    border-right: 2px solid #4b5563;
+    display: flex;
+    align-items: center;
+}
+
+.w-40 {
+    width: 160px !important;
+    min-width: 160px !important;
+    max-width: 160px !important;
+    flex-shrink: 0;
+}
+
+.set-block {
+    position: absolute;
+    height: 60px;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: #4b5563;
+    color: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    font-size: 13px;
+    min-width: 80px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    top: 10px;
+    box-sizing: border-box;
+    margin-right: 2px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.set-block:hover::after {
+    display: none;
+}
+
+.set-block .text-sm {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 2px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    padding: 0 4px;
+}
+
+.set-block .text-xs {
+    font-size: 11px;
+    opacity: 0.9;
 }
 
 .conflict-block {
@@ -71,16 +147,17 @@
     border: 2px solid white;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* Make checkboxes more visible */
-.artist-checkbox {
-    width: 16px;
-    height: 16px;
-    accent-color: #06b6d4;
+/* ============================================
+   NAVIGATION AND BUTTONS
+   ============================================ */
+.active-btn {
+    background-color: #06b6d4;
+    color: black;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5), 0 0 0 1px #06b6d4;
+    transform: scale(1.05);
+    font-weight: bold;
+    position: relative;
+    z-index: 5;
 }
 
 .day-tab {
@@ -109,8 +186,26 @@
     transform: scale(1.2);
 }
 
-.hidden {
-    display: none;
+/* Artist checkbox styling */
+.artist-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: #06b6d4;
+}
+
+/* ============================================
+   MODAL STYLES
+   ============================================ */
+#favorites-modal {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes fadeOut {
@@ -118,7 +213,125 @@
     to { opacity: 0; }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+/* ============================================
+   EVENT MODAL STYLES
+   ============================================ */
+.event-details-modal {
+    position: absolute;
+    background-color: #1e293b;
+    border: 1px solid #4b5563;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    max-width: 250px;
+    min-width: 200px;
+    pointer-events: auto;
+    animation: fadeIn 0.15s ease-out;
+    transition: opacity 0.15s;
+}
+
+.event-details-modal .arrow {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    transform: rotate(45deg);
+    background: #1e293b;
+    border: 1px solid #4b5563;
+}
+
+.event-details-modal.arrow-top .arrow {
+    top: -6px;
+    left: calc(50% - 6px);
+    border-right: none;
+    border-bottom: none;
+}
+
+.event-details-modal.arrow-bottom .arrow {
+    bottom: -6px;
+    left: calc(50% - 6px);
+    border-top: none;
+    border-left: none;
+}
+
+.event-details-modal h3 {
+    font-size: 0.95rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.event-details-modal p {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+    color: #e2e8f0;
+}
+
+.event-details-modal .time {
+    color: #06b6d4;
+    font-weight: 600;
+}
+
+.event-details-modal .stage {
+    color: #d1d5db;
+    font-style: italic;
+}
+
+.event-details-modal .conflict-section {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 8px;
+    padding-top: 6px;
+}
+
+.event-details-modal h4 {
+    color: #ef4444;
+    font-size: 0.8rem;
+    margin: 0 0 4px 0;
+    font-weight: bold;
+}
+
+.event-details-modal .conflict-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 120px;
+    overflow-y: auto;
+    background-color: rgba(220, 38, 38, 0.15);
+    padding: 6px;
+    border-radius: 4px;
+}
+
+.event-details-modal .conflict-list li {
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.event-details-modal .conflict-list li:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.event-details-modal .conflict-artist {
+    font-weight: bold;
+    color: white;
+    font-size: 0.8rem;
+    display: block;
+}
+
+.event-details-modal .conflict-info {
+    font-size: 0.75rem;
+    color: #d1d5db;
+}
+
+.event-details-modal .conflict-stage {
+    color: #9ca3af;
+    margin-left: 4px;
+}
+
+.event-details-modal .conflict-venue {
+    font-style: italic;
+    margin-left: 4px;
+    color: #fbbf24;
 }

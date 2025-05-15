@@ -1,146 +1,311 @@
 {
-    "wednesday": {},
-    "thursday": {},
-    "friday": {
-        "Apex Stage": [
-            {"artist": "SIM", "start": "13:00", "end": "13:30"},
-            {"artist": "CKY", "start": "14:00", "end": "14:30"},
-            {"artist": "Boston Manor", "start": "15:00", "end": "15:40"},
-            {"artist": "Rise Against", "start": "16:10", "end": "17:00"},
-            {"artist": "Jimmy Eat World", "start": "17:30", "end": "18:30"},
-            {"artist": "Weezer", "start": "19:00", "end": "20:10"},
-            {"artist": "Green Day", "start": "20:50", "end": "22:50"}
-        ],
-        "Opus Stage": [
-            {"artist": "The Scratch", "start": "13:00", "end": "13:30"},
-            {"artist": "Starset", "start": "13:50", "end": "14:40"},
-            {"artist": "Dirty Honey", "start": "14:55", "end": "15:25"},
-            {"artist": "Northlane", "start": "15:50", "end": "16:35"},
-            {"artist": "Myles Kennedy", "start": "17:00", "end": "17:45"},
-            {"artist": "Opeth", "start": "18:15", "end": "19:00"},
-            {"artist": "Within Temptation", "start": "19:35", "end": "20:35"}
-        ],
-        "Avalanche Stage": [
-            { "artist": "Karen Dió", "start": "12:50", "end": "13:15" },
-            { "artist": "Unpeople", "start": "13:40", "end": "14:05" },
-            { "artist": "Dead Pony", "start": "14:30", "end": "14:55" },
-            { "artist": "The Meffs", "start": "15:20", "end": "15:45" },
-            { "artist": "Bad Nerves", "start": "16:10", "end": "16:35" },
-            { "artist": "Trophy Eyes", "start": "17:00", "end": "17:25" },
-            { "artist": "Crossfaith", "start": "17:50", "end": "18:20" },
-            { "artist": "Elliot Minor", "start": "18:45", "end": "19:30" },
-            { "artist": "McFly", "start": "19:55", "end": "21:00" }
-        ],
-        "Dogtooth Stage": [
-            {"artist": "The Haunt", "start": "13:00", "end": "13:25"},
-            {"artist": "Battlesnake", "start": "13:50", "end": "14:15"},
-            {"artist": "Gore", "start": "14:40", "end": "15:05"},
-            {"artist": "Riding The Low", "start": "15:30", "end": "15:55"},
-            {"artist": "Graphic Nature", "start": "16:20", "end": "16:45"},
-            {"artist": "Windhand", "start": "17:10", "end": "17:35"},
-            {"artist": "Svalbard", "start": "18:00", "end": "18:30"},
-            {"artist": "Vola", "start": "18:50", "end": "19:35"},
-            {"artist": "Alcest", "start": "19:50", "end": "20:35"},
-            {"artist": "Eivor", "start": "20:50", "end": "21:35"},
-            {"artist": "Apocalyptica", "start": "21:50", "end": "22:50"}
-        ]
+    "districtX": {
+        "wednesday": {
+            "The Den": [
+                {"artist": "Jard Christmas", "start": "14:00", "end": "14:15"},
+                {"artist": "Chris Washington", "start": "14:15", "end": "14:30"},
+                {"artist": "Kyla Cobbler", "start": "14:55", "end": "15:15"},
+                {"artist": "Jard Christmas", "start": "15:30", "end": "15:45"},
+                {"artist": "Bethany Black", "start": "15:45", "end": "16:00"},
+                {"artist": "John Robertson", "start": "16:05", "end": "16:20"},
+                {"artist": "Markus Birdman", "start": "16:25", "end": "16:45"},
+                {"artist": "Dave Longley", "start": "17:00", "end": "17:15"},
+                {"artist": "Hayley Ellis", "start": "17:15", "end": "17:30"},
+                {"artist": "Pete Otway", "start": "17:35", "end": "17:50"},
+                {"artist": "Dave Longley", "start": "18:30", "end": "18:45"},
+                {"artist": "Matt Reed", "start": "18:45", "end": "19:00"},
+                {"artist": "John Robertson", "start": "20:15", "end": "21:30"},
+                {"artist": "Nu-Castle", "start": "22:00", "end": "22:55"},
+                {"artist": "00s Mixtape", "start": "23:00", "end": "03:00"}
+            ],
+            "The Doghouse": [
+                {"artist": "Community Takeover", "start": "16:00", "end": "21:00"},
+                {"artist": "Rockstar", "start": "21:00", "end": "22:00"},
+                {"artist": "Destruction In The Doghouse", "start": "22:00", "end": "00:00"},
+                {"artist": "Rockstar", "start": "00:00", "end": "01:00"},
+                {"artist": "Zoe London", "start": "01:00", "end": "03:00"}
+            ],
+            "The Outpost": [
+                {"artist": "Axe & Paddle", "start": "14:00", "end": "14:40"},
+                {"artist": "Adam Purnell - Shropshire Lad", "start": "15:00", "end": "15:40"},
+                {"artist": "Chilli Eating Competitions", "start": "16:00", "end": "17:00"},
+                {"artist": "McBagleyBBQ", "start": "17:30", "end": "18:10"},
+                {"artist": "Boca Loco", "start": "18:30", "end": "19:10"},
+                {"artist": "Fat Foodie", "start": "19:30", "end": "20:10"},
+                {"artist": "Mat Blak", "start": "20:30", "end": "21:10"},
+                {"artist": "Cinema - Borderlands (12A), Hellboy (15)", "start": "21:30", "end": "01:50"}
+            ],
+            "Ace Of Spades Tavern": [
+                {"artist": "Panic! At The Bingo", "start": "15:00", "end": "17:00"},
+                {"artist": "Panic! At The Bingo", "start": "18:00", "end": "20:00"},
+                {"artist": "Emo Drag Karaoke", "start": "20:30", "end": "22:00"},
+                {"artist": "Uprawr", "start": "23:00", "end": "03:00"}
+            ]
+        },
+        "thursday": {
+            "The Den": [
+                {"artist": "Battlesnake", "start": "12:00", "end": "12:45"},
+                {"artist": "Thanyia Moore", "start": "14:00", "end": "14:15"},
+                {"artist": "Kate Butch", "start": "14:15", "end": "14:30"},
+                {"artist": "Peter Bush", "start": "14:35", "end": "14:50"},
+                {"artist": "Scott Bennett", "start": "14:55", "end": "15:15"},
+                {"artist": "Thanyia Moore", "start": "15:30", "end": "15:45"},
+                {"artist": "Phil Nichol", "start": "16:25", "end": "16:45"},
+                {"artist": "Danny McLoughlin", "start": "17:00", "end": "17:15"},
+                {"artist": "Lou Coran", "start": "17:15", "end": "17:30"},
+                {"artist": "Eddy Brimson", "start": "17:35", "end": "17:50"},
+                {"artist": "Sikisa", "start": "18:20", "end": "18:40"},
+                {"artist": "Kate Butch", "start": "20:25", "end": "20:40"},
+                {"artist": "Sikisa", "start": "20:45", "end": "21:00"},
+                {"artist": "Stokes", "start": "21:30", "end": "22:00"},
+                {"artist": "Thanks For The Memories", "start": "22:00", "end": "23:00"},
+                {"artist": "Stokes", "start": "23:00", "end": "23:30"},
+                {"artist": "Emo Drag Karaoke", "start": "23:30", "end": "03:00"}
+            ],
+            "The Doghouse": [
+                {"artist": "RockFit", "start": "10:00", "end": "11:00"},
+                {"artist": "Heavy Metal Sports", "start": "11:30", "end": "13:00"},
+                {"artist": "Choir Noir", "start": "13:30", "end": "14:15"},
+                {"artist": "Old Time Sailors", "start": "15:00", "end": "16:00"},
+                {"artist": "Dave Hill", "start": "16:30", "end": "17:30"},
+                {"artist": "The Scratch", "start": "18:00", "end": "19:00"},
+                {"artist": "Famous First Words", "start": "19:30", "end": "22:00"},
+                {"artist": "Vengaboys", "start": "22:30", "end": "23:00"},
+                {"artist": "Hang The DJs", "start": "23:00", "end": "01:00"},
+                {"artist": "John Mahon DJ", "start": "01:00", "end": "03:00"}
+            ],
+            "The Outpost": [
+                {"artist": "Flow State Wellness Session", "start": "10:00", "end": "11:00"},
+                {"artist": "Axe & Paddle", "start": "12:30", "end": "13:10"},
+                {"artist": "Live Fire Bunch", "start": "13:30", "end": "14:10"},
+                {"artist": "McBagleyBBQ", "start": "14:30", "end": "15:10"},
+                {"artist": "Chilli Eating Competitions", "start": "15:30", "end": "16:30"},
+                {"artist": "Boca Loco", "start": "16:50", "end": "17:50"},
+                {"artist": "Chilli Eating Competitions", "start": "18:10", "end": "19:10"},
+                {"artist": "Adam Purnell - Shropshire Lad", "start": "19:30", "end": "20:10"},
+                {"artist": "Mat Blak", "start": "20:30", "end": "21:10"},
+                {"artist": "Cinema - The Princess Bride (PG), Reservoir Dogs (18)", "start": "23:30", "end": "03:00"}
+            ],
+            "Ace Of Spades Tavern": [
+                {"artist": "Panic! At The Bingo", "start": "12:30", "end": "14:30"},
+                {"artist": "On Wednesdays We Wear Black", "start": "15:30", "end": "16:30"},
+                {"artist": "Never Mind The Download Pub Quiz", "start": "17:30", "end": "19:30"},
+                {"artist": "Defender Of The Riff", "start": "20:30", "end": "21:30"},
+                {"artist": "Alex Baker", "start": "23:00", "end": "03:00"}
+            ]
+        },
+        "friday": {
+            "The Den": [
+                {"artist": "Rock Kids", "start": "10:00", "end": "11:00"},
+                {"artist": "Justin Hawkins Rides Again", "start": "11:30", "end": "12:30"},
+                {"artist": "She They Press Play", "start": "23:00", "end": "00:00"},
+                {"artist": "She They Press Play", "start": "00:30", "end": "01:30"},
+                {"artist": "90s & 00s Raveyard", "start": "01:30", "end": "03:00"}
+            ],
+            "The Doghouse": [
+                {"artist": "RockFit", "start": "11:00", "end": "12:00"},
+                {"artist": "GateKeeper", "start": "22:00", "end": "23:30"},
+                {"artist": "Aled Phillips", "start": "23:30", "end": "00:30"},
+                {"artist": "Funeral For A Friend Acoustic", "start": "00:30", "end": "01:00"},
+                {"artist": "Dougie Poynter", "start": "01:00", "end": "02:00"},
+                {"artist": "GateKeeper", "start": "02:00", "end": "03:30"}
+            ],
+            "The Outpost": [
+                {"artist": "Flow State Wellness Session", "start": "09:00", "end": "10:00"},
+                {"artist": "Cinema - The Autopsy of Jane Doe (15), Insidious 3 (15)", "start": "23:00", "end": "02:20"}
+            ],
+            "Ace Of Spades Tavern": [
+                {"artist": "Green Day Quiz", "start": "10:00", "end": "12:00"},
+                {"artist": "Emo Prom", "start": "23:00", "end": "03:00"}
+            ]
         },
         "saturday": {
+            "The Den": [
+                {"artist": "Slay Duggee", "start": "10:00", "end": "11:00"},
+                {"artist": "Delight", "start": "23:00", "end": "00:00"},
+                {"artist": "K1", "start": "00:30", "end": "01:00"},
+                {"artist": "Dani Filth (And Kam Haq!)", "start": "01:00", "end": "02:00"},
+                {"artist": "K1", "start": "02:00", "end": "03:00"}
+            ],
+            "The Doghouse": [
+                {"artist": "RockFit", "start": "11:00", "end": "12:00"},
+                {"artist": "Feelin' This", "start": "22:00", "end": "23:30"},
+                {"artist": "Feelin' This", "start": "23:30", "end": "01:30"},
+                {"artist": "Modestep DJ Set", "start": "01:30", "end": "03:00"}
+            ],
+            "The Outpost": [
+                {"artist": "Flow State Wellness Session", "start": "09:00", "end": "10:00"},
+                {"artist": "Cinema - Dirty Dancy (15), The Unbearable Weight of Massive Talent (15)", "start": "23:30", "end": "02:20"}
+            ],
+            "Ace Of Spades Tavern": [
+                {"artist": "Sleep Token Quiz", "start": "10:00", "end": "12:00"},
+                {"artist": "Bongo's Bingo", "start": "22:30", "end": "00:00"},
+                {"artist": "Master Of Pop Hits", "start": "01:00", "end": "03:00"}
+            ]
+        },
+        "sunday": {
+            "The Den": [
+                {"artist": "Rock Kids", "start": "10:00", "end": "11:00"},
+                {"artist": "Metal Night", "start": "23:00", "end": "00:00"}
+            ],
+            "The Doghouse": [
+                {"artist": "RockFit", "start": "11:00", "end": "12:00"},
+                {"artist": "Salt Sweet Sugar", "start": "22:00", "end": "23:30"},
+                {"artist": "End Of The World Party", "start": "23:30", "end": "03:00"}
+            ],
+            "The Outpost": [
+                {"artist": "Flow State Wellness Session", "start": "10:00", "end": "11:00"},
+                {"artist": "Cinema - John Wick: Chapter 4 (15), Rambo (18)", "start": "21:30", "end": "02:10"}
+            ],
+            "Ace Of Spades Tavern": [
+                {"artist": "Korn Quiz", "start": "10:00", "end": "12:00"},
+                {"artist": "Decade", "start": "23:00", "end": "01:00"},
+                {"artist": "Attitude Era", "start": "01:00", "end": "03:00"}
+            ]
+        }
+    },
+    "arena": {    
+        "friday": {
             "Apex Stage": [
-              { "artist": "Static Dress", "start": "11:00", "end": "11:30" },
-              { "artist": "Loathe", "start": "12:00", "end": "12:30" },
-              { "artist": "Hatebreed", "start": "13:05", "end": "13:50" },
-              { "artist": "Poppy", "start": "14:15", "end": "15:00" },
-              { "artist": "Palaye Royale", "start": "15:30", "end": "16:15" },
-              { "artist": "Don Broco", "start": "16:50", "end": "17:50" },
-              { "artist": "Shinedown", "start": "18:20", "end": "19:20" },
-              { "artist": "Sleep Token", "start": "21:00", "end": "22:45" }
+                {"artist": "SIM", "start": "13:00", "end": "13:30"},
+                {"artist": "CKY", "start": "14:00", "end": "14:30"},
+                {"artist": "Boston Manor", "start": "15:00", "end": "15:40"},
+                {"artist": "Rise Against", "start": "16:10", "end": "17:00"},
+                {"artist": "Jimmy Eat World", "start": "17:30", "end": "18:30"},
+                {"artist": "Weezer", "start": "19:00", "end": "20:10"},
+                {"artist": "Green Day", "start": "20:50", "end": "22:50"}
             ],
             "Opus Stage": [
-              { "artist": "Sophie Lloyd", "start": "12:05", "end": "12:35" },
-              { "artist": "Kim Dracula", "start": "12:55", "end": "13:25" },
-              { "artist": "Currents", "start": "13:50", "end": "14:35" },
-              { "artist": "Awolnation", "start": "14:55", "end": "15:40" },
-              { "artist": "Polaris", "start": "16:00", "end": "16:45" },
-              { "artist": "Eagles of Death Metal", "start": "17:05", "end": "17:50" },
-              { "artist": "The Darkness", "start": "18:10", "end": "19:00" },
-              { "artist": "Sex Pistols featuring Frank Carter", "start": "19:35", "end": "20:45" }
+                {"artist": "The Scratch", "start": "13:00", "end": "13:25"},
+                {"artist": "Starset", "start": "13:50", "end": "14:30"},
+                {"artist": "Dirty Honey", "start": "14:55", "end": "15:25"},
+                {"artist": "Northlane", "start": "15:50", "end": "16:30"},
+                {"artist": "Myles Kennedy", "start": "17:00", "end": "17:45"},
+                {"artist": "Opeth", "start": "18:15", "end": "19:05"},
+                {"artist": "Within Temptation", "start": "19:35", "end": "20:50"}
             ],
             "Avalanche Stage": [
-              { "artist": "Autumn Fires", "start": "11:00", "end": "11:30" },
-              { "artist": "Bex", "start": "11:50", "end": "12:20" },
-              { "artist": "Venus Grrrls", "start": "12:45", "end": "13:15" },
-              { "artist": "Split Chain", "start": "13:40", "end": "14:10" },
-              { "artist": "Lolo", "start": "14:35", "end": "15:05" },
-              { "artist": "Mothica", "start": "15:30", "end": "16:00" },
-              { "artist": "Smash Into Pieces", "start": "16:25", "end": "16:55" },
-              { "artist": "Twin Atlantic", "start": "17:20", "end": "18:05" },
-              { "artist": "Mallory Knox", "start": "18:30", "end": "19:15" },
-              { "artist": "Dayseeker", "start": "19:40", "end": "20:40" }
+                { "artist": "Karen Dió", "start": "12:50", "end": "13:15" },
+                { "artist": "Unpeople", "start": "13:40", "end": "14:05" },
+                { "artist": "Dead Pony", "start": "14:30", "end": "14:55" },
+                { "artist": "The Meffs", "start": "15:20", "end": "15:45" },
+                { "artist": "Bad Nerves", "start": "16:10", "end": "16:35" },
+                { "artist": "Trophy Eyes", "start": "17:00", "end": "17:25" },
+                { "artist": "Crossfaith", "start": "17:50", "end": "18:20" },
+                { "artist": "Elliot Minor", "start": "18:45", "end": "19:25" },
+                { "artist": "McFly", "start": "19:55", "end": "20:55" }
             ],
             "Dogtooth Stage": [
-              { "artist": "Artio", "start": "11:00", "end": "11:20" },
-              { "artist": "Lastelle", "start": "11:45", "end": "12:05" },
-              { "artist": "Bastardane", "start": "12:30", "end": "13:00" },
-              { "artist": "Zetra", "start": "13:20", "end": "13:50" },
-              { "artist": "Underside", "start": "14:10", "end": "14:40" },
-              { "artist": "Holy Wars", "start": "15:00", "end": "15:30" },
-              { "artist": "Teen Mortgage", "start": "15:50", "end": "16:20" },
-              { "artist": "The Funeral Portrait", "start": "16:40", "end": "17:10" },
-              { "artist": "Anaal Nathrakh", "start": "17:30", "end": "18:00" },
-              { "artist": "Kittie", "start": "18:25", "end": "19:10" },
-              { "artist": "Sylosis", "start": "19:25", "end": "20:10" },
-              { "artist": "Cradle of Filth", "start": "20:30", "end": "21:30" }
+                {"artist": "The Haunt", "start": "13:00", "end": "13:25"},
+                {"artist": "Battlesnake", "start": "13:50", "end": "14:15"},
+                {"artist": "Gore.", "start": "14:40", "end": "15:05"},
+                {"artist": "Riding The Low", "start": "15:30", "end": "15:55"},
+                {"artist": "Graphic Nature", "start": "16:20", "end": "16:45"},
+                {"artist": "Windhand", "start": "17:10", "end": "17:35"},
+                {"artist": "Svalbard", "start": "18:00", "end": "18:25"},
+                {"artist": "Vola", "start": "18:50", "end": "19:20"},
+                {"artist": "Alcest", "start": "19:50", "end": "20:25"},
+                {"artist": "Eivor", "start": "20:50", "end": "21:25"},
+                {"artist": "Apocalyptica", "start": "21:50", "end": "22:50"}
             ]
-          },
-    "sunday": {
-        "Apex Stage": [
-            { "artist": "Orbit Culture", "start": "11:00", "end": "11:30" },
-            { "artist": "Bleed From Within", "start": "12:00", "end": "12:45" },
-            { "artist": "Power Trip", "start": "13:10", "end": "13:55" },
-            { "artist": "Jinjer", "start": "14:25", "end": "15:10" },
-            { "artist": "Meshuggah", "start": "15:40", "end": "16:25" },
-            { "artist": "Spiritbox", "start": "17:00", "end": "18:00" },
-            { "artist": "Bullet For My Valentine", "start": "19:00", "end": "20:00" },
-            { "artist": "Korn", "start": "21:25", "end": "23:00" }
-        ],
-        "Opus Stage": [
-            { "artist": "The Southern River Band", "start": "11:00", "end": "11:30" },
-            { "artist": "Seven Hours After Violet", "start": "11:50", "end": "12:20" },
-            { "artist": "Nothing More", "start": "12:40", "end": "13:10" },
-            { "artist": "The Ghost Inside", "start": "13:40", "end": "14:10" },
-            { "artist": "Municipal Waste", "start": "14:35", "end": "15:05" },
-            { "artist": "Alien Ant Farm", "start": "15:30", "end": "16:00" },
-            { "artist": "Jerry Cantrell", "start": "16:25", "end": "17:10" },
-            { "artist": "Airbourne", "start": "17:35", "end": "18:20" },
-            { "artist": "Lorna Shore", "start": "18:45", "end": "19:30" },
-            { "artist": "Steel Panther", "start": "20:05", "end": "21:05" }
-        ],
-        "Avalanche Stage": [
-            { "artist": "Harpy", "start": "11:00", "end": "11:30" },
-            { "artist": "Arrows In Action", "start": "11:50", "end": "12:20" },
-            { "artist": "Amira Elfeky", "start": "12:50", "end": "13:20" },
-            { "artist": "Spiritual Cramp", "start": "13:50", "end": "14:20" },
-            { "artist": "House Of Protection", "start": "14:35", "end": "15:05" },
-            { "artist": "Dead Poet Society", "start": "15:30", "end": "16:15" },
-            { "artist": "Turbonegro", "start": "16:40", "end": "17:25" },
-            { "artist": "Me First And The Gimme Gimmes", "start": "17:45", "end": "18:30" },
-            { "artist": "Kids In Glass Houses", "start": "19:00", "end": "20:00" }
-        ],
-        "Dogtooth Stage": [
-            { "artist": "Neckbreakker", "start": "11:00", "end": "11:30" },
-            { "artist": "Archers", "start": "11:50", "end": "12:20" },
-            { "artist": "Faetooth", "start": "12:40", "end": "13:10" },
-            { "artist": "Vower", "start": "13:35", "end": "14:05" },
-            { "artist": "Survive Said The Prophet", "start": "14:30", "end": "15:00" },
-            { "artist": "Vows", "start": "15:25", "end": "15:55" },
-            { "artist": "President", "start": "16:25", "end": "16:55" },
-            { "artist": "Unprocessed", "start": "17:25", "end": "17:55" },
-            { "artist": "Novelists", "start": "18:25", "end": "18:55" },
-            { "artist": "Cattle Decapitation", "start": "19:20", "end": "19:50" },
-            { "artist": "Fit For An Autopsy", "start": "20:15", "end": "20:45" },
-            { "artist": "Whitechapel", "start": "21:10", "end": "21:40" },
-            { "artist": "Sikth", "start": "22:05", "end": "22:50" }
-        ]
-    }
+            },
+            "saturday": {
+                "Apex Stage": [
+                    { "artist": "Static Dress", "start": "11:00", "end": "11:30" },
+                    { "artist": "Loathe", "start": "12:00", "end": "12:35" },
+                    { "artist": "Hatebreed", "start": "13:05", "end": "13:45" },
+                    { "artist": "Poppy", "start": "14:15", "end": "15:00" },
+                    { "artist": "Palaye Royale", "start": "15:30", "end": "16:20" },
+                    { "artist": "Don Broco", "start": "16:50", "end": "17:50" },
+                    { "artist": "Shinedown", "start": "18:20", "end": "19:30" },
+                    { "artist": "Sleep Token", "start": "21:00", "end": "22:45" }
+                ],
+                "Opus Stage": [
+                    { "artist": "Sophie Lloyd", "start": "12:05", "end": "12:30" },
+                    { "artist": "Kim Dracula", "start": "12:55", "end": "13:25" },
+                    { "artist": "Currents", "start": "13:50", "end": "14:30" },
+                    { "artist": "Awolnation", "start": "14:55", "end": "15:35" },
+                    { "artist": "Polaris", "start": "16:00", "end": "16:40" },
+                    { "artist": "Eagles of Death Metal", "start": "17:05", "end": "17:45" },
+                    { "artist": "The Darkness", "start": "18:10", "end": "19:00" },
+                    { "artist": "Sex Pistols featuring Frank Carter", "start": "19:35", "end": "20:50" }
+                ],
+                "Avalanche Stage": [
+                    { "artist": "Autumn Fires", "start": "11:00", "end": "11:25" },
+                    { "artist": "Bex", "start": "11:50", "end": "12:20" },
+                    { "artist": "Venus Grrrls", "start": "12:45", "end": "13:15" },
+                    { "artist": "Split Chain", "start": "13:40", "end": "14:10" },
+                    { "artist": "Lolo", "start": "14:35", "end": "15:05" },
+                    { "artist": "Mothica", "start": "15:30", "end": "16:00" },
+                    { "artist": "Smash Into Pieces", "start": "16:25", "end": "16:55" },
+                    { "artist": "Twin Atlantic", "start": "17:20", "end": "18:00" },
+                    { "artist": "Mallory Knox", "start": "18:30", "end": "19:10" },
+                    { "artist": "Dayseeker", "start": "19:40", "end": "20:40" }
+                ],
+                "Dogtooth Stage": [
+                    { "artist": "Artio", "start": "11:00", "end": "11:20" },
+                    { "artist": "Lastelle", "start": "11:45", "end": "12:05" },
+                    { "artist": "Bastardane", "start": "12:30", "end": "12:55" },
+                    { "artist": "Zetra", "start": "13:20", "end": "13:45" },
+                    { "artist": "Underside", "start": "14:10", "end": "14:35" },
+                    { "artist": "Holy Wars", "start": "15:00", "end": "15:25" },
+                    { "artist": "Teen Mortgage", "start": "15:50", "end": "16:15" },
+                    { "artist": "The Funeral Portrait", "start": "16:40", "end": "17:05" },
+                    { "artist": "Anaal Nathrakh", "start": "17:30", "end": "18:00" },
+                    { "artist": "Kittie", "start": "18:25", "end": "19:00" },
+                    { "artist": "Sylosis", "start": "19:25", "end": "20:00" },
+                    { "artist": "Cradle of Filth", "start": "20:30", "end": "21:30" }
+                ]
+            },
+            "sunday": {
+                "Apex Stage": [
+                    { "artist": "Orbit Culture", "start": "11:00", "end": "11:30" },
+                    { "artist": "Bleed From Within", "start": "12:00", "end": "12:40" },
+                    { "artist": "Power Trip", "start": "13:10", "end": "13:55" },
+                    { "artist": "Jinjer", "start": "14:25", "end": "15:10" },
+                    { "artist": "Meshuggah", "start": "15:40", "end": "16:30" },
+                    { "artist": "Spiritbox", "start": "17:00", "end": "18:00" },
+                    { "artist": "Bullet For My Valentine", "start": "19:00", "end": "20:10" },
+                    { "artist": "Korn", "start": "21:25", "end": "22:55" }
+                ],
+                "Opus Stage": [
+                    { "artist": "The Southern River Band", "start": "11:00", "end": "11:25" },
+                    { "artist": "Seven Hours After Violet", "start": "11:50", "end": "12:15" },
+                    { "artist": "Nothing More", "start": "12:40", "end": "13:15" },
+                    { "artist": "The Ghost Inside", "start": "13:40", "end": "14:10" },
+                    { "artist": "Municipal Waste", "start": "14:35", "end": "15:05" },
+                    { "artist": "Alien Ant Farm", "start": "15:30", "end": "16:00" },
+                    { "artist": "Jerry Cantrell", "start": "16:25", "end": "17:05" },
+                    { "artist": "Airbourne", "start": "17:35", "end": "18:15" },
+                    { "artist": "Lorna Shore", "start": "18:45", "end": "19:30" },
+                    { "artist": "Steel Panther", "start": "20:05", "end": "21:15" }
+                ],
+                "Avalanche Stage": [
+                    { "artist": "Harpy", "start": "11:00", "end": "11:25" },
+                    { "artist": "Arrows In Action", "start": "11:50", "end": "12:20" },
+                    { "artist": "Amira Elfeky", "start": "12:50", "end": "13:20" },
+                    { "artist": "Spiritual Cramp", "start": "13:50", "end": "14:20" },
+                    { "artist": "House Of Protection", "start": "15:50", "end": "16:20" },
+                    { "artist": "Dead Poet Society", "start": "16:50", "end": "17:30" },
+                    { "artist": "Turbonegro", "start": "18:00", "end": "18:40" },
+                    { "artist": "Me First And The Gimme Gimmes", "start": "19:10", "end": "19:50" },
+                    { "artist": "Kids In Glass Houses", "start": "20:20", "end": "21:20" }
+                ],
+                "Dogtooth Stage": [
+                    { "artist": "Neckbreakker", "start": "11:00", "end": "11:25" },
+                    { "artist": "Archers", "start": "11:50", "end": "12:15" },
+                    { "artist": "Faetooth", "start": "12:40", "end": "13:10" },
+                    { "artist": "Vower", "start": "13:35", "end": "14:05" },
+                    { "artist": "Survive Said The Prophet", "start": "14:30", "end": "15:00" },
+                    { "artist": "Vowws", "start": "15:25", "end": "15:55" },
+                    { "artist": "President", "start": "16:25", "end": "16:55" },
+                    { "artist": "Unprocessed", "start": "17:25", "end": "17:55" },
+                    { "artist": "Novelists", "start": "18:25", "end": "18:55" },
+                    { "artist": "Cattle Decapitation", "start": "19:20", "end": "19:50" },
+                    { "artist": "Fit For An Autopsy", "start": "20:15", "end": "20:45" },
+                    { "artist": "Whitechapel", "start": "21:10", "end": "21:40" },
+                    { "artist": "Sikth", "start": "22:05", "end": "22:50" }
+                ]
+            }
+        }
   }
