@@ -10,42 +10,45 @@
 		<script src="script.js"></script>
 	</head>
 	<body class="bg-black text-white p-4">
-		<header class="flex items-center gap-3 mb-6">
-			<img
-				src="assets/downloadlogo.svg"
-				alt="Download Festival"
-				class="h-12"
-			/>
-			<h1 class="text-2xl font-bold">Set Times</h1>
-		</header>
-		<!-- Favorites Button -->
-		<div class="fixed top-4 right-4 z-30">
-			<div class="flex gap-2 items-center">
+		<header
+			class="flex flex-wrap items-center justify-between gap-2 mb-4 sm:mb-6"
+		>
+			<div class="flex items-center gap-2 sm:gap-3">
+				<img
+					src="assets/downloadlogo.svg"
+					alt="Download Festival"
+					class="h-8 sm:h-12"
+				/>
+				<h1 class="text-xl sm:text-2xl font-bold">Set Times</h1>
+			</div>
+
+			<!-- Move buttons into the header for better mobile layout -->
+			<div class="flex gap-1 sm:gap-2 items-center">
 				<button
 					id="open-favorites"
-					class="bg-cyan-600 px-3 py-2 rounded flex items-center"
+					class="bg-cyan-600 px-2 sm:px-3 py-1 sm:py-2 rounded text-sm sm:text-base flex items-center"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
+						width="14"
+						height="14"
 						fill="currentColor"
-						class="mr-2"
+						class="mr-1 sm:mr-2"
 						viewBox="0 0 16 16"
 					>
 						<path
 							d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
 						/>
 					</svg>
-					My Artists
+					<span class="hidden xs:inline">My</span> Artists
 				</button>
 				<button
 					id="generate-poster"
-					class="ml-2 bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-4 rounded-lg flex items-center"
+					class="bg-cyan-700 hover:bg-cyan-600 text-white py-1 sm:py-2 px-2 sm:px-4 rounded text-sm sm:text-base flex items-center"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 mr-1"
+						class="h-4 w-4 sm:h-5 sm:w-5 mr-1"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"
@@ -57,10 +60,10 @@
 							d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
 						/>
 					</svg>
-					Generate Poster
+					<span class="hidden xs:inline">Generate</span> Poster
 				</button>
 			</div>
-		</div>
+		</header>
 
 		<!-- Artist Favorites Modal -->
 		<div
@@ -118,74 +121,171 @@
 			</div>
 		</div>
 
-		<!-- Main Schedule Sections -->
+		<!-- Arena Bands Section -->
 		<div class="mb-8">
-			<!-- Arena Bands Section -->
 			<h2 class="text-xl font-bold mb-3 border-b border-gray-700 pb-2">
 				Arena Bands
 			</h2>
-			<!-- Weather forecast section -->
-			<!-- <div class="weather-container mb-4 p-3 rounded-lg bg-gray-800">
-				<h3 class="text-sm font-bold mb-2 text-cyan-500">
-					Festival Weather
-				</h3>
-				<div class="flex flex-wrap gap-3" id="weather-forecast">
-					<div class="loading-spinner"></div>
-					<span class="text-sm">Loading weather...</span>
+
+			<!-- My Artists Toggle (responsive placement) -->
+			<div
+				class="md:hidden my-artists-toggle flex items-center mb-4 justify-end"
+			>
+				<span class="text-sm mr-2">My Artists Only</span>
+				<label class="switch">
+					<input
+						type="checkbox"
+						id="global-favorites-toggle-mobile"
+					/>
+					<span class="slider round"></span>
+				</label>
+			</div>
+
+			<!-- Mobile UI (visible only on small screens) -->
+			<div class="block md:hidden mb-4">
+				<!-- Stage Selector Dropdown (Mobile) -->
+				<div class="relative inline-block text-left w-full mb-3">
+					<button
+						id="stage-dropdown-btn-mobile"
+						class="bg-cyan-600 px-4 py-2 rounded flex items-center justify-between w-full"
+					>
+						<span id="current-stage-mobile">All Stages</span>
+						<svg
+							class="w-4 h-4 ml-2 transition-transform duration-300"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							></path>
+						</svg>
+					</button>
+					<div
+						id="stage-dropdown-mobile"
+						class="hidden absolute z-30 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
+					>
+						<div class="py-1" role="menu">
+							<!-- Menu items will be here -->
+						</div>
+					</div>
 				</div>
-			</div> -->
-			<div class="flex justify-between items-center">
-				<div
-					id="stage-buttons"
-					class="flex gap-2 mb-4 overflow-x-auto"
-				></div>
-				<div class="flex justify-between items-center mb-4">
+
+				<!-- Day Selector Dropdown (Mobile) -->
+				<div class="relative inline-block text-left w-full">
+					<button
+						id="day-dropdown-btn-mobile"
+						class="bg-cyan-600 px-4 py-2 rounded flex items-center justify-between w-full"
+					>
+						<span id="current-day-mobile">Friday</span>
+						<svg
+							class="w-4 h-4 ml-2"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							></path>
+						</svg>
+					</button>
+					<div
+						id="day-dropdown-mobile"
+						class="hidden absolute z-10 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
+					>
+						<div class="py-1" role="menu">
+							<button
+								onclick="showDay('friday'); updateMobileDayText('Friday');"
+								class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+								role="menuitem"
+							>
+								Friday
+							</button>
+							<button
+								onclick="showDay('saturday'); updateMobileDayText('Saturday');"
+								class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+								role="menuitem"
+							>
+								Saturday
+							</button>
+							<button
+								onclick="showDay('sunday'); updateMobileDayText('Sunday');"
+								class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+								role="menuitem"
+							>
+								Sunday
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- My Artists Toggle (Mobile) -->
+			<div class="flex items-center justify-end mb-4 md:hidden">
+				<span class="text-sm mr-2">My Artists Only</span>
+				<label class="switch">
+					<input
+						type="checkbox"
+						id="global-favorites-toggle-mobile"
+					/>
+					<span class="slider round"></span>
+				</label>
+			</div>
+
+			<!-- Desktop UI (hidden on mobile) -->
+			<div class="hidden md:block">
+				<div class="flex items-center justify-between mb-4">
+					<!-- Existing stage buttons will be here -->
 					<div
 						id="stage-buttons"
 						class="flex gap-2 overflow-x-auto"
 					></div>
-					<div class="my-artists-toggle flex items-center ml-auto">
+
+					<!-- My Artists Toggle (Desktop) -->
+					<div class="flex items-center ml-4">
 						<span class="text-sm mr-2">My Artists Only</span>
 						<label class="switch">
 							<input
 								type="checkbox"
-								id="global-favorites-toggle"
+								id="global-favorites-toggle-desktop"
 							/>
 							<span class="slider round"></span>
 						</label>
 					</div>
 				</div>
+
+				<!-- Day selector buttons for desktop -->
+				<div class="flex flex-nowrap gap-2 mb-4">
+					<button
+						onclick="showDay('friday')"
+						class="day-btn bg-gray-700 px-4 py-2 rounded"
+					>
+						Friday
+					</button>
+					<button
+						onclick="showDay('saturday')"
+						class="day-btn bg-gray-700 px-4 py-2 rounded"
+					>
+						Saturday
+					</button>
+					<button
+						onclick="showDay('sunday')"
+						class="day-btn bg-gray-700 px-4 py-2 rounded"
+					>
+						Sunday
+					</button>
+				</div>
 			</div>
 
-			<!-- Day Selector -->
-			<div class="flex gap-2 mb-4 overflow-x-auto">
-				<button
-					onclick="showDay('friday')"
-					class="day-btn bg-gray-700 px-4 py-2 rounded"
-				>
-					Friday
-				</button>
-				<button
-					onclick="showDay('saturday')"
-					class="day-btn bg-gray-700 px-4 py-2 rounded"
-				>
-					Saturday
-				</button>
-				<button
-					onclick="showDay('sunday')"
-					class="day-btn bg-gray-700 px-4 py-2 rounded"
-				>
-					Sunday
-				</button>
-			</div>
-
-			<!-- Stage Filter -->
-			<div
-				id="stage-buttons"
-				class="flex gap-2 mb-4 overflow-x-auto"
-			></div>
-
-			<!-- Schedule Container -->
+			<!-- Schedule Container (both mobile and desktop) -->
 			<div class="overflow-x-auto">
 				<div
 					class="relative"
@@ -194,7 +294,6 @@
 				></div>
 			</div>
 		</div>
-
 		<!-- District X Bands Section -->
 		<div class="mt-12">
 			<h2 class="text-xl font-bold mb-3 border-b border-gray-700 pb-2">

@@ -383,6 +383,91 @@ function filterDistrictXStage(stage) {
 		});
 }
 
+function populateMobileStageDropdown(stageNames) {
+	const dropdown = document.getElementById("stage-dropdown-mobile");
+	if (!dropdown) return;
+
+	const menuContainer = dropdown.querySelector('div[role="menu"]');
+	if (!menuContainer) return;
+
+	// Clear existing options except "All Stages"
+	const allStagesOption = menuContainer.querySelector(
+		"button[onclick*=\"filterStage('all')\"]"
+	);
+	menuContainer.innerHTML = "";
+
+	// Re-add "All Stages" option
+	if (allStagesOption) {
+		menuContainer.appendChild(allStagesOption);
+	} else {
+		const allButton = document.createElement("button");
+		allButton.className =
+			"block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700";
+		allButton.setAttribute("role", "menuitem");
+		allButton.onclick = function () {
+			filterStage("all");
+			updateMobileStageText("All Stages");
+		};
+		allButton.textContent = "All Stages";
+		menuContainer.appendChild(allButton);
+	}
+
+	// Add options for each stage from JSON
+	stageNames.forEach((stage) => {
+		// Capitalize first letter but preserve "Stage" capitalization
+		const stageName =
+			stage.charAt(0).toUpperCase() +
+			stage.slice(1).replace(/\bstage\b/i, "Stage");
+
+		const stageButton = document.createElement("button");
+		stageButton.className =
+			"block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700";
+		stageButton.setAttribute("role", "menuitem");
+		stageButton.onclick = function () {
+			filterStage(stage);
+			updateMobileStageText(stageName);
+		};
+		stageButton.textContent = stageName;
+		menuContainer.appendChild(stageButton);
+	});
+}
+
+function populateStageButtons(stageNames) {
+	// Original functionality for desktop
+	const container = document.getElementById("stage-buttons");
+	if (!container) return;
+
+	container.innerHTML = "";
+
+	// All Stages button
+	const allButton = document.createElement("button");
+	allButton.innerText = "All Stages";
+	allButton.className = "bg-cyan-600 px-4 py-2 rounded active-btn";
+	allButton.onclick = function () {
+		filterStage("all");
+		updateMobileStageText("All Stages");
+	};
+	container.appendChild(allButton);
+
+	// Individual stage buttons
+	stageNames.forEach((stage) => {
+		const stageName =
+			stage.charAt(0).toUpperCase() +
+			stage.slice(1).replace(/\bstage\b/i, "Stage");
+		const button = document.createElement("button");
+		button.innerText = stageName;
+		button.className = "bg-gray-700 px-4 py-2 rounded";
+		button.onclick = function () {
+			filterStage(stage);
+			updateMobileStageText(stageName);
+		};
+		container.appendChild(button);
+	});
+
+	// ALSO populate the mobile dropdown with the same stages
+	populateMobileStageDropdown(stageNames);
+}
+
 function showFavoritesModal() {
 	const modal = document.getElementById("favorites-modal");
 
@@ -943,6 +1028,36 @@ async function loadData() {
 			};
 		}
 
+		const stageNames = [];
+
+		// Loop through each day in arena
+		Object.keys(data.arena).forEach((day) => {
+			const dayData = data.arena[day];
+
+			// Check if dayData is an array (as originally expected)
+			if (Array.isArray(dayData)) {
+				// Extract stage names from array structure
+				dayData.forEach((event) => {
+					if (
+						event.stage &&
+						!stageNames.includes(event.stage.toLowerCase())
+					) {
+						stageNames.push(event.stage.toLowerCase());
+					}
+				});
+			} else if (typeof dayData === "object") {
+				// If it's an object with stage names as keys
+				Object.keys(dayData).forEach((stage) => {
+					if (!stageNames.includes(stage.toLowerCase())) {
+						stageNames.push(stage.toLowerCase());
+					}
+				});
+			}
+		});
+
+		// Populate both desktop buttons and mobile dropdown
+		populateStageButtons(stageNames);
+
 		// Reset stage filters
 		currentStage = "all";
 		districtXCurrentStage = "all";
@@ -1249,6 +1364,25 @@ function showDay(day) {
 	}
 
 	filterStage(currentStage);
+	updateActiveDayButton(day);
+	updateMobileDayText(day.charAt(0).toUpperCase() + day.slice(1));
+}
+
+function updateMobileStageText(text) {
+	const mobileText = document.getElementById("current-stage-mobile");
+	if (mobileText) {
+		// Properly capitalize "Stage" if it appears in the text
+		if (text !== "All Stages") {
+			// Only process non-"All Stages" text
+			text = text.replace(/\bstage\b/i, "Stage"); // Preserve capital S in "Stage"
+		}
+		mobileText.textContent = text;
+	}
+}
+
+function updateMobileDayText(day) {
+	const mobileDay = document.getElementById("current-day-mobile");
+	if (mobileDay) mobileDay.textContent = day;
 }
 
 function filterStage(stage) {
@@ -1265,7 +1399,10 @@ function filterStage(stage) {
 		document.querySelectorAll(".stage-btn")
 	).find(
 		(btn) =>
-			btn.textContent.trim() === (stage === "all" ? "All Stages" : stage)
+			btn.textContent.trim() ===
+			(stage === "all"
+				? "All Stages"
+				: stage.charAt(0).toUpperCase() + stage.slice(1)) // No need to append "Stage"
 	);
 
 	if (activeStageBtn) {
@@ -1279,6 +1416,17 @@ function filterStage(stage) {
 				? "flex"
 				: "none";
 	});
+
+	updateActiveStageButton(stage);
+
+	// Update mobile dropdown to match - no need to append "Stage"
+	const stageName =
+		stage === "all"
+			? "All Stages"
+			: stage.charAt(0).toUpperCase() +
+			  stage.slice(1).replace(/\bstage\b/i, "Stage");
+
+	updateMobileStageText(stageName);
 }
 
 function showDistrictXDay(day) {
@@ -2119,21 +2267,29 @@ function createPersonalizedPoster(name) {
 		"fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50";
 	modal.id = "poster-modal";
 
-	// Create poster container - THIS WAS MISSING
-	const posterContainer = document.createElement("div");
-	posterContainer.className =
-		"relative p-6 rounded-lg max-w-3xl max-h-[90vh] overflow-auto";
+	// Detect if we're on mobile
+	const isMobile = window.innerWidth < 768;
+	const isExtraSmall = window.innerWidth < 350;
 
-	// Create poster content
+	// Create poster container with height constraints
+	const posterContainer = document.createElement("div");
+	posterContainer.className = `relative rounded-lg overflow-auto ${
+		isMobile ? "poster-container-mobile" : "max-w-3xl p-6"
+	}`;
+
+	// Create poster content with adaptive styling
 	const posterContent = document.createElement("div");
 	posterContent.id = "poster-content";
-	posterContent.className = "text-center download-poster-style";
-	posterContent.style.padding = "40px 20px";
-	posterContent.style.borderRadius = "8px";
-	posterContent.style.position = "relative";
-	posterContent.style.overflow = "hidden";
-	posterContent.style.minHeight = "800px";
-
+	posterContent.className = `text-center download-poster-style ${
+		isMobile ? "poster-content-mobile" : ""
+	}`;
+	posterContent.style.padding = isMobile
+		? isExtraSmall
+			? "12px 8px"
+			: "16px 10px"
+		: "40px 20px";
+	posterContent.style.minHeight = isMobile ? "auto" : "800px";
+	posterContent.style.width = isMobile ? "100%" : "auto";
 	// Format the name properly for display
 	const displayName = name === "My" ? "My" : `${name}'s`;
 
@@ -2329,9 +2485,11 @@ function createPersonalizedPoster(name) {
 			const startIndex = Math.floor(
 				(i * arenaArtists.length) / tierCount
 			);
+
 			const endIndex = Math.floor(
 				((i + 1) * arenaArtists.length) / tierCount
 			);
+
 			const tierArtists = arenaArtists.slice(startIndex, endIndex);
 
 			const tier = document.createElement("div");
@@ -2343,14 +2501,33 @@ function createPersonalizedPoster(name) {
 
 			tierArtists.forEach((artist) => {
 				const artistSpan = document.createElement("span");
-				artistSpan.className = `artist-name inline-block mx-3 my-2`;
+				artistSpan.className = `artist-name inline-block ${
+					isMobile ? "mx-1 my-1" : "mx-3 my-2"
+				}`;
+
+				// Adjust font sizes further for mobile
+				const fontSize = isMobile
+					? isExtraSmall
+						? Math.max(11, 18 - i * 2)
+						: Math.max(13, 20 - i * 3)
+					: 28 - i * 5;
+				artistSpan.style.fontSize = `${fontSize}px`;
+				artistSpan.style.fontWeight = "800";
+				artistSpan.style.color = "#FFFFFF";
+
+				// Reduce glow intensity on mobile
+				const glowIntensity = isMobile ? Math.max(1, 3 - i) : 5 - i;
+				artistSpan.style.textShadow = `0 0 ${glowIntensity}px #0ff, 0 0 ${
+					glowIntensity + 2
+				}px rgba(0,255,255,0.8)`;
+
 				artistSpan.style.fontSize = `${fontSize}px`;
 				artistSpan.style.fontWeight = "800";
 				artistSpan.style.color = "#FFFFFF";
 				artistSpan.style.textShadow = `0 0 ${glowIntensity}px #0ff, 0 0 ${
 					glowIntensity + 2
 				}px rgba(0,255,255,0.8)`;
-				artistSpan.style.letterSpacing = "1px";
+				artistSpan.style.letterSpacing = isMobile ? "0.5px" : "1px";
 				artistSpan.innerText = artist.artist.toUpperCase();
 				tier.appendChild(artistSpan);
 			});
@@ -2417,7 +2594,6 @@ function createPersonalizedPoster(name) {
 	`;
 
 	downloadBtn.onclick = () => {
-		console.log("Download button clicked");
 		if (typeof html2canvas !== "undefined") {
 			const content = document.getElementById("poster-content");
 
@@ -2450,13 +2626,46 @@ function createPersonalizedPoster(name) {
 		}
 	};
 
+	if (isMobile) {
+		downloadBtn.className =
+			"mt-3 bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg flex items-center mx-auto text-sm";
+	}
+
 	// Add everything to the DOM
 	posterContainer.appendChild(closeBtn);
 	posterContainer.appendChild(posterContent);
 	posterContainer.appendChild(downloadBtn);
 	modal.appendChild(posterContainer);
 	document.body.appendChild(modal);
-	console.log("Poster modal added to DOM");
+}
+
+function updateActiveStageButton(stage) {
+	// Update mobile dropdown display text
+	const currentStageElement = document.getElementById("current-stage-mobile");
+	if (currentStageElement) {
+		currentStageElement.textContent =
+			stage === "all"
+				? "All Stages"
+				: stage.charAt(0).toUpperCase() +
+				  stage.slice(1).replace(/\bstage\b/i, "Stage");
+	}
+}
+
+// Updates the active day button in the desktop UI
+function updateActiveDayButton(day) {
+	// Update mobile dropdown display text
+	const mobileDayElement = document.getElementById("current-day-mobile");
+	if (mobileDayElement) {
+		mobileDayElement.textContent =
+			day.charAt(0).toUpperCase() + day.slice(1);
+	}
+}
+
+// Updates the mobile dropdowns when clicking desktop buttons
+function updateMobileDropdowns(day) {
+	// Update the mobile day dropdown text when desktop button is clicked
+	document.getElementById("current-day").textContent =
+		day.charAt(0).toUpperCase() + day.slice(1);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -2549,4 +2758,229 @@ document.addEventListener("DOMContentLoaded", () => {
 			console.warn("Poster button not found in the DOM");
 		}
 	});
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+	// Stage dropdown
+	const stageDropdownBtn = document.getElementById("stage-dropdown-btn");
+	const stageDropdown = document.getElementById("stage-dropdown");
+	const currentStage = document.getElementById("current-stage");
+
+	// Day dropdown
+	const dayDropdownBtn = document.getElementById("day-dropdown-btn");
+	const dayDropdown = document.getElementById("day-dropdown");
+	const currentDay = document.getElementById("current-day");
+
+	// Only add event listeners if elements exist
+	if (stageDropdownBtn && stageDropdown) {
+		stageDropdownBtn.addEventListener("click", function () {
+			stageDropdown.classList.toggle("hidden");
+			if (dayDropdown) dayDropdown.classList.add("hidden"); // Close other dropdown
+		});
+	}
+
+	if (dayDropdownBtn && dayDropdown) {
+		dayDropdownBtn.addEventListener("click", function () {
+			dayDropdown.classList.toggle("hidden");
+			if (stageDropdown) stageDropdown.classList.add("hidden"); // Close other dropdown
+		});
+	}
+
+	// Close dropdowns when clicking outside (only if elements exist)
+	document.addEventListener("click", function (event) {
+		if (
+			stageDropdownBtn &&
+			stageDropdown &&
+			!stageDropdownBtn.contains(event.target) &&
+			!stageDropdown.contains(event.target)
+		) {
+			stageDropdown.classList.add("hidden");
+		}
+		if (
+			dayDropdownBtn &&
+			dayDropdown &&
+			!dayDropdownBtn.contains(event.target) &&
+			!dayDropdown.contains(event.target)
+		) {
+			dayDropdown.classList.add("hidden");
+		}
+	});
+
+	// Sync checkbox state between mobile and desktop (if elements exist)
+	const mobileToggle = document.getElementById(
+		"global-favorites-toggle-mobile"
+	);
+	const desktopToggle = document.getElementById(
+		"global-favorites-toggle-desktop"
+	);
+
+	if (mobileToggle && desktopToggle) {
+		mobileToggle.addEventListener("change", () => {
+			desktopToggle.checked = mobileToggle.checked;
+		});
+
+		desktopToggle.addEventListener("change", () => {
+			mobileToggle.checked = desktopToggle.checked;
+		});
+	}
+});
+
+// Do the same for the mobile dropdown handler
+document.addEventListener("DOMContentLoaded", function () {
+	// Mobile stage dropdown
+	const stageDropdownBtnMobile = document.getElementById(
+		"stage-dropdown-btn-mobile"
+	);
+	const stageDropdownMobile = document.getElementById(
+		"stage-dropdown-mobile"
+	);
+
+	if (stageDropdownBtnMobile && stageDropdownMobile) {
+		stageDropdownBtnMobile.addEventListener("click", function () {
+			stageDropdownMobile.classList.toggle("hidden");
+			const dayDropdownMobile = document.getElementById(
+				"day-dropdown-mobile"
+			);
+			if (dayDropdownMobile) dayDropdownMobile.classList.add("hidden");
+		});
+	}
+
+	// Mobile day dropdown (with null checks)
+	const dayDropdownBtnMobile = document.getElementById(
+		"day-dropdown-btn-mobile"
+	);
+	const dayDropdownMobile = document.getElementById("day-dropdown-mobile");
+
+	if (dayDropdownBtnMobile && dayDropdownMobile) {
+		dayDropdownBtnMobile.addEventListener("click", function () {
+			dayDropdownMobile.classList.toggle("hidden");
+			const stageDropdownMobile = document.getElementById(
+				"stage-dropdown-mobile"
+			);
+			if (stageDropdownMobile)
+				stageDropdownMobile.classList.add("hidden");
+		});
+	}
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+	// Mobile stage dropdown
+	const stageDropdownBtnMobile = document.getElementById(
+		"stage-dropdown-btn-mobile"
+	);
+	const stageDropdownMobile = document.getElementById(
+		"stage-dropdown-mobile"
+	);
+	const stageChevron = stageDropdownBtnMobile?.querySelector("svg");
+
+	// Mobile day dropdown
+	const dayDropdownBtnMobile = document.getElementById(
+		"day-dropdown-btn-mobile"
+	);
+	const dayDropdownMobile = document.getElementById("day-dropdown-mobile");
+	const dayChevron = dayDropdownBtnMobile?.querySelector("svg");
+
+	// Track open state
+	let stageDropdownOpen = false;
+	let dayDropdownOpen = false;
+
+	// Stage dropdown toggle
+	if (stageDropdownBtnMobile && stageDropdownMobile) {
+		stageDropdownBtnMobile.addEventListener("click", function (e) {
+			e.stopPropagation(); // Prevent document click
+
+			// Close day dropdown if open
+			if (dayDropdownOpen && dayDropdownMobile) {
+				closeDropdown(dayDropdownMobile, dayChevron);
+				dayDropdownOpen = false;
+			}
+
+			// Toggle stage dropdown
+			if (stageDropdownOpen) {
+				closeDropdown(stageDropdownMobile, stageChevron);
+			} else {
+				openDropdown(stageDropdownMobile, stageChevron);
+			}
+			stageDropdownOpen = !stageDropdownOpen;
+		});
+
+		// Close when clicking on an option
+		stageDropdownMobile
+			.querySelectorAll("button[role='menuitem']")
+			.forEach((button) => {
+				button.addEventListener("click", () => {
+					closeDropdown(stageDropdownMobile, stageChevron);
+					stageDropdownOpen = false;
+				});
+			});
+	}
+
+	// Day dropdown toggle
+	if (dayDropdownBtnMobile && dayDropdownMobile) {
+		dayDropdownBtnMobile.addEventListener("click", function (e) {
+			e.stopPropagation(); // Prevent document click
+
+			// Close stage dropdown if open
+			if (stageDropdownOpen && stageDropdownMobile) {
+				closeDropdown(stageDropdownMobile, stageChevron);
+				stageDropdownOpen = false;
+			}
+
+			// Toggle day dropdown
+			if (dayDropdownOpen) {
+				closeDropdown(dayDropdownMobile, dayChevron);
+			} else {
+				openDropdown(dayDropdownMobile, dayChevron);
+			}
+			dayDropdownOpen = !dayDropdownOpen;
+		});
+
+		// Close when clicking on an option
+		dayDropdownMobile
+			.querySelectorAll("button[role='menuitem']")
+			.forEach((button) => {
+				button.addEventListener("click", () => {
+					closeDropdown(dayDropdownMobile, dayChevron);
+					dayDropdownOpen = false;
+				});
+			});
+	}
+
+	// Close dropdowns when clicking outside
+	document.addEventListener("click", function () {
+		if (stageDropdownOpen && stageDropdownMobile) {
+			closeDropdown(stageDropdownMobile, stageChevron);
+			stageDropdownOpen = false;
+		}
+		if (dayDropdownOpen && dayDropdownMobile) {
+			closeDropdown(dayDropdownMobile, dayChevron);
+			dayDropdownOpen = false;
+		}
+	});
+
+	// Helper functions for animations
+	function openDropdown(dropdown, chevron) {
+		dropdown.classList.remove("hidden");
+		dropdown.classList.add("dropdown-open");
+		if (chevron) {
+			chevron.style.transform = "rotate(180deg)";
+			chevron.style.transition = "transform 0.3s ease";
+		}
+	}
+
+	function closeDropdown(dropdown, chevron) {
+		dropdown.classList.remove("dropdown-open");
+		dropdown.classList.add("dropdown-close");
+
+		if (chevron) {
+			chevron.style.transform = "rotate(0deg)";
+			chevron.style.transition = "transform 0.3s ease";
+		}
+
+		// Add the hidden class after animation completes
+		setTimeout(() => {
+			dropdown.classList.add("hidden");
+			dropdown.classList.remove("dropdown-close");
+		}, 300);
+	}
 });

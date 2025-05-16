@@ -5,16 +5,16 @@
     overflow-x: auto;
     max-width: 100%;
     padding-bottom: 20px;
-}
-
-.hidden {
+  }
+  
+  .hidden {
     display: none;
-}
-
-/* ============================================
-   TIMELINE GRID
-   ============================================ */
-.time-slot {
+  }
+  
+  /* ============================================
+     TIMELINE GRID
+     ============================================ */
+  .time-slot {
     width: 60px !important;
     min-width: 60px !important;
     max-width: 60px !important;
@@ -23,9 +23,9 @@
     border-right: 1px solid #374151;
     height: 100%;
     background-color: rgba(17, 24, 39, 0.2);
-}
-
-.time-header {
+  }
+  
+  .time-header {
     display: flex;
     width: max-content;
     position: sticky;
@@ -33,20 +33,20 @@
     z-index: 20;
     background-color: black;
     border-bottom: 2px solid #4b5563;
-}
-
-.time-header .w-40 {
+  }
+  
+  .time-header .w-40 {
     position: sticky;
     left: 0;
     z-index: 30;
     background-color: black;
-}
-
-.time-slot.next-day {
-    position: relative;
-}
+  }
   
-.time-slot.next-day::after {
+  .time-slot.next-day {
+    position: relative;
+  }
+  
+  .time-slot.next-day::after {
     content: "";
     position: absolute;
     top: 0;
@@ -54,19 +54,19 @@
     width: 100%;
     height: 100%;
     background: repeating-linear-gradient(
-        45deg,
-        rgba(0, 0, 0, 0.1),
-        rgba(0, 0, 0, 0.1) 5px,
-        rgba(0, 0, 0, 0.2) 5px,
-        rgba(0, 0, 0, 0.2) 10px
+      45deg,
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.1) 5px,
+      rgba(0, 0, 0, 0.2) 5px,
+      rgba(0, 0, 0, 0.2) 10px
     );
     z-index: -1;
-}
-
-/* ============================================
-   STAGE AND SET BLOCKS
-   ============================================ */
-.stage-row {
+  }
+  
+  /* ============================================
+     STAGE AND SET BLOCKS
+     ============================================ */
+  .stage-row {
     display: flex;
     width: max-content;
     height: 80px;
@@ -74,9 +74,9 @@
     position: relative;
     border-bottom: 1px solid #374151;
     background-color: rgba(17, 24, 39, 0.1);
-}
-
-.stage-name {
+  }
+  
+  .stage-name {
     width: 160px !important;
     min-width: 160px !important;
     flex-shrink: 0;
@@ -87,16 +87,16 @@
     border-right: 2px solid #4b5563;
     display: flex;
     align-items: center;
-}
-
-.w-40 {
+  }
+  
+  .w-40 {
     width: 160px !important;
     min-width: 160px !important;
     max-width: 160px !important;
     flex-shrink: 0;
-}
-
-.set-block {
+  }
+  
+  .set-block {
     position: absolute;
     height: 60px;
     border-radius: 0.5rem;
@@ -116,13 +116,14 @@
     box-sizing: border-box;
     margin-right: 2px;
     border: 2px solid rgba(0, 0, 0, 0.3);
-}
-
-.set-block:hover::after {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .set-block:hover::after {
     display: none;
-}
-
-.set-block .text-sm {
+  }
+  
+  .set-block .text-sm {
     font-size: 13px;
     font-weight: bold;
     margin-bottom: 2px;
@@ -132,25 +133,33 @@
     text-overflow: ellipsis;
     max-width: 100%;
     padding: 0 4px;
-}
-
-.set-block .text-xs {
+  }
+  
+  .set-block .text-xs {
     font-size: 11px;
     opacity: 0.9;
-}
-
-.conflict-block {
+  }
+  
+  .conflict-block {
     background-color: #dc2626 !important; /* Red */
-}
-
-.favorite-block {
+  }
+  
+  .favorite-block {
     border: 2px solid white;
-}
-
-/* ============================================
-   NAVIGATION AND BUTTONS
-   ============================================ */
-.active-btn {
+  }
+  
+  .set-block.fade-in {
+    animation: fadeIn 0.4s forwards;
+  }
+  
+  .set-block.fade-out {
+    animation: fadeOut 0.4s forwards;
+  }
+  
+  /* ============================================
+     NAVIGATION AND BUTTONS
+     ============================================ */
+  .active-btn {
     background-color: #06b6d4;
     color: black;
     box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5), 0 0 0 1px #06b6d4;
@@ -158,20 +167,20 @@
     font-weight: bold;
     position: relative;
     z-index: 5;
-}
-
-.day-tab {
+  }
+  
+  .day-tab {
     border-bottom: 2px solid transparent;
     transition: all 0.2s;
-}
-
-.active-tab {
+  }
+  
+  .active-tab {
     border-bottom: 2px solid #06b6d4;
     color: white;
     font-weight: bold;
-}
-
-.heart-icon {
+  }
+  
+  .heart-icon {
     cursor: pointer;
     transition: transform 0.1s;
     background: none;
@@ -180,43 +189,57 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.heart-icon:hover {
+  }
+  
+  .heart-icon:hover {
     transform: scale(1.2);
-}
-
-/* Artist checkbox styling */
-.artist-checkbox {
+  }
+  
+  /* Artist checkbox styling */
+  .artist-checkbox {
     width: 16px;
     height: 16px;
     accent-color: #06b6d4;
-}
-
-/* ============================================
-   MODAL STYLES
-   ============================================ */
-#favorites-modal {
+  }
+  
+  /* ============================================
+     ANIMATIONS
+     ============================================ */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+  }
+  
+  @keyframes spinner {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* ============================================
+     MODAL STYLES
+     ============================================ */
+  #favorites-modal {
     animation: fadeIn 0.2s ease-in-out;
-}
-
-/* ============================================
-   ANIMATIONS
-   ============================================ */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-/* ============================================
-   EVENT MODAL STYLES
-   ============================================ */
-.event-details-modal {
+  }
+  
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 90;
+  }
+  
+  /* ============================================
+     EVENT MODAL STYLES
+     ============================================ */
+  .event-details-modal {
     position: absolute;
     background-color: #1e293b;
     border: 1px solid #4b5563;
@@ -229,68 +252,68 @@
     pointer-events: auto;
     animation: fadeIn 0.15s ease-out;
     transition: opacity 0.15s;
-}
-
-.event-details-modal .arrow {
+  }
+  
+  .event-details-modal .arrow {
     position: absolute;
     width: 12px;
     height: 12px;
     transform: rotate(45deg);
     background: #1e293b;
     border: 1px solid #4b5563;
-}
-
-.event-details-modal.arrow-top .arrow {
+  }
+  
+  .event-details-modal.arrow-top .arrow {
     top: -6px;
     left: calc(50% - 6px);
     border-right: none;
     border-bottom: none;
-}
-
-.event-details-modal.arrow-bottom .arrow {
+  }
+  
+  .event-details-modal.arrow-bottom .arrow {
     bottom: -6px;
     left: calc(50% - 6px);
     border-top: none;
     border-left: none;
-}
-
-.event-details-modal h3 {
+  }
+  
+  .event-details-modal h3 {
     font-size: 0.95rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
     color: white;
-}
-
-.event-details-modal p {
+  }
+  
+  .event-details-modal p {
     font-size: 0.85rem;
     margin-bottom: 0.25rem;
     color: #e2e8f0;
-}
-
-.event-details-modal .time {
+  }
+  
+  .event-details-modal .time {
     color: #06b6d4;
     font-weight: 600;
-}
-
-.event-details-modal .stage {
+  }
+  
+  .event-details-modal .stage {
     color: #d1d5db;
     font-style: italic;
-}
-
-.event-details-modal .conflict-section {
+  }
+  
+  .event-details-modal .conflict-section {
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     margin-top: 8px;
     padding-top: 6px;
-}
-
-.event-details-modal h4 {
+  }
+  
+  .event-details-modal h4 {
     color: #ef4444;
     font-size: 0.8rem;
     margin: 0 0 4px 0;
     font-weight: bold;
-}
-
-.event-details-modal .conflict-list {
+  }
+  
+  .event-details-modal .conflict-list {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -299,62 +322,52 @@
     background-color: rgba(220, 38, 38, 0.15);
     padding: 6px;
     border-radius: 4px;
-}
-
-.event-details-modal .conflict-list li {
+  }
+  
+  .event-details-modal .conflict-list li {
     margin-bottom: 6px;
     padding-bottom: 6px;
     border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-}
-
-.event-details-modal .conflict-list li:last-child {
+  }
+  
+  .event-details-modal .conflict-list li:last-child {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;
-}
-
-.event-details-modal .conflict-artist {
+  }
+  
+  .event-details-modal .conflict-artist {
     font-weight: bold;
     color: white;
     font-size: 0.8rem;
     display: block;
-}
-
-.event-details-modal .conflict-info {
+  }
+  
+  .event-details-modal .conflict-info {
     font-size: 0.75rem;
     color: #d1d5db;
-}
-
-.event-details-modal .conflict-stage {
+  }
+  
+  .event-details-modal .conflict-stage {
     color: #9ca3af;
     margin-left: 4px;
-}
-
-.event-details-modal .conflict-venue {
+  }
+  
+  .event-details-modal .conflict-venue {
     font-style: italic;
     margin-left: 4px;
     color: #fbbf24;
-}
-
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 90;
-}
-
-.event-details-modal.mobile {
+  }
+  
+  .event-details-modal.mobile {
     z-index: 95;
     position: fixed;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     max-height: 80vh;
     overflow-y: auto;
-}
-
-.modal-close-btn {
+  }
+  
+  .modal-close-btn {
     position: absolute;
     right: 8px;
     top: 8px;
@@ -368,20 +381,19 @@
     text-align: center;
     color: white;
     cursor: pointer;
-}
-
-.event-details-modal.mobile .conflict-list {
-    max-height: 30vh;
-}
-
-/* ============================================
-   MY ARTISTS TOGGLE
-   ============================================ */
-
-.my-artists-toggle {
-    margin-left: auto;
   }
   
+  .event-details-modal.mobile .conflict-list {
+    max-height: 30vh;
+  }
+  
+  /* ============================================
+     MY ARTISTS TOGGLE
+     ============================================ */
+  .my-artists-toggle {
+    margin-left: auto;
+  }
+    
   /* The switch - the box around the slider */
   .switch {
     position: relative;
@@ -389,14 +401,14 @@
     width: 50px;
     height: 24px;
   }
-  
+    
   /* Hide default HTML checkbox */
   .switch input {
     opacity: 0;
     width: 0;
     height: 0;
   }
-  
+    
   /* The slider */
   .slider {
     position: absolute;
@@ -408,7 +420,7 @@
     background-color: #4b5563;
     transition: .4s;
   }
-  
+    
   .slider:before {
     position: absolute;
     content: "";
@@ -419,64 +431,41 @@
     background-color: white;
     transition: .4s;
   }
-  
+    
   input:checked + .slider {
     background-color: #06b6d4;
   }
-  
+    
   input:checked + .slider:before {
     transform: translateX(26px);
   }
-  
+    
   /* Rounded sliders */
   .slider.round {
     border-radius: 24px;
   }
-  
+    
   .slider.round:before {
     border-radius: 50%;
   }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
   
-  @keyframes fadeOut {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(-10px); }
-  }
-  
-  .set-block {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  
-  .set-block.fade-in {
-    animation: fadeIn 0.4s forwards;
-  }
-  
-  .set-block.fade-out {
-    animation: fadeOut 0.4s forwards;
-  }
-
   /* ============================================
-   WEATHER FORECAST
-   ============================================ */
-
+     WEATHER FORECAST
+     ============================================ */
   .weather-container {
     border-left: 4px solid #06b6d4;
   }
-  
+    
   .weather-day {
     min-width: 80px;
     transition: all 0.2s ease;
   }
-  
+    
   .weather-day:hover {
     transform: translateY(-3px);
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
   }
-  
+    
   .loading-spinner {
     width: 20px;
     height: 20px;
@@ -486,19 +475,15 @@
     animation: spinner 1s ease-in-out infinite;
   }
   
-  @keyframes spinner {
-    to {transform: rotate(360deg);}
-  }
-
-    /* ============================================
-   POSTER GENERATOR
-   ============================================ */
-   .poster-rendering {
+  /* ============================================
+     POSTER GENERATOR
+     ============================================ */
+  .poster-rendering {
     width: 800px;
     padding: 40px;
     background-color: black;
   }
-  
+    
   #poster-content {
     background-color: black;
     background-image: linear-gradient(rgba(0, 20, 40, 0.3) 1px, transparent 1px);
@@ -508,7 +493,7 @@
     border: 2px solid #09c;
     position: relative;
   }
-  
+    
   #poster-content::before {
     content: "";
     position: absolute;
@@ -519,35 +504,36 @@
     background: radial-gradient(circle at center, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
     pointer-events: none;
   }
-  
+    
   .poster-tier {
     margin-bottom: 20px;
     line-height: 1.4;
   }
-  
+    
   .tier-1 {
     margin-bottom: 15px;
   }
-
+  
   .tier-1 .artist-name {
     letter-spacing: 2px;
   }
-  
+    
   .tier-2 {
     letter-spacing: 1px;
   }
-  
+    
   .tier-3 {
     letter-spacing: 0.5px;
   }
-
+  
+  /* Poster styling */
   .download-poster-style {
     box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
     background-color: #030b1f;
     position: relative;
     z-index: 1;
   }
-  
+    
   .download-logo-text {
     font-family: Arial, sans-serif;
     letter-spacing: 3px;
@@ -556,13 +542,24 @@
     position: relative;
     z-index: 10;
   }
-  
+    
   .download-glow {
     text-shadow: 0 0 8px #0ff, 0 0 15px rgba(0, 255, 255, 0.6);
     position: relative;
     z-index: 10;
   }
   
+  /* Poster background layers */
+  .poster-bg-main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, #05203a 0%, #041536 40%, #030b1f 100%);
+    z-index: 1;
+  }
+    
   .poster-bg-effect {
     position: absolute;
     top: 0;
@@ -576,19 +573,9 @@
     pointer-events: none;
     opacity: 0.9;
   }
-
-  .poster-bg-main {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at center, #05203a 0%, #041536 40%, #030b1f 100%);
-    z-index: 1;
-  }
-
+  
   /* Bubble effect layer */
-.poster-bg-bubbles {
+  .poster-bg-bubbles {
     position: absolute;
     top: -50%;
     left: -50%;
@@ -604,7 +591,7 @@
     opacity: 0.8;
     transform: rotate(-5deg);
   }
-  
+    
   /* Swirl effect for that marbled look */
   .poster-bg-swirl {
     position: absolute;
@@ -619,7 +606,7 @@
     z-index: 4;
     opacity: 0.7;
   }
-  
+    
   /* Noise texture overlay */
   .poster-bg-noise {
     position: absolute;
@@ -631,9 +618,9 @@
     opacity: 0.03;
     z-index: 5;
   }
-
+  
   /* Make artist names stand out over the background */
-.artist-name {
+  .artist-name {
     position: relative;
     z-index: 15;
     display: inline-block;
@@ -641,9 +628,159 @@
     background: rgba(3, 11, 31, 0.5); /* Semi-transparent dark background */
     border-radius: 3px;
   }
-  
+    
   /* Add horizontal divider styling */
   .poster-tier + div {
     position: relative;
     z-index: 15;
   }
+    
+  /* Mobile styles */
+  .artist-name-mobile {
+    line-height: 1.2;
+    margin: 3px !important;
+  }
+  
+  .poster-container-mobile {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    padding: 2px !important;
+    max-height: 80vh !important; /* Limit height to prevent overflow */
+    overflow-y: auto !important; /* Enable vertical scrolling */
+  }
+    
+  .poster-content-mobile {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 15px 10px !important;
+    min-height: auto !important; /* Remove minimum height constraint */
+  }
+    
+  /* Make artist tiers more compact on mobile */
+  @media (max-width: 767px) {
+    .poster-tier {
+      margin-bottom: 8px !important; /* Reduce space between tiers */
+      line-height: 1.2 !important; /* Tighter line height */
+    }
+      
+    .download-logo-text {
+      font-size: 1.5rem !important; /* Smaller title on very small screens */
+      margin-bottom: 4px !important;
+    }
+      
+    .poster-bg-bubbles, 
+    .poster-bg-swirl {
+      opacity: 0.5 !important; /* Reduce background complexity */
+    }
+      
+    /* Make artist names more compact */
+    .artist-name {
+      margin: 2px !important;
+      padding: 2px 4px !important;
+    }
+      
+    /* Smaller font for lower tiers */
+    .tier-3 .artist-name,
+    .tier-4 .artist-name {
+      font-size: 12px !important;
+    }
+      
+    /* Add gap between sections */
+    #poster-content > div:not(:first-child) {
+      margin-top: 12px !important;
+    }
+  }
+    
+  /* Handle extra small screens */
+  @media (max-width: 350px) {
+    .download-logo-text {
+      font-size: 1.25rem !important; 
+    }
+      
+    #poster-content > div {
+      margin-bottom: 6px !important;
+    }
+  }
+
+  #stage-dropdown-mobile,
+#day-dropdown-mobile {
+  z-index: 20 !important; /* Ensure dropdowns appear above other elements */
+  max-height: 300px !important; /* Set a max height */
+  overflow-y: auto !important; /* Enable vertical scrolling */
+  position: absolute !important; /* Ensure proper positioning */
+  width: 100% !important; 
+}
+
+/* Mobile button containers need to establish a stacking context */
+.relative.inline-block.text-left.w-full {
+  position: relative !important;
+  z-index: 15 !important; /* Higher than schedule but lower than dropdowns */
+}
+
+/* Schedule container needs a lower z-index */
+.overflow-x-auto {
+  z-index: 5;
+  position: relative;
+}
+
+#stage-dropdown-mobile,
+#day-dropdown-mobile {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  transform-origin: top center;
+  z-index: 30 !important;
+}
+
+/* Menu items padding for better touch targets */
+#stage-dropdown-mobile button,
+#day-dropdown-mobile button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Animation classes */
+.dropdown-open {
+  animation: dropdownOpen 0.3s ease forwards;
+}
+
+.dropdown-close {
+  animation: dropdownClose 0.3s ease forwards;
+}
+
+/* Animation keyframes */
+@keyframes dropdownOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdownClose {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Make sure dropdowns appear above everything else */
+.relative.inline-block.text-left.w-full {
+  position: relative;
+  z-index: 20;
+}
+
+/* Style for dropdown backdrop - helps with visual separation */
+#stage-dropdown-mobile,
+#day-dropdown-mobile {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
