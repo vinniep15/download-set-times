@@ -82,8 +82,8 @@ export function safeSetItem(key, value) {
 
 export function safeStorageAvailable() {
 	try {
-		const testKey = '__test__';
-		localStorage.setItem(testKey, '1');
+		const testKey = "__test__";
+		localStorage.setItem(testKey, "1");
 		localStorage.removeItem(testKey);
 		return true;
 	} catch (e) {

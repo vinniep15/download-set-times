@@ -4,7 +4,13 @@
  */
 
 import {state} from "./core.js";
-import {saveToStorage, loadFromStorage, safeGetItem, safeSetItem, safeStorageAvailable} from "./storage.js";
+import {
+	saveToStorage,
+	loadFromStorage,
+	safeGetItem,
+	safeSetItem,
+	safeStorageAvailable,
+} from "./storage.js";
 import {timeToMinutes, formatTimeDisplay} from "./utils.js";
 import {showDay, showDistrictXDay, showConflictAlert} from "./ui.js";
 
