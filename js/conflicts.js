@@ -21,7 +21,10 @@ export function findConflictsForSet(set, stage, day, venue) {
 		!set ||
 		!set.start ||
 		!set.end ||
-		!state.favoriteArtists.includes(set.artist)
+		!state.favoriteSets ||
+		!state.favoriteSets.includes(
+			`${set.artist}|${day}|${stage}|${set.start}`
+		)
 	) {
 		return [];
 	}
@@ -34,16 +37,13 @@ export function findConflictsForSet(set, stage, day, venue) {
 	if (state.data[venue] && state.data[venue][day]) {
 		Object.keys(state.data[venue][day]).forEach((otherStage) => {
 			if (otherStage === stage) return; // Skip same stage
-
 			if (Array.isArray(state.data[venue][day][otherStage])) {
 				state.data[venue][day][otherStage].forEach((otherSet) => {
-					if (!state.favoriteArtists.includes(otherSet.artist))
-						return;
+					const otherSetKey = `${otherSet.artist}|${day}|${otherStage}|${otherSet.start}`;
+					if (!state.favoriteSets.includes(otherSetKey)) return;
 					if (!otherSet.start || !otherSet.end) return;
-
 					const otherStart = timeToMinutes(otherSet.start);
 					const otherEnd = timeToMinutes(otherSet.end);
-
 					if (startMin < otherEnd && endMin > otherStart) {
 						conflicts.push({
 							artist: otherSet.artist,
@@ -58,20 +58,17 @@ export function findConflictsForSet(set, stage, day, venue) {
 		});
 	}
 
-	// Check for conflicts in other venue on same day
+	// Check for conflicts in the other venue (all stages)
 	const otherVenue = venue === "arena" ? "districtX" : "arena";
-
 	if (state.data[otherVenue] && state.data[otherVenue][day]) {
 		Object.keys(state.data[otherVenue][day]).forEach((otherStage) => {
 			if (Array.isArray(state.data[otherVenue][day][otherStage])) {
 				state.data[otherVenue][day][otherStage].forEach((otherSet) => {
-					if (!state.favoriteArtists.includes(otherSet.artist))
-						return;
+					const otherSetKey = `${otherSet.artist}|${day}|${otherStage}|${otherSet.start}`;
+					if (!state.favoriteSets.includes(otherSetKey)) return;
 					if (!otherSet.start || !otherSet.end) return;
-
 					const otherStart = timeToMinutes(otherSet.start);
 					const otherEnd = timeToMinutes(otherSet.end);
-
 					if (startMin < otherEnd && endMin > otherStart) {
 						conflicts.push({
 							artist: otherSet.artist,
@@ -87,7 +84,42 @@ export function findConflictsForSet(set, stage, day, venue) {
 		});
 	}
 
-	return conflicts;
+	// Check for conflicts in both venues (all stages, including the current set's own venue)
+	["arena", "districtX"].forEach((v) => {
+		if (!state.data[v] || !state.data[v][day]) return;
+		Object.keys(state.data[v][day]).forEach((otherStage) => {
+			if (v === venue && otherStage === stage) return; // Skip the same set
+			if (Array.isArray(state.data[v][day][otherStage])) {
+				state.data[v][day][otherStage].forEach((otherSet) => {
+					const otherSetKey = `${otherSet.artist}|${day}|${otherStage}|${otherSet.start}`;
+					if (!state.favoriteSets.includes(otherSetKey)) return;
+					if (!otherSet.start || !otherSet.end) return;
+					const otherStart = timeToMinutes(otherSet.start);
+					const otherEnd = timeToMinutes(otherSet.end);
+					if (startMin < otherEnd && endMin > otherStart) {
+						conflicts.push({
+							artist: otherSet.artist,
+							stage: otherStage,
+							start: otherSet.start,
+							end: otherSet.end,
+							venue: v === "arena" ? "Arena" : "District X",
+						});
+					}
+				});
+			}
+		});
+	});
+
+	// Remove duplicates (by artist, stage, start, end, venue)
+	const seen = new Set();
+	const uniqueConflicts = conflicts.filter((c) => {
+		const key = `${c.artist}|${c.stage}|${c.start}|${c.end}|${c.venue}`;
+		if (seen.has(key)) return false;
+		seen.add(key);
+		return true;
+	});
+
+	return uniqueConflicts;
 }
 
 /**
