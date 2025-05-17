@@ -7,6 +7,10 @@ import {formatTimeDisplay, timeToMinutes} from "./utils.js";
 import {findConflictsForSet} from "./conflicts.js";
 import {saveFavorites} from "./favourites.js";
 import {generatePersonalizedPoster} from "./poster.js";
+import {loadData, extractStageNames} from "./data.js";
+import {initState} from "./core.js";
+import {setupEventListeners} from "./events.js";
+import {showDay} from "./ui.js";
 
 // Track modal state
 let eventModal = null;
@@ -2177,4 +2181,63 @@ if (document.readyState === "loading") {
 } else {
 	setupShareFavoritesButton();
 	tryImportSharedFavorites();
+}
+
+import {
+	loadFavorites,
+	checkFirstVisit,
+	checkForConflicts,
+	showFavoritesOnly,
+} from "./favourites.js";
+import {setupOutsideClickListeners} from "./events.js";
+import {setupPosterButton, loadPosterStyles} from "./poster.js";
+import {
+	populateDistrictXStageDropdown,
+	populateArenaStageDropdown,
+} from "./dropdowns.js";
+
+async function main() {
+	initState();
+	window.state = state;
+
+	await loadData();
+
+	const stageNames = extractStageNames();
+	populateStageButtons(stageNames);
+	populateArenaStageDropdown(stageNames.arena);
+	populateDistrictXStageDropdown(stageNames.districtX);
+
+	showDay("friday");
+	showDistrictXDay("wednesday");
+
+	checkFirstVisit();
+	loadFavorites();
+	checkForConflicts();
+	loadPosterStyles();
+	setupPosterButton();
+	setupEventListeners();
+	setupOutsideClickListeners();
+	setupDropdowns();
+
+	// If you have weather:
+	// const forecast = await fetchWeather();
+	// renderWeather(forecast);
+
+	tryImportSharedFavorites();
+}
+
+// --- Initialization logic ---
+let isCallbackPage = window.location.pathname.endsWith("callback.html");
+
+if (isCallbackPage) {
+	import("./core.js").then(({state}) => {
+		window.state = state;
+		handleSpotifyAuthCallback();
+	});
+} else {
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", main);
+	} else {
+		main();
+	}
 }

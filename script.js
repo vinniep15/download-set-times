@@ -58,18 +58,44 @@ window.showFavoritesOnly = showFavoritesOnly;
 
 // --- Download Festival Weather Forecast ---
 async function fetchWeather() {
-	// Download Festival 2025: 11-15 June 2025 (Wed-Sun)
 	const start = "2025-06-11";
 	const end = "2025-06-15";
 	const url = `https://api.open-meteo.com/v1/forecast?latitude=52.8306&longitude=-1.3756&start_date=${start}&end_date=${end}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=Europe%2FLondon`;
-	try {
-		const res = await fetch(url);
-		if (!res.ok) throw new Error("Weather fetch failed");
-		const data = await res.json();
-		return data.daily;
-	} catch (e) {
-		return null;
-	}
+	const timeoutMs = 5000; // 5 seconds
+	let timeoutId;
+	let didTimeout = false;
+	return await Promise.race([
+		(async () => {
+			try {
+				const res = await fetch(url);
+				if (didTimeout) return null;
+				if (!res.ok) throw new Error("Weather fetch failed");
+				const data = await res.json();
+				if (!data.daily || !data.daily.time) {
+					console.warn("Weather API returned unexpected structure:", data);
+					return null;
+				}
+				return data.daily;
+			} catch (e) {
+				if (didTimeout) {
+					console.error("Weather fetch timed out (catch block)");
+				} else {
+					console.error("Weather fetch error:", e);
+				}
+				return null;
+			}
+		})(),
+		new Promise((resolve) => {
+			timeoutId = setTimeout(() => {
+				didTimeout = true;
+				console.error("Weather fetch timed out (Promise.race)");
+				resolve(null);
+			}, timeoutMs);
+		})
+	]).then((result) => {
+		clearTimeout(timeoutId);
+		return result;
+	});
 }
 
 function renderWeather(forecast) {
