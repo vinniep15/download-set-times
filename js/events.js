@@ -15,7 +15,7 @@ import {
 } from "./ui.js";
 import {
 	saveFavorites,
-	toggleFavorite,
+	toggleFavoriteSet,
 	showFavoritesOnly,
 } from "./favourites.js";
 import {generatePersonalizedPoster} from "./poster.js";
@@ -124,9 +124,9 @@ function setupFavoritesEvents() {
 			heartIcon &&
 			document.getElementById("favorites-modal").contains(heartIcon)
 		) {
-			const artist = heartIcon.dataset.artist;
+			const setKey = heartIcon.dataset.setKey;
 			const svg = heartIcon.querySelector("svg");
-			toggleFavorite(artist, svg);
+			toggleFavoriteSet(setKey, svg);
 		}
 	});
 }
@@ -136,16 +136,13 @@ function setupFavoritesEvents() {
  */
 function setupFilterEvents() {
 	// Global favorites toggle (desktop)
-	console.log("Setting up favorites toggle handlers");
 	const globalToggleDesktop = document.getElementById(
 		"global-favorites-toggle-desktop"
 	);
-	console.log("Desktop toggle found:", !!globalToggleDesktop);
 
 	if (globalToggleDesktop) {
 		globalToggleDesktop.addEventListener("change", function () {
 			const isChecked = this.checked;
-			console.log("Desktop toggle changed to:", isChecked);
 
 			import("./favourites.js").then((module) => {
 				module.showFavoritesOnly(isChecked);
@@ -162,12 +159,10 @@ function setupFilterEvents() {
 	const globalToggleMobile = document.getElementById(
 		"global-favorites-toggle-mobile"
 	);
-	console.log("Mobile toggle found:", !!globalToggleMobile);
 
 	if (globalToggleMobile) {
 		globalToggleMobile.addEventListener("change", function () {
 			const isChecked = this.checked;
-			console.log("Mobile toggle changed to:", isChecked);
 
 			import("./favourites.js").then((module) => {
 				module.showFavoritesOnly(isChecked);
@@ -235,7 +230,6 @@ function setupPosterEvents() {
 
 		// Add event listener using dynamic import
 		newButton.addEventListener("click", function () {
-			console.log("Poster button clicked");
 			import("./poster.js").then((module) => {
 				module.generatePersonalizedPoster();
 			});

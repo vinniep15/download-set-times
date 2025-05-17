@@ -9,32 +9,20 @@ import {timeToMinutes, formatTimeDisplay} from "./utils.js";
 import {showDay, showDistrictXDay, showConflictAlert} from "./ui.js";
 
 // Constants for storage
-const FAVORITES_KEY = "downloadFestivalFavorites";
+const FAVORITES_KEY = "downloadFestivalFavoriteSets";
 const FAVORITES_FILTER_KEY = "downloadFestivalFavoritesFilter";
+
+// Helper to generate a unique key for a set
+function getSetKey(artist, day, stage, start) {
+	return `${artist}|${day}|${stage}|${start}`;
+}
 
 /**
  * Save the current favorites to storage
  */
 export function saveFavorites() {
-	// Collect all artists marked as favorites in the UI
-	const favorites = [];
-	document
-		.querySelectorAll('.heart-icon svg[fill="#06b6d4"]')
-		.forEach((heart) => {
-			favorites.push(heart.closest(".heart-icon").dataset.artist);
-		});
-
-	// Update application state
-	state.favoriteArtists = favorites;
-
-	// Save to storage
-	saveToStorage(FAVORITES_KEY, favorites);
-
-	// Close modal
-	document.getElementById("favorites-modal").classList.add("hidden");
-
-	// Refresh the schedule and check for conflicts
-	showDay(state.currentDay);
+	// Save the current state.favoriteSets to storage
+	saveToStorage(FAVORITES_KEY, state.favoriteSets);
 	checkForConflicts();
 }
 
@@ -43,18 +31,15 @@ export function saveFavorites() {
  */
 export function loadFavorites() {
 	const favorites = loadFromStorage(FAVORITES_KEY);
-
 	if (favorites) {
-		state.favoriteArtists = favorites;
+		state.favoriteSets = favorites;
+	} else {
+		state.favoriteSets = [];
 	}
 
 	// ADDED: Load favorites filter state
 	const filterState = loadFromStorage(FAVORITES_FILTER_KEY);
-	console.log("Loading filter state from storage:", filterState);
-
-	// Make sure we treat it as a proper boolean
 	state.showFavoritesOnly = filterState === true;
-	console.log("Set state.showFavoritesOnly to:", state.showFavoritesOnly);
 
 	// Update toggle UI to match state
 	const desktopToggle = document.getElementById(
@@ -64,105 +49,88 @@ export function loadFavorites() {
 		"global-favorites-toggle-mobile"
 	);
 
-	if (desktopToggle) {
-		console.log("Setting desktop toggle to:", state.showFavoritesOnly);
-		desktopToggle.checked = state.showFavoritesOnly;
-	}
-
-	if (mobileToggle) {
-		console.log("Setting mobile toggle to:", state.showFavoritesOnly);
-		mobileToggle.checked = state.showFavoritesOnly;
-	}
+	if (desktopToggle) desktopToggle.checked = state.showFavoritesOnly;
+	if (mobileToggle) mobileToggle.checked = state.showFavoritesOnly;
 
 	// Make sure to re-render with current filter state
 	showDay(state.currentDay);
-
-	// Check for conflicts after a short delay
+	// If the current day is wednesday or thursday and districtX, show that day by default
+	if (
+		state.data.districtX &&
+		state.data.districtX[state.districtXCurrentDay]
+	) {
+		showDistrictXDay(state.districtXCurrentDay || "wednesday");
+		// Add active class to the correct District X day button
+		setTimeout(() => {
+			document.querySelectorAll('.districtx-day-btn').forEach(btn => {
+				if (btn.textContent.trim().toLowerCase() === (state.districtXCurrentDay || "wednesday")) {
+					btn.classList.add('active-btn');
+					btn.classList.remove('bg-gray-700');
+				} else {
+					btn.classList.remove('active-btn');
+					btn.classList.add('bg-gray-700');
+				}
+			});
+		}, 0);
+	}
 	setTimeout(checkForConflicts, 1000);
 }
 
 /**
- * Toggle favorite status for an artist
- * @param {string} artist - Artist name
- * @param {Element} svg - SVG heart icon element
+ * Toggle favorite status for a set (by setKey)
+ * @param {string} setKey - Unique set key (artist|day|stage|start)
+ * @param {Element} svg - SVG heart icon element (optional)
  */
-export function toggleFavorite(artist, svg) {
-	const isFavorite = svg.getAttribute("fill") === "#06b6d4";
-
+export function toggleFavoriteSet(setKey, svg) {
+	const isFavorite = state.favoriteSets.includes(setKey);
 	if (isFavorite) {
-		// Remove from favorites
-		svg.setAttribute("fill", "none");
-		svg.setAttribute("stroke", "currentColor");
-
-		// Update state
-		state.favoriteArtists = state.favoriteArtists.filter(
-			(a) => a !== artist
-		);
+		if (svg) {
+			svg.setAttribute("fill", "none");
+			svg.setAttribute("stroke", "currentColor");
+		}
+		state.favoriteSets = state.favoriteSets.filter((k) => k !== setKey);
 	} else {
-		// Add to favorites
-		svg.setAttribute("fill", "#06b6d4");
-		svg.setAttribute("stroke", "none");
-
-		// Update state
-		if (!state.favoriteArtists.includes(artist)) {
-			state.favoriteArtists.push(artist);
+		if (svg) {
+			svg.setAttribute("fill", "#06b6d4");
+			svg.setAttribute("stroke", "none");
+		}
+		if (!state.favoriteSets.includes(setKey)) {
+			state.favoriteSets.push(setKey);
 		}
 	}
 }
 
 /**
- * Show or hide only favorite artists in the schedule
+ * Show or hide only favorite sets in the schedule
  */
 export function showFavoritesOnly(show) {
-	console.log("showFavoritesOnly called with:", show);
-
-	// Ensure it's a boolean
 	show = show === true;
-
-	// Update application state
 	state.showFavoritesOnly = show;
-	console.log("Updated state.showFavoritesOnly:", state.showFavoritesOnly);
-
-	// Force synchronize toggle UI
 	const desktopToggle = document.getElementById(
 		"global-favorites-toggle-desktop"
 	);
 	const mobileToggle = document.getElementById(
 		"global-favorites-toggle-mobile"
 	);
-
 	if (desktopToggle) desktopToggle.checked = show;
 	if (mobileToggle) mobileToggle.checked = show;
-
-	// Save to storage
 	saveToStorage(FAVORITES_FILTER_KEY, show);
-	console.log("Saved filter state to storage:", show);
-
-	// IMPORTANT: Force re-render of visible artist sets
+	// Hide/show set blocks by setKey
 	const allSetBlocks = document.querySelectorAll(".set-block");
 	if (show) {
-		// Show only favorites
 		allSetBlocks.forEach((block) => {
-			const artistName =
-				block.querySelector(".text-sm.font-bold")?.innerText;
-			if (artistName && !state.favoriteArtists.includes(artistName)) {
+			const setKey = block.dataset.setkey;
+			if (setKey && !state.favoriteSets.includes(setKey)) {
 				block.style.display = "none";
 			} else {
 				block.style.display = "";
 			}
 		});
 	} else {
-		// Show all artists
 		allSetBlocks.forEach((block) => {
 			block.style.display = "";
 		});
 	}
-
-	// Redraw schedules with new filter
-	console.log(
-		"Redrawing schedules with filter state:",
-		state.showFavoritesOnly
-	);
 	showDay(state.currentDay);
 	if (
 		state.data.districtX &&
@@ -196,7 +164,7 @@ export function checkFirstVisit() {
  * Check for schedule conflicts between favorite artists
  */
 export function checkForConflicts() {
-	if (state.favoriteArtists.length < 2) return; // Need at least 2 favorites to have a conflict
+	if (state.favoriteSets.length < 2) return; // Need at least 2 favorites to have a conflict
 
 	const conflicts = [];
 
@@ -258,8 +226,9 @@ function findConflictsForVenue(venue, day, stages) {
 		if (!Array.isArray(state.data[venue][day][stage])) return;
 
 		state.data[venue][day][stage].forEach((set) => {
+			const setKey = getSetKey(set.artist, day, stage, set.start);
 			if (
-				state.favoriteArtists.includes(set.artist) &&
+				state.favoriteSets.includes(setKey) &&
 				set.start &&
 				set.end
 			) {
@@ -314,8 +283,9 @@ function findCrossVenueConflicts() {
 		const arenaFavorites = [];
 		Object.keys(state.data.arena[day]).forEach((stage) => {
 			state.data.arena[day][stage].forEach((set) => {
+				const setKey = getSetKey(set.artist, day, stage, set.start);
 				if (
-					state.favoriteArtists.includes(set.artist) &&
+					state.favoriteSets.includes(setKey) &&
 					set.start &&
 					set.end
 				) {
@@ -338,8 +308,9 @@ function findCrossVenueConflicts() {
 			if (!Array.isArray(state.data.districtX[day][stage])) return;
 
 			state.data.districtX[day][stage].forEach((set) => {
+				const setKey = getSetKey(set.artist, day, stage, set.start);
 				if (
-					state.favoriteArtists.includes(set.artist) &&
+					state.favoriteSets.includes(setKey) &&
 					set.start &&
 					set.end
 				) {
@@ -391,7 +362,7 @@ export function findConflictsForSet(set, stage, day, venue) {
 		!set ||
 		!set.start ||
 		!set.end ||
-		!state.favoriteArtists.includes(set.artist)
+		!state.favoriteSets.includes(getSetKey(set.artist, day, stage, set.start))
 	) {
 		return [];
 	}
@@ -407,7 +378,7 @@ export function findConflictsForSet(set, stage, day, venue) {
 
 			if (Array.isArray(state.data[venue][day][otherStage])) {
 				state.data[venue][day][otherStage].forEach((otherSet) => {
-					if (!state.favoriteArtists.includes(otherSet.artist))
+					if (!state.favoriteSets.includes(getSetKey(otherSet.artist, day, otherStage, otherSet.start)))
 						return;
 					if (!otherSet.start || !otherSet.end) return;
 
@@ -435,7 +406,7 @@ export function findConflictsForSet(set, stage, day, venue) {
 		Object.keys(state.data[otherVenue][day]).forEach((otherStage) => {
 			if (Array.isArray(state.data[otherVenue][day][otherStage])) {
 				state.data[otherVenue][day][otherStage].forEach((otherSet) => {
-					if (!state.favoriteArtists.includes(otherSet.artist))
+					if (!state.favoriteSets.includes(getSetKey(otherSet.artist, day, otherStage, otherSet.start)))
 						return;
 					if (!otherSet.start || !otherSet.end) return;
 

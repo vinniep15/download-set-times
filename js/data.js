@@ -45,8 +45,6 @@ export async function loadData() {
  * Extract stage names from the data
  */
 export function extractStageNames() {
-	console.log("Extracting stage names from data");
-
 	// Create sets to collect unique stage names
 	const arenaStages = new Set();
 	const districtXStages = new Set();
@@ -75,6 +73,5 @@ export function extractStageNames() {
 		districtX: Array.from(districtXStages),
 	};
 
-	console.log("Extracted stage names:", result);
 	return result;
 }

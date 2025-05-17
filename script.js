@@ -35,7 +35,6 @@ import {
 	setupDropdowns,
 	setupDistrictXDropdownsDirectly,
 	populateDistrictXStageDropdown,
-	setupMobileDropdownsExceptDistrictX,
 	populateArenaStageDropdown,
 } from "./js/dropdowns.js";
 
@@ -53,8 +52,6 @@ window.updateDistrictXMobileDayText = updateDistrictXMobileDayText;
 window.updateDistrictXMobileStageText = updateDistrictXMobileStageText;
 window.setupDistrictXDropdownsDirectly = setupDistrictXDropdownsDirectly;
 window.populateDistrictXStageDropdown = populateDistrictXStageDropdown;
-window.setupMobileDropdownsExceptDistrictX =
-	setupMobileDropdownsExceptDistrictX;
 window.populateArenaStageDropdown = populateArenaStageDropdown;
 window.showFavoritesOnly = showFavoritesOnly;
 

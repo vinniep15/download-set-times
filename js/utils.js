@@ -25,7 +25,6 @@ export function generateTimeArray(startHour, endHour) {
  */
 export function timeToMinutes(time) {
 	if (!time || typeof time !== "string") {
-		console.warn("Invalid time value passed to timeToMinutes:", time);
 		return 0;
 	}
 

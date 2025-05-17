@@ -30,10 +30,8 @@ export function setupPosterButton() {
  * Start the poster generation process
  */
 export function generatePersonalizedPoster() {
-	console.log("Generating poster...");
-
 	// Check if we have favorites
-	if (state.favoriteArtists.length === 0) {
+	if (!state.favoriteSets || state.favoriteSets.length === 0) {
 		alert("Please add some favorite artists first!");
 		return;
 	}
@@ -270,7 +268,8 @@ function collectArenaArtists() {
 	Object.keys(state.data.arena).forEach((day) => {
 		Object.keys(state.data.arena[day]).forEach((stage) => {
 			state.data.arena[day][stage].forEach((set) => {
-				if (state.favoriteArtists.includes(set.artist)) {
+				const setKey = `${set.artist}|${day}|${stage}|${set.start}`;
+				if (state.favoriteSets.includes(setKey)) {
 					arenaArtists.push({
 						artist: set.artist,
 						stage: stage,
@@ -297,7 +296,8 @@ function collectDistrictXArtists() {
 		Object.keys(state.data.districtX[day]).forEach((stage) => {
 			if (Array.isArray(state.data.districtX[day][stage])) {
 				state.data.districtX[day][stage].forEach((set) => {
-					if (state.favoriteArtists.includes(set.artist)) {
+					const setKey = `${set.artist}|${day}|${stage}|${set.start}`;
+					if (state.favoriteSets.includes(setKey)) {
 						districtArtists.push({
 							artist: set.artist,
 							stage: stage,
@@ -445,7 +445,6 @@ function createDownloadButton(displayName, name, isMobile) {
 				useCORS: true,
 			})
 				.then((canvas) => {
-					console.log("Canvas generated");
 					const link = document.createElement("a");
 					link.download = `${
 						name === "My" ? "my" : name.toLowerCase()
@@ -454,14 +453,12 @@ function createDownloadButton(displayName, name, isMobile) {
 					link.click();
 				})
 				.catch((err) => {
-					console.error("Error generating canvas:", err);
 					alert(
 						"Sorry, there was an error creating your poster: " +
 							err.message
 					);
 				});
 		} else {
-			console.error("html2canvas not found");
 			alert("Cannot generate download - html2canvas library not loaded.");
 		}
 	};

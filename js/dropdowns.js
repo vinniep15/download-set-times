@@ -17,8 +17,6 @@ import {
  * Set up all dropdowns
  */
 export function setupDropdowns() {
-	console.log("Setting up all dropdowns with simplified approach");
-
 	// MOBILE DROPDOWNS - Direct approach
 	setupSimpleDropdown("stage-dropdown-btn-mobile", "stage-dropdown-mobile");
 	setupSimpleDropdown("day-dropdown-btn-mobile", "day-dropdown-mobile");
@@ -48,7 +46,6 @@ function setupSimpleDropdown(btnId, menuId) {
 	const menu = document.getElementById(menuId);
 
 	if (!btn || !menu) {
-		console.warn(`Dropdown elements not found for ${btnId} / ${menuId}`);
 		return;
 	}
 
@@ -243,17 +240,13 @@ function setupOutsideClickHandler() {
  * Populate the District X stage filter dropdown
  */
 export function populateDistrictXStageDropdown(stageNames) {
-	console.log("Populating District X dropdown with stage names:", stageNames);
-
 	const dropdown = document.getElementById("districtx-stage-dropdown-mobile");
 	if (!dropdown) {
-		console.error("District X stage dropdown not found");
 		return;
 	}
 
 	const menuContainer = dropdown.querySelector('div[role="menu"]');
 	if (!menuContainer) {
-		console.error("District X stage dropdown menu container not found");
 		return;
 	}
 
@@ -284,8 +277,6 @@ export function populateDistrictXStageDropdown(stageNames) {
 				? stageNames.arena
 				: ["tent", "doghouse"];
 
-		console.log("Using District X stages:", stages);
-
 		stages.forEach((stage) => {
 			const stageBtn = document.createElement("button");
 			stageBtn.className =
@@ -306,8 +297,6 @@ export function populateDistrictXStageDropdown(stageNames) {
 			menuContainer.appendChild(stageBtn);
 		});
 	} catch (error) {
-		console.error("Error populating District X stage dropdown:", error);
-
 		// Add a fallback option if the loop fails
 		const errorBtn = document.createElement("button");
 		errorBtn.className =
@@ -315,8 +304,6 @@ export function populateDistrictXStageDropdown(stageNames) {
 		errorBtn.textContent = "Error loading stages";
 		menuContainer.appendChild(errorBtn);
 	}
-
-	console.log("District X stage dropdown populated successfully");
 }
 
 /**
@@ -449,20 +436,12 @@ export function updateDistrictXMobileStageText(text) {
 // For backward compatibility
 export function setupDistrictXDropdownsDirectly() {
 	// This is now handled by setupDropdowns
-	console.log("setupDistrictXDropdownsDirectly is deprecated");
-}
-
-export function setupMobileDropdownsExceptDistrictX() {
-	// This is now handled by setupDropdowns
-	console.log("setupMobileDropdownsExceptDistrictX is deprecated");
 }
 
 /**
  * Direct fix for Arena dropdowns not showing
  */
 export function fixArenaDropdowns() {
-	console.log("Applying direct fix to Arena dropdowns");
-
 	// Stage dropdown fix
 	const stageBtn = document.getElementById("stage-dropdown-btn-mobile");
 	const stageMenu = document.getElementById("stage-dropdown-mobile");
@@ -476,7 +455,6 @@ export function fixArenaDropdowns() {
 		newStageBtn.addEventListener("click", function (e) {
 			e.preventDefault();
 			e.stopPropagation();
-			console.log("Arena stage dropdown clicked");
 
 			// Force close any open dropdowns
 			document
@@ -494,7 +472,6 @@ export function fixArenaDropdowns() {
 				stageMenu.classList.remove("hidden");
 				stageMenu.style.cssText =
 					"display: block !important; z-index: 9999 !important; position: absolute !important;";
-				console.log("SHOWING Arena stage dropdown");
 
 				// Rotate arrow
 				const arrow = this.querySelector("svg");
@@ -503,7 +480,6 @@ export function fixArenaDropdowns() {
 				// Hide dropdown
 				stageMenu.classList.add("hidden");
 				stageMenu.style.display = "none";
-				console.log("HIDING Arena stage dropdown");
 
 				// Reset arrow
 				const arrow = this.querySelector("svg");
@@ -525,7 +501,6 @@ export function fixArenaDropdowns() {
 		newDayBtn.addEventListener("click", function (e) {
 			e.preventDefault();
 			e.stopPropagation();
-			console.log("Arena day dropdown clicked");
 
 			// Force close any open dropdowns
 			document
@@ -543,7 +518,6 @@ export function fixArenaDropdowns() {
 				dayMenu.classList.remove("hidden");
 				dayMenu.style.cssText =
 					"display: block !important; z-index: 9999 !important; position: absolute !important;";
-				console.log("SHOWING Arena day dropdown");
 
 				// Rotate arrow
 				const arrow = this.querySelector("svg");
@@ -552,7 +526,6 @@ export function fixArenaDropdowns() {
 				// Hide dropdown
 				dayMenu.classList.add("hidden");
 				dayMenu.style.display = "none";
-				console.log("HIDING Arena day dropdown");
 
 				// Reset arrow
 				const arrow = this.querySelector("svg");
@@ -566,17 +539,13 @@ export function fixArenaDropdowns() {
  * Populate the Arena stage filter dropdown
  */
 export function populateArenaStageDropdown(stageNames) {
-	console.log("Populating Arena dropdown with stage names:", stageNames);
-
 	const dropdown = document.getElementById("stage-dropdown-mobile");
 	if (!dropdown) {
-		console.error("Arena stage dropdown not found");
 		return;
 	}
 
 	const menuContainer = dropdown.querySelector('div[role="menu"]');
 	if (!menuContainer) {
-		console.error("Arena stage dropdown menu container not found");
 		return;
 	}
 
@@ -602,8 +571,6 @@ export function populateArenaStageDropdown(stageNames) {
 				? stageNames.arena
 				: ["Main Stage", "Second Stage", "Avalanche", "Dogtooth"];
 
-		console.log("Using Arena stages:", stages);
-
 		stages.forEach((stage) => {
 			const stageBtn = document.createElement("button");
 			stageBtn.className =
@@ -623,9 +590,5 @@ export function populateArenaStageDropdown(stageNames) {
 
 			menuContainer.appendChild(stageBtn);
 		});
-	} catch (error) {
-		console.error("Error populating Arena stage dropdown:", error);
-	}
-
-	console.log("Arena stage dropdown populated successfully");
+	} catch (error) {}
 }
