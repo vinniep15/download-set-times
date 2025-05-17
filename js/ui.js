@@ -1910,8 +1910,8 @@ export function setupShareFavoritesButton() {
 		setCurrentPersonId();
 		setCurrentPersonName(name);
 		// Update all favorites from 'You' to the entered name
-		window.state.favoriteSets = window.state.favoriteSets.map(fav =>
-			fav.person === "You" ? { ...fav, person: name } : fav
+		window.state.favoriteSets = window.state.favoriteSets.map((fav) =>
+			fav.person === "You" ? {...fav, person: name} : fav
 		);
 		if (
 			!window.state ||
@@ -1925,7 +1925,11 @@ export function setupShareFavoritesButton() {
 		const userFavorites = window.state.favoriteSets
 			.filter((fav) => fav.person === getCurrentPersonName())
 			.map((fav) => fav.setKey);
-		console.log('[DEBUG] Sharing favorites for', getCurrentPersonName(), userFavorites);
+		console.log(
+			"[DEBUG] Sharing favorites for",
+			getCurrentPersonName(),
+			userFavorites
+		);
 		const payload = {
 			name,
 			favorites: userFavorites,
@@ -2006,7 +2010,11 @@ export function tryImportSharedFavorites() {
 	} catch {
 		payload = null;
 	}
-	if (payload && Array.isArray(payload.favorites) && payload.favorites.length === 0) {
+	if (
+		payload &&
+		Array.isArray(payload.favorites) &&
+		payload.favorites.length === 0
+	) {
 		alert("This shared link does not contain any favorites to import.");
 		return;
 	}
