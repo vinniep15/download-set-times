@@ -63,3 +63,30 @@ export function loadFromStorage(key) {
 
 	return null;
 }
+
+export function safeGetItem(key) {
+	try {
+		return localStorage.getItem(key);
+	} catch (e) {
+		return null;
+	}
+}
+
+export function safeSetItem(key, value) {
+	try {
+		localStorage.setItem(key, value);
+	} catch (e) {
+		// Ignore
+	}
+}
+
+export function safeStorageAvailable() {
+	try {
+		const testKey = '__test__';
+		localStorage.setItem(testKey, '1');
+		localStorage.removeItem(testKey);
+		return true;
+	} catch (e) {
+		return false;
+	}
+}

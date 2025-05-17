@@ -14,7 +14,7 @@ import {
 	updateMobileStageText,
 	updateMobileDayText,
 	populateStageButtons,
-	showFavoritesModal,
+	showFavoritesModalPatched,
 	updateDistrictXMobileDayText,
 	updateDistrictXMobileStageText,
 } from "./js/ui.js";
@@ -44,7 +44,7 @@ window.showDistrictXDay = showDistrictXDay;
 window.filterStage = filterStage;
 window.filterDistrictXStage = filterDistrictXStage;
 window.saveFavorites = saveFavorites;
-window.showFavoritesModal = showFavoritesModal;
+window.showFavoritesModal = showFavoritesModalPatched;
 window.generatePersonalizedPoster = generatePersonalizedPoster;
 window.updateMobileStageText = updateMobileStageText;
 window.updateMobileDayText = updateMobileDayText;

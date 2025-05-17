@@ -1718,3 +1718,25 @@ function setupFavoritesModalTabEvents() {
 		});
 	});
 }
+
+// Show a warning if storage is unavailable (e.g. in incognito/private mode)
+function showStorageWarning() {
+	if (!state.storageWarning) return;
+	let existing = document.getElementById('storage-warning');
+	if (existing) return;
+	const warning = document.createElement('div');
+	warning.id = 'storage-warning';
+	warning.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-red-700 text-white px-4 py-2 rounded shadow-lg z-50';
+	warning.innerHTML = '⚠️ Unable to save favorites: browser storage is unavailable (private/incognito mode or browser settings). Your selections will not be saved after you close this tab.';
+	document.body.appendChild(warning);
+	setTimeout(() => {
+		if (warning.parentNode) warning.parentNode.removeChild(warning);
+	}, 15000);
+}
+
+// Patch showFavoritesModal to show the warning if needed
+const origShowFavoritesModal = showFavoritesModal;
+export function showFavoritesModalPatched() {
+	origShowFavoritesModal();
+	showStorageWarning();
+}

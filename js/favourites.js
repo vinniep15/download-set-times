@@ -4,7 +4,7 @@
  */
 
 import {state} from "./core.js";
-import {saveToStorage, loadFromStorage} from "./storage.js";
+import {saveToStorage, loadFromStorage, safeGetItem, safeSetItem, safeStorageAvailable} from "./storage.js";
 import {timeToMinutes, formatTimeDisplay} from "./utils.js";
 import {showDay, showDistrictXDay, showConflictAlert} from "./ui.js";
 
@@ -21,8 +21,16 @@ function getSetKey(artist, day, stage, start) {
  * Save the current favorites to storage
  */
 export function saveFavorites() {
-	// Save the current state.favoriteSets to storage
-	saveToStorage(FAVORITES_KEY, state.favoriteSets);
+	if (!safeStorageAvailable()) {
+		state.storageWarning = true;
+		return;
+	}
+	try {
+		safeSetItem(FAVORITES_KEY, JSON.stringify(state.favoriteSets));
+		state.storageWarning = false;
+	} catch {
+		state.storageWarning = true;
+	}
 	// Only check for conflicts on save (not on every toggle)
 	checkForConflicts();
 }
@@ -31,12 +39,24 @@ export function saveFavorites() {
  * Load favorites from storage
  */
 export function loadFavorites() {
-	const favorites = loadFromStorage(FAVORITES_KEY);
-	if (favorites) {
-		state.favoriteSets = favorites;
+	if (!safeStorageAvailable()) {
+		state.favoriteSets = [];
+		state.favoriteArtists = [];
+		state.storageWarning = true;
+		return;
+	}
+	const favs = safeGetItem(FAVORITES_KEY);
+	if (favs) {
+		try {
+			state.favoriteSets = JSON.parse(favs);
+		} catch {
+			state.favoriteSets = [];
+		}
 	} else {
 		state.favoriteSets = [];
 	}
+	state.favoriteArtists = [];
+	state.storageWarning = false;
 
 	// ADDED: Load favorites filter state
 	const filterState = loadFromStorage(FAVORITES_FILTER_KEY);
