@@ -63,13 +63,16 @@ export function loadFavorites() {
 		showDistrictXDay(state.districtXCurrentDay || "wednesday");
 		// Add active class to the correct District X day button
 		setTimeout(() => {
-			document.querySelectorAll('.districtx-day-btn').forEach(btn => {
-				if (btn.textContent.trim().toLowerCase() === (state.districtXCurrentDay || "wednesday")) {
-					btn.classList.add('active-btn');
-					btn.classList.remove('bg-gray-700');
+			document.querySelectorAll(".districtx-day-btn").forEach((btn) => {
+				if (
+					btn.textContent.trim().toLowerCase() ===
+					(state.districtXCurrentDay || "wednesday")
+				) {
+					btn.classList.add("active-btn");
+					btn.classList.remove("bg-gray-700");
 				} else {
-					btn.classList.remove('active-btn');
-					btn.classList.add('bg-gray-700');
+					btn.classList.remove("active-btn");
+					btn.classList.add("bg-gray-700");
 				}
 			});
 		}, 0);
@@ -227,11 +230,7 @@ function findConflictsForVenue(venue, day, stages) {
 
 		state.data[venue][day][stage].forEach((set) => {
 			const setKey = getSetKey(set.artist, day, stage, set.start);
-			if (
-				state.favoriteSets.includes(setKey) &&
-				set.start &&
-				set.end
-			) {
+			if (state.favoriteSets.includes(setKey) && set.start && set.end) {
 				favoriteSets.push({
 					artist: set.artist,
 					stage: stage,
@@ -362,7 +361,9 @@ export function findConflictsForSet(set, stage, day, venue) {
 		!set ||
 		!set.start ||
 		!set.end ||
-		!state.favoriteSets.includes(getSetKey(set.artist, day, stage, set.start))
+		!state.favoriteSets.includes(
+			getSetKey(set.artist, day, stage, set.start)
+		)
 	) {
 		return [];
 	}
@@ -378,7 +379,16 @@ export function findConflictsForSet(set, stage, day, venue) {
 
 			if (Array.isArray(state.data[venue][day][otherStage])) {
 				state.data[venue][day][otherStage].forEach((otherSet) => {
-					if (!state.favoriteSets.includes(getSetKey(otherSet.artist, day, otherStage, otherSet.start)))
+					if (
+						!state.favoriteSets.includes(
+							getSetKey(
+								otherSet.artist,
+								day,
+								otherStage,
+								otherSet.start
+							)
+						)
+					)
 						return;
 					if (!otherSet.start || !otherSet.end) return;
 
@@ -406,7 +416,16 @@ export function findConflictsForSet(set, stage, day, venue) {
 		Object.keys(state.data[otherVenue][day]).forEach((otherStage) => {
 			if (Array.isArray(state.data[otherVenue][day][otherStage])) {
 				state.data[otherVenue][day][otherStage].forEach((otherSet) => {
-					if (!state.favoriteSets.includes(getSetKey(otherSet.artist, day, otherStage, otherSet.start)))
+					if (
+						!state.favoriteSets.includes(
+							getSetKey(
+								otherSet.artist,
+								day,
+								otherStage,
+								otherSet.start
+							)
+						)
+					)
 						return;
 					if (!otherSet.start || !otherSet.end) return;
 
