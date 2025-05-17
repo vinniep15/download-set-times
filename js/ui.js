@@ -16,6 +16,79 @@ function getSetKey(artist, day, stage, start) {
 	return `${artist}|${day}|${stage}|${start}`;
 }
 
+// Helper: get all people for a setKey
+function getPeopleForSet(setKey) {
+    return state.favoriteSets.filter(fav => fav.setKey === setKey).map(fav => fav.person);
+}
+
+// Download Festival inspired color palette for person colors
+// Use #06b6d4 (cyan-400) instead of the very light blue
+const personColors = [
+    '#06b6d4', // Cyan (Download/cyan-400)
+    '#00bfae', // Teal
+    '#2563eb', // Download blue (matches day button)
+    '#a259ff', // Purple
+    '#ff2d7e', // Magenta
+    '#baff00', // Acid Green
+    '#ffe600', // Yellow
+    '#ffffff', // White
+    '#ff7f50', // Coral (for extra contrast)
+];
+
+// Assign each person a unique color from the palette, cycling only if needed
+const personColorMap = {};
+function getColorForPerson(person) {
+    if (!personColorMap[person]) {
+        // Assign next unused color
+        const usedColors = Object.values(personColorMap);
+        const available = personColors.find(c => !usedColors.includes(c));
+        personColorMap[person] = available || personColors[usedColors.length % personColors.length];
+    }
+    return personColorMap[person];
+}
+
+// --- Store and load current user name ---
+const CURRENT_PERSON_ID = "__current__";
+
+function getCurrentPerson() {
+    if (state.currentPersonId) return state.currentPersonId;
+    const stored = localStorage.getItem("downloadFestivalCurrentPersonId");
+    if (stored) {
+        state.currentPersonId = stored;
+        return stored;
+    }
+    // Fallback to special id
+    return CURRENT_PERSON_ID;
+}
+function setCurrentPersonId() {
+    state.currentPersonId = CURRENT_PERSON_ID;
+    localStorage.setItem("downloadFestivalCurrentPersonId", CURRENT_PERSON_ID);
+}
+function setCurrentPersonName(name) {
+    state.currentPersonName = name;
+    localStorage.setItem("downloadFestivalCurrentPersonName", name);
+}
+function getCurrentPersonName() {
+    if (state.currentPersonName) return state.currentPersonName;
+    const stored = localStorage.getItem("downloadFestivalCurrentPersonName");
+    if (stored) {
+        state.currentPersonName = stored;
+        return stored;
+    }
+    return "You";
+}
+
+// Helper to get the current user's person id
+function getCurrentPersonId() {
+    if (state.currentPersonId) return state.currentPersonId;
+    const stored = localStorage.getItem("downloadFestivalCurrentPersonId");
+    if (stored) {
+        state.currentPersonId = stored;
+        return stored;
+    }
+    return "__current__";
+}
+
 // --- FIX: Move createArtistRow to module scope so it is accessible everywhere ---
 function createArtistRow(set, day, stage) {
 	const artistDiv = document.createElement("div");
@@ -25,7 +98,7 @@ function createArtistRow(set, day, stage) {
 	const heartBtn = document.createElement("button");
 	heartBtn.className = "heart-icon mr-2";
 	heartBtn.dataset.setkey = setKey;
-	const isFavorite = state.favoriteSets.includes(setKey);
+	const isFavorite = getPeopleForSetDisplay(setKey).includes("You");
 	heartBtn.innerHTML = `
 		<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" fill=\"${
 			isFavorite ? "#06b6d4" : "none"
@@ -37,12 +110,14 @@ function createArtistRow(set, day, stage) {
 	`;
 	heartBtn.addEventListener("click", function (e) {
 		e.stopPropagation();
-		const idx = state.favoriteSets.indexOf(setKey);
+		// Toggle favorite for 'You'
+		const idx = state.favoriteSets.findIndex(fav => fav.setKey === setKey && fav.person === "You");
 		if (idx === -1) {
-			state.favoriteSets.push(setKey);
+			state.favoriteSets.push({ setKey, person: "You" });
 		} else {
 			state.favoriteSets.splice(idx, 1);
 		}
+		saveFavorites();
 		showFavoritesModalWithActiveDay(day);
 	});
 	artistDiv.appendChild(heartBtn);
@@ -138,7 +213,7 @@ function renderStageRow(container, day, stage, venue) {
 	const setsToShow = state.showFavoritesOnly
 		? state.data[venue][day][stage].filter((set) => {
 				const setKey = getSetKey(set.artist, day, stage, set.start);
-				return state.favoriteSets.includes(setKey);
+				return state.favoriteSets.some(fav => fav.setKey === setKey);
 		  })
 		: state.data[venue][day][stage];
 
@@ -186,12 +261,12 @@ function createEventBlock(set, stage, day, venue) {
 
 	// Check for favorite status and conflicts
 	const setKey = getSetKey(set.artist, day, stage, set.start);
-	const isFavorite = state.favoriteSets.includes(setKey);
+	const isFavorite = state.favoriteSets.some(fav => fav.setKey === setKey && fav.person === "You");
 	const hasConflict =
 		isFavorite && checkForSetConflict(set, stage, day, venue);
 
 	// Apply styling based on status
-	stylizeBlock(block, isFavorite, hasConflict);
+	stylizeBlock(block, isFavorite, hasConflict, setKey);
 
 	// Add artist name
 	const artistName = document.createElement("div");
@@ -217,9 +292,9 @@ function createEventBlock(set, stage, day, venue) {
 	`;
 	heartBtn.addEventListener("click", function (e) {
 		e.stopPropagation();
-		const idx = state.favoriteSets.indexOf(setKey);
+		const idx = state.favoriteSets.findIndex(fav => fav.setKey === setKey && fav.person === "You");
 		if (idx === -1) {
-			state.favoriteSets.push(setKey);
+			state.favoriteSets.push({ setKey, person: "You" });
 		} else {
 			state.favoriteSets.splice(idx, 1);
 		}
@@ -256,23 +331,76 @@ function createEventBlock(set, stage, day, venue) {
 	block.dataset.end = endMin;
 	block.dataset.stage = stage;
 
+	// Add tooltip for people
+	const people = getPeopleForSetDisplay(setKey);
+	if (people.length > 0) {
+		block.addEventListener("mouseenter", function () {
+			showPeopleTooltip(block, people);
+		});
+		block.addEventListener("mouseleave", function () {
+			hidePeopleTooltip();
+		});
+		// Touch/tap for mobile
+		block.addEventListener("touchstart", function (e) {
+			showPeopleTooltip(block, people);
+		}, {passive: true});
+		block.addEventListener("touchend", function (e) {
+			setTimeout(hidePeopleTooltip, 500);
+		});
+	}
+
 	return block;
+}
+
+// Tooltip helpers
+let peopleTooltip = null;
+function showPeopleTooltip(block, people) {
+    hidePeopleTooltip();
+    peopleTooltip = document.createElement("div");
+    peopleTooltip.className = "people-tooltip";
+    peopleTooltip.style.position = "absolute";
+    peopleTooltip.style.zIndex = 9999;
+    peopleTooltip.style.background = "#222";
+    peopleTooltip.style.color = "#fff";
+    peopleTooltip.style.padding = "6px 12px";
+    peopleTooltip.style.borderRadius = "6px";
+    peopleTooltip.style.fontSize = "13px";
+    peopleTooltip.style.boxShadow = "0 2px 8px rgba(0,0,0,0.25)";
+    peopleTooltip.innerHTML =
+        '<div class="mb-1 font-semibold">Who\'s going:</div>' +
+        people.map(p => `<span style="display:inline-block;margin-right:8px;padding:2px 8px;border-radius:4px;background:${getColorForPerson(p)};color:#fff;">${p}</span>`).join("");
+    document.body.appendChild(peopleTooltip);
+    const rect = block.getBoundingClientRect();
+    peopleTooltip.style.left = rect.left + window.scrollX + "px";
+    peopleTooltip.style.top = rect.top + window.scrollY - peopleTooltip.offsetHeight - 8 + "px";
+}
+function hidePeopleTooltip() {
+    if (peopleTooltip && peopleTooltip.parentNode) peopleTooltip.parentNode.removeChild(peopleTooltip);
+    peopleTooltip = null;
 }
 
 /**
  * Apply appropriate styling to blocks based on favorite status
  */
-function stylizeBlock(block, isFavorite, hasConflict) {
-	block.style.backgroundColor = "";
-	block.style.border = "";
-	block.style.boxShadow = "";
+function stylizeBlock(block, isFavorite, hasConflict, setKey) {
+	const people = getPeopleForSetDisplay(setKey);
+	if (people.length === 0) {
+		block.style.backgroundColor = "";
+		block.style.border = "";
+	} else if (people.length === 1) {
+		block.style.backgroundColor = getColorForPerson(people[0]) + "22"; // light background
+		block.style.border = `2px solid ${getColorForPerson(people[0])}`;
+	} else {
+		// Multiple people: use a gradient border
+		const colors = people.map(getColorForPerson);
+		block.style.background = `linear-gradient(90deg, ${colors.map((c, i) => `${c} ${(i / colors.length) * 100}%`).join(", ")})`;
+		block.style.border = `2px solid transparent`;
+	}
 	if (hasConflict) {
 		block.style.backgroundColor = "#dc2626"; // Red for conflicts
 		block.style.border = "3px solid #fff";
 		block.style.boxShadow = "0 0 5px rgba(255, 255, 255, 0.7)";
 	} else if (isFavorite) {
-		block.style.backgroundColor = "#06b6d4"; // Cyan for favorites
-		block.style.border = "3px solid #fff";
 		block.style.boxShadow = "0 0 5px rgba(255, 255, 255, 0.7)";
 	}
 }
@@ -297,7 +425,7 @@ function checkForSetConflict(set, stage, day, venue) {
 				otherStage,
 				otherSet.start
 			);
-			if (!state.favoriteSets.includes(otherSetKey)) continue;
+			if (!state.favoriteSets.some(fav => fav.setKey === otherSetKey)) continue;
 			if (!otherSet.start || !otherSet.end) continue;
 
 			const otherStart = timeToMinutes(otherSet.start);
@@ -322,7 +450,7 @@ function checkForSetConflict(set, stage, day, venue) {
 					otherStage,
 					otherSet.start
 				);
-				if (!state.favoriteSets.includes(otherSetKey)) continue;
+				if (!state.favoriteSets.some(fav => fav.setKey === otherSetKey)) continue;
 				if (!otherSet.start || !otherSet.end) continue;
 
 				const otherStart = timeToMinutes(otherSet.start);
@@ -535,29 +663,13 @@ export function filterDistrictXStage(stage) {
 					? "flex"
 					: "none";
 		});
-
-	// Update button state
-	document
-		.querySelectorAll("#districtx-stage-buttons .stage-btn")
-		.forEach((btn) => {
-			if (
-				btn.textContent === stage ||
-				(btn.textContent === "All Stages" && stage === "all")
-			) {
-				btn.classList.add("active-btn");
-				btn.classList.remove("bg-gray-700");
-			} else {
-				btn.classList.remove("active-btn");
-				btn.classList.add("bg-gray-700");
-			}
-		});
 }
 
 /**
- * Show event details popup
+ * Show event details in a modal
  */
 export function showEventDetails(event, set, stage, day, venue, isMobile) {
-	// Remove any existing modal
+	// Hide any existing modal
 	hideEventDetails();
 
 	// Create modal element
@@ -1741,4 +1853,235 @@ const origShowFavoritesModal = showFavoritesModal;
 export function showFavoritesModalPatched() {
 	origShowFavoritesModal();
 	showStorageWarning();
+}
+
+// --- Shared Favorites: Clean Implementation ---
+
+// 1. Share button setup
+export function setupShareFavoritesButton() {
+	const btn = document.getElementById("share-favorites-btn");
+	if (!btn) return;
+	// Remove previous handlers
+	const newBtn = btn.cloneNode(true);
+	btn.parentNode.replaceChild(newBtn, btn);
+	newBtn.addEventListener("click", function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+		// 2. Prompt for name
+		let name = window.prompt(
+			"Enter your name to share your favorites:",
+			getCurrentPersonName()
+		);
+		if (name === null) return;
+		name = name.trim();
+		if (!name) return;
+		setCurrentPersonId();
+		setCurrentPersonName(name);
+		if (
+			!window.state ||
+			!Array.isArray(window.state.favoriteSets) ||
+			!window.state.favoriteSets.length
+		) {
+			alert("You have not selected any favorites to share!");
+			return;
+		}
+		// 3. Copy favorites (name + favorites)
+		// Only share your own favorites (person: CURRENT_PERSON_ID)
+		const payload = {
+			name,
+			favorites: window.state.favoriteSets
+				.filter(fav => fav.person === CURRENT_PERSON_ID)
+				.map(fav => fav.setKey),
+		};
+		let encoded;
+		try {
+			encoded = encodeURIComponent(JSON.stringify(payload));
+		} catch {
+			alert("Failed to encode favorites for sharing.");
+			return;
+		}
+		const url = `${window.location.origin}${window.location.pathname}?shared=${encoded}`;
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(url).then(
+				() => {
+					showShareTooltip(newBtn, "Link copied!");
+				},
+				() => {
+					fallbackCopyTextToClipboard(url, newBtn);
+				}
+			);
+		} else {
+			fallbackCopyTextToClipboard(url, newBtn);
+		}
+	});
+}
+
+function showShareTooltip(btn, message) {
+	let tooltip = document.createElement("div");
+	tooltip.textContent = message;
+	tooltip.style.position = "absolute";
+	tooltip.style.bottom = "110%";
+	tooltip.style.left = "50%";
+	tooltip.style.transform = "translateX(-50%)";
+	tooltip.style.background = "#06b6d4";
+	tooltip.style.color = "#fff";
+	tooltip.style.padding = "4px 12px";
+	tooltip.style.borderRadius = "6px";
+	tooltip.style.fontSize = "13px";
+	tooltip.style.zIndex = "9999";
+	btn.appendChild(tooltip);
+	setTimeout(() => {
+		if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
+	}, 1500);
+}
+
+function fallbackCopyTextToClipboard(text, btn) {
+	const textArea = document.createElement("textarea");
+	textArea.value = text;
+	document.body.appendChild(textArea);
+	textArea.focus();
+	textArea.select();
+	try {
+		const successful = document.execCommand("copy");
+		showShareTooltip(btn, successful ? "Link copied!" : "Copy failed");
+	} catch {
+		showShareTooltip(btn, "Copy failed");
+	}
+	document.body.removeChild(textArea);
+}
+
+// 5. On page load: check for shared favorites in URL and show overlay
+export function tryImportSharedFavorites() {
+	const params = new URLSearchParams(window.location.search);
+	const shared = params.get("shared");
+	if (!shared) return;
+	let payload = null;
+	try {
+		payload = JSON.parse(decodeURIComponent(shared));
+		if (
+			!payload ||
+			typeof payload !== "object" ||
+			!Array.isArray(payload.favorites) ||
+			typeof payload.name !== "string"
+		) {
+			throw new Error("Malformed shared favorites payload");
+		}
+	} catch {
+		payload = null;
+	}
+	window._sharedFavoritesPayload = payload;
+	renderSharedFavoritesOverlay();
+}
+
+// Patch import overlay to store name
+function renderSharedFavoritesOverlay() {
+	const legend = document.getElementById("shared-favorites-legend");
+	const list = document.getElementById("shared-favorites-list");
+	if (!legend || !list) return;
+	const payload = window._sharedFavoritesPayload;
+	if (
+		!payload ||
+		!Array.isArray(payload.favorites) ||
+		typeof payload.name !== "string"
+	) {
+		legend.classList.add("hidden");
+		return;
+	}
+	// Show sender's name
+	let html = `<div class="mb-2 text-cyan-400 font-semibold">Shared by: ${
+		payload.name || "Someone"
+	}</div>`;
+	// Map set keys to readable artist names
+	html += payload.favorites
+		.map((fav) => {
+			// Support both old (string) and new ({setKey, person}) formats
+			const setKey = typeof fav === 'string' ? fav : fav.setKey;
+			let found = null;
+			["arena", "districtX"].forEach((venue) => {
+				if (found) return;
+				Object.keys(state.data[venue] || {}).forEach((day) => {
+					if (found) return;
+					Object.keys(state.data[venue][day] || {}).forEach(
+						(stage) => {
+							if (found) return;
+							const set = (
+								state.data[venue][day][stage] || []
+							).find(
+								(s) =>
+									getSetKey(s.artist, day, stage, s.start) ===
+									setKey
+							);
+							if (set) {
+								found = {
+									artist: set.artist,
+									day,
+									stage,
+									venue,
+									time: `${set.start}–${set.end}`,
+								};
+							}
+						}
+					);
+				});
+			});
+			if (found) {
+				return `<div class="mb-1"><span class="font-bold">${
+					found.artist
+				}</span> <span class="text-xs text-gray-400">(${found.day}, ${
+					found.stage
+				}, ${found.venue}, ${found.time})</span></div>`;
+			} else {
+				return `<div class="mb-1 text-red-400">Unknown set: ${setKey}</div>`;
+			}
+		})
+		.join("");
+	list.innerHTML = html;
+	legend.classList.remove("hidden");
+	// Import button
+	const importBtn = document.getElementById("import-shared-favorites");
+	if (importBtn) {
+		importBtn.onclick = function () {
+			if (!payload || !Array.isArray(payload.favorites)) return;
+			if (!window.state) return;
+			setCurrentPersonName(payload.name); // Set as current user
+			// Add imported favorites with person name
+			const imported = payload.favorites.map(setKey => ({ setKey, person: payload.name }));
+			// Avoid duplicates
+			const all = [
+				...window.state.favoriteSets,
+				...imported.filter(fav => !window.state.favoriteSets.some(f => f.setKey === fav.setKey && f.person === f.person))
+			];
+			window.state.favoriteSets = all;
+			if (typeof window.saveFavorites === "function") window.saveFavorites();
+			window.location.search = '';
+		};
+	}
+	// Hide button
+	const hideBtn = document.getElementById("hide-shared-favorites");
+	if (hideBtn) {
+		hideBtn.onclick = function () {
+			legend.classList.add("hidden");
+		};
+	}
+}
+
+// Patch getPeopleForSet to return both 'You' and all other people (no deduplication by label)
+function getPeopleForSetDisplay(setKey) {
+    const currentId = getCurrentPersonId ? getCurrentPersonId() : CURRENT_PERSON_ID;
+    const currentName = getCurrentPersonName();
+    const people = state.favoriteSets.filter(fav => fav.setKey === setKey)
+        .map(fav => fav.person === currentId ? "You" : fav.person)
+        .filter((v, i, arr) => arr.indexOf(v) === i);
+    return people;
+}
+
+// 6. Initialize share button and import overlay on DOM ready
+if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", () => {
+		setupShareFavoritesButton();
+		tryImportSharedFavorites();
+	});
+} else {
+	setupShareFavoritesButton();
+	tryImportSharedFavorites();
 }

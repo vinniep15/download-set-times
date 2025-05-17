@@ -37,6 +37,10 @@ import {
 	populateDistrictXStageDropdown,
 	populateArenaStageDropdown,
 } from "./js/dropdowns.js";
+import {
+	setupShareFavoritesButton,
+	tryImportSharedFavorites
+} from "./js/ui.js";
 
 // Export functions to window for backward compatibility with inline event handlers
 window.showDay = showDay;
@@ -117,6 +121,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 	try {
 		// Initialize state
 		initState();
+		window.state = state; // Ensure window.state is the same as the imported state
 
 		// Load data
 		await loadData();
@@ -152,6 +157,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 		const forecast = await fetchWeather();
 		renderWeather(forecast);
+
+		tryImportSharedFavorites();
+		// Ensure share button is attached after DOM is fully rendered
+		setTimeout(setupShareFavoritesButton, 0);
+		// Patch overlays after rendering
+		setTimeout(() => {
+			window.patchGridForSharedFavorites &&
+				window.patchGridForSharedFavorites();
+		}, 1000);
 
 		console.log("Download Festival Set Times App initialized successfully");
 	} catch (error) {

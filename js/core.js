@@ -16,6 +16,7 @@ export const state = {
 	currentStage: "all",
 	districtXCurrentStage: "all",
 	favoriteArtists: [],
+	favoriteSets: [], // <-- ADD THIS LINE
 	eventModal: null,
 	showFavoritesOnly: false,
 	allTimes: generateTimeArray(10, 29),
@@ -28,7 +29,14 @@ export function initState() {
 	// Load favorites from storage
 	const storedFavorites = loadFromStorage(FAVORITES_KEY);
 	if (storedFavorites) {
+		try {
+			state.favoriteSets = JSON.parse(storedFavorites);
+		} catch {
+			state.favoriteSets = [];
+		}
 		state.favoriteArtists = storedFavorites;
+	} else {
+		state.favoriteSets = [];
 	}
 
 	// Load filter state

@@ -455,6 +455,82 @@
 				></div>
 			</div>
 		</div>
+		<!-- Share Favorites Button -->
+		<div class="fixed bottom-4 right-4 z-50">
+			<button
+				id="share-favorites-btn"
+				class="bg-cyan-700 hover:bg-cyan-500 text-white px-4 py-2 rounded shadow-lg flex items-center gap-2"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M15 8a3 3 0 11-6 0 3 3 0 016 0zm6 8a6 6 0 00-12 0v1a3 3 0 003 3h6a3 3 0 003-3v-1z"
+					/>
+				</svg>
+				Share My Favorites
+			</button>
+		</div>
+		<!-- Overlay Management UI: Shared Favorites Legend and Controls -->
+		<div
+			id="shared-favorites-legend"
+			class="fixed bottom-28 right-4 bg-gray-900 bg-opacity-90 rounded p-3 text-xs z-50 shadow-lg hidden min-w-[180px]"
+		>
+			<div class="font-bold mb-1">Shared Favorites:</div>
+			<div id="shared-favorites-list"></div>
+			<div class="mt-2 flex flex-col gap-1">
+				<button
+					id="import-shared-favorites"
+					class="bg-cyan-700 hover:bg-cyan-500 text-white px-2 py-1 rounded text-xs"
+				>
+					+ Import Shared Link
+				</button>
+				<button
+					id="hide-shared-favorites"
+					class="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs"
+				>
+					Hide All Overlays
+				</button>
+			</div>
+		</div>
+		<div
+			id="import-shared-favorites-modal"
+			class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden"
+		>
+			<div class="bg-gray-800 p-6 rounded-lg max-w-xs w-full">
+				<h3 class="text-base font-bold mb-2">
+					Import Shared Favorites Link
+				</h3>
+				<input
+					id="import-shared-link-input"
+					type="text"
+					class="w-full p-2 rounded bg-gray-900 text-white mb-3 border border-gray-700"
+					placeholder="Paste share link here..."
+				/>
+				<div class="flex justify-end gap-2">
+					<button
+						id="cancel-import-shared"
+						class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+					>
+						Cancel
+					</button>
+					<button
+						id="confirm-import-shared"
+						class="bg-cyan-700 hover:bg-cyan-500 text-white px-3 py-1 rounded text-xs"
+					>
+						Import
+					</button>
+				</div>
+			</div>
+		</div>
+		<!-- End Overlay Management UI -->
 	</body>
 	<footer class="w-full mt-12 text-center text-xs text-gray-400 pb-4">
 		Looking for more gigs and festivals? Discover and track your next events
