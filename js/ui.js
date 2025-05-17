@@ -39,7 +39,6 @@ function createArtistRow(set, day, stage) {
 		} else {
 			state.favoriteSets.splice(idx, 1);
 		}
-		saveFavorites(); // Persist favorites after every toggle
 		showFavoritesModalWithActiveDay(day);
 	});
 	artistDiv.appendChild(heartBtn);

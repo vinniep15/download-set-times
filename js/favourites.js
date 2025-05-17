@@ -23,6 +23,7 @@ function getSetKey(artist, day, stage, start) {
 export function saveFavorites() {
 	// Save the current state.favoriteSets to storage
 	saveToStorage(FAVORITES_KEY, state.favoriteSets);
+	// Only check for conflicts on save (not on every toggle)
 	checkForConflicts();
 }
 
@@ -73,7 +74,6 @@ export function loadFavorites() {
 			});
 		}, 0);
 	}
-	setTimeout(checkForConflicts, 1000);
 }
 
 /**
