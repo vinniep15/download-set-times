@@ -269,7 +269,7 @@ function collectArenaArtists() {
 		Object.keys(state.data.arena[day]).forEach((stage) => {
 			state.data.arena[day][stage].forEach((set) => {
 				const setKey = `${set.artist}|${day}|${stage}|${set.start}`;
-				if (state.favoriteSets.includes(setKey)) {
+				if (state.favoriteSets.some((fav) => fav.setKey === setKey)) {
 					arenaArtists.push({
 						artist: set.artist,
 						stage: stage,
@@ -297,7 +297,9 @@ function collectDistrictXArtists() {
 			if (Array.isArray(state.data.districtX[day][stage])) {
 				state.data.districtX[day][stage].forEach((set) => {
 					const setKey = `${set.artist}|${day}|${stage}|${set.start}`;
-					if (state.favoriteSets.includes(setKey)) {
+					if (
+						state.favoriteSets.some((fav) => fav.setKey === setKey)
+					) {
 						districtArtists.push({
 							artist: set.artist,
 							stage: stage,

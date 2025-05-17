@@ -18,75 +18,78 @@ function getSetKey(artist, day, stage, start) {
 
 // Helper: get all people for a setKey
 function getPeopleForSet(setKey) {
-    return state.favoriteSets.filter(fav => fav.setKey === setKey).map(fav => fav.person);
+	return state.favoriteSets
+		.filter((fav) => fav.setKey === setKey)
+		.map((fav) => fav.person);
 }
 
 // Download Festival inspired color palette for person colors
 // Use #06b6d4 (cyan-400) instead of the very light blue
 const personColors = [
-    '#06b6d4', // Cyan (Download/cyan-400)
-    '#00bfae', // Teal
-    '#2563eb', // Download blue (matches day button)
-    '#a259ff', // Purple
-    '#ff2d7e', // Magenta
-    '#baff00', // Acid Green
-    '#ffe600', // Yellow
-    '#ffffff', // White
-    '#ff7f50', // Coral (for extra contrast)
+	"#06b6d4", // Cyan (Download/cyan-400)
+	"#00bfae", // Teal
+	"#2563eb", // Download blue (matches day button)
+	"#a259ff", // Purple
+	"#ff2d7e", // Magenta
+	"#baff00", // Acid Green
+	"#ffe600", // Yellow
+	"#ffffff", // White
+	"#ff7f50", // Coral (for extra contrast)
 ];
 
 // Assign each person a unique color from the palette, cycling only if needed
 const personColorMap = {};
 function getColorForPerson(person) {
-    if (!personColorMap[person]) {
-        // Assign next unused color
-        const usedColors = Object.values(personColorMap);
-        const available = personColors.find(c => !usedColors.includes(c));
-        personColorMap[person] = available || personColors[usedColors.length % personColors.length];
-    }
-    return personColorMap[person];
+	if (!personColorMap[person]) {
+		// Assign next unused color
+		const usedColors = Object.values(personColorMap);
+		const available = personColors.find((c) => !usedColors.includes(c));
+		personColorMap[person] =
+			available || personColors[usedColors.length % personColors.length];
+	}
+	return personColorMap[person];
 }
 
 // --- Store and load current user name ---
 const CURRENT_PERSON_ID = "__current__";
 
 function getCurrentPerson() {
-    if (state.currentPersonId) return state.currentPersonId;
-    const stored = localStorage.getItem("downloadFestivalCurrentPersonId");
-    if (stored) {
-        state.currentPersonId = stored;
-        return stored;
-    }
-    // Fallback to special id
-    return CURRENT_PERSON_ID;
+	if (state.currentPersonId) return state.currentPersonId;
+	const stored = localStorage.getItem("downloadFestivalCurrentPersonId");
+	if (stored) {
+		state.currentPersonId = stored;
+		return stored;
+	}
+	// Fallback to special id
+	return CURRENT_PERSON_ID;
 }
 function setCurrentPersonId() {
-    state.currentPersonId = CURRENT_PERSON_ID;
-    localStorage.setItem("downloadFestivalCurrentPersonId", CURRENT_PERSON_ID);
+	state.currentPersonId = CURRENT_PERSON_ID;
+	localStorage.setItem("downloadFestivalCurrentPersonId", CURRENT_PERSON_ID);
 }
 function setCurrentPersonName(name) {
-    state.currentPersonName = name;
-    localStorage.setItem("downloadFestivalCurrentPersonName", name);
+	state.currentPersonName = name;
+	localStorage.setItem("downloadFestivalCurrentPersonName", name);
 }
 function getCurrentPersonName() {
-    if (state.currentPersonName) return state.currentPersonName;
-    const stored = localStorage.getItem("downloadFestivalCurrentPersonName");
-    if (stored) {
-        state.currentPersonName = stored;
-        return stored;
-    }
-    return "You";
+	if (state.currentPersonName) return state.currentPersonName;
+	const stored = localStorage.getItem("downloadFestivalCurrentPersonName");
+	if (stored) {
+		state.currentPersonName = stored;
+		return stored;
+	}
+	return "You";
 }
 
 // Helper to get the current user's person id
 function getCurrentPersonId() {
-    if (state.currentPersonId) return state.currentPersonId;
-    const stored = localStorage.getItem("downloadFestivalCurrentPersonId");
-    if (stored) {
-        state.currentPersonId = stored;
-        return stored;
-    }
-    return "__current__";
+	if (state.currentPersonId) return state.currentPersonId;
+	const stored = localStorage.getItem("downloadFestivalCurrentPersonId");
+	if (stored) {
+		state.currentPersonId = stored;
+		return stored;
+	}
+	return "__current__";
 }
 
 // --- FIX: Move createArtistRow to module scope so it is accessible everywhere ---
@@ -111,9 +114,11 @@ function createArtistRow(set, day, stage) {
 	heartBtn.addEventListener("click", function (e) {
 		e.stopPropagation();
 		// Toggle favorite for 'You'
-		const idx = state.favoriteSets.findIndex(fav => fav.setKey === setKey && fav.person === "You");
+		const idx = state.favoriteSets.findIndex(
+			(fav) => fav.setKey === setKey && fav.person === "You"
+		);
 		if (idx === -1) {
-			state.favoriteSets.push({ setKey, person: "You" });
+			state.favoriteSets.push({setKey, person: "You"});
 		} else {
 			state.favoriteSets.splice(idx, 1);
 		}
@@ -213,7 +218,7 @@ function renderStageRow(container, day, stage, venue) {
 	const setsToShow = state.showFavoritesOnly
 		? state.data[venue][day][stage].filter((set) => {
 				const setKey = getSetKey(set.artist, day, stage, set.start);
-				return state.favoriteSets.some(fav => fav.setKey === setKey);
+				return state.favoriteSets.some((fav) => fav.setKey === setKey);
 		  })
 		: state.data[venue][day][stage];
 
@@ -261,7 +266,9 @@ function createEventBlock(set, stage, day, venue) {
 
 	// Check for favorite status and conflicts
 	const setKey = getSetKey(set.artist, day, stage, set.start);
-	const isFavorite = state.favoriteSets.some(fav => fav.setKey === setKey && fav.person === "You");
+	const isFavorite = state.favoriteSets.some(
+		(fav) => fav.setKey === setKey && fav.person === "You"
+	);
 	const hasConflict =
 		isFavorite && checkForSetConflict(set, stage, day, venue);
 
@@ -292,9 +299,11 @@ function createEventBlock(set, stage, day, venue) {
 	`;
 	heartBtn.addEventListener("click", function (e) {
 		e.stopPropagation();
-		const idx = state.favoriteSets.findIndex(fav => fav.setKey === setKey && fav.person === "You");
+		const idx = state.favoriteSets.findIndex(
+			(fav) => fav.setKey === setKey && fav.person === "You"
+		);
 		if (idx === -1) {
-			state.favoriteSets.push({ setKey, person: "You" });
+			state.favoriteSets.push({setKey, person: "You"});
 		} else {
 			state.favoriteSets.splice(idx, 1);
 		}
@@ -341,9 +350,13 @@ function createEventBlock(set, stage, day, venue) {
 			hidePeopleTooltip();
 		});
 		// Touch/tap for mobile
-		block.addEventListener("touchstart", function (e) {
-			showPeopleTooltip(block, people);
-		}, {passive: true});
+		block.addEventListener(
+			"touchstart",
+			function (e) {
+				showPeopleTooltip(block, people);
+			},
+			{passive: true}
+		);
 		block.addEventListener("touchend", function (e) {
 			setTimeout(hidePeopleTooltip, 500);
 		});
@@ -355,28 +368,37 @@ function createEventBlock(set, stage, day, venue) {
 // Tooltip helpers
 let peopleTooltip = null;
 function showPeopleTooltip(block, people) {
-    hidePeopleTooltip();
-    peopleTooltip = document.createElement("div");
-    peopleTooltip.className = "people-tooltip";
-    peopleTooltip.style.position = "absolute";
-    peopleTooltip.style.zIndex = 9999;
-    peopleTooltip.style.background = "#222";
-    peopleTooltip.style.color = "#fff";
-    peopleTooltip.style.padding = "6px 12px";
-    peopleTooltip.style.borderRadius = "6px";
-    peopleTooltip.style.fontSize = "13px";
-    peopleTooltip.style.boxShadow = "0 2px 8px rgba(0,0,0,0.25)";
-    peopleTooltip.innerHTML =
-        '<div class="mb-1 font-semibold">Who\'s going:</div>' +
-        people.map(p => `<span style="display:inline-block;margin-right:8px;padding:2px 8px;border-radius:4px;background:${getColorForPerson(p)};color:#fff;">${p}</span>`).join("");
-    document.body.appendChild(peopleTooltip);
-    const rect = block.getBoundingClientRect();
-    peopleTooltip.style.left = rect.left + window.scrollX + "px";
-    peopleTooltip.style.top = rect.top + window.scrollY - peopleTooltip.offsetHeight - 8 + "px";
+	hidePeopleTooltip();
+	peopleTooltip = document.createElement("div");
+	peopleTooltip.className = "people-tooltip";
+	peopleTooltip.style.position = "absolute";
+	peopleTooltip.style.zIndex = 9999;
+	peopleTooltip.style.background = "#222";
+	peopleTooltip.style.color = "#fff";
+	peopleTooltip.style.padding = "6px 12px";
+	peopleTooltip.style.borderRadius = "6px";
+	peopleTooltip.style.fontSize = "13px";
+	peopleTooltip.style.boxShadow = "0 2px 8px rgba(0,0,0,0.25)";
+	peopleTooltip.innerHTML =
+		'<div class="mb-1 font-semibold">Who\'s going:</div>' +
+		people
+			.map(
+				(p) =>
+					`<span style="display:inline-block;margin-right:8px;padding:2px 8px;border-radius:4px;background:${getColorForPerson(
+						p
+					)};color:#fff;">${p}</span>`
+			)
+			.join("");
+	document.body.appendChild(peopleTooltip);
+	const rect = block.getBoundingClientRect();
+	peopleTooltip.style.left = rect.left + window.scrollX + "px";
+	peopleTooltip.style.top =
+		rect.top + window.scrollY - peopleTooltip.offsetHeight - 8 + "px";
 }
 function hidePeopleTooltip() {
-    if (peopleTooltip && peopleTooltip.parentNode) peopleTooltip.parentNode.removeChild(peopleTooltip);
-    peopleTooltip = null;
+	if (peopleTooltip && peopleTooltip.parentNode)
+		peopleTooltip.parentNode.removeChild(peopleTooltip);
+	peopleTooltip = null;
 }
 
 /**
@@ -393,7 +415,9 @@ function stylizeBlock(block, isFavorite, hasConflict, setKey) {
 	} else {
 		// Multiple people: use a gradient border
 		const colors = people.map(getColorForPerson);
-		block.style.background = `linear-gradient(90deg, ${colors.map((c, i) => `${c} ${(i / colors.length) * 100}%`).join(", ")})`;
+		block.style.background = `linear-gradient(90deg, ${colors
+			.map((c, i) => `${c} ${(i / colors.length) * 100}%`)
+			.join(", ")})`;
 		block.style.border = `2px solid transparent`;
 	}
 	if (hasConflict) {
@@ -425,7 +449,8 @@ function checkForSetConflict(set, stage, day, venue) {
 				otherStage,
 				otherSet.start
 			);
-			if (!state.favoriteSets.some(fav => fav.setKey === otherSetKey)) continue;
+			if (!state.favoriteSets.some((fav) => fav.setKey === otherSetKey))
+				continue;
 			if (!otherSet.start || !otherSet.end) continue;
 
 			const otherStart = timeToMinutes(otherSet.start);
@@ -450,7 +475,12 @@ function checkForSetConflict(set, stage, day, venue) {
 					otherStage,
 					otherSet.start
 				);
-				if (!state.favoriteSets.some(fav => fav.setKey === otherSetKey)) continue;
+				if (
+					!state.favoriteSets.some(
+						(fav) => fav.setKey === otherSetKey
+					)
+				)
+					continue;
 				if (!otherSet.start || !otherSet.end) continue;
 
 				const otherStart = timeToMinutes(otherSet.start);
@@ -1469,9 +1499,11 @@ function setupFavoritesModalEvents() {
 		heartBtn.addEventListener("click", function (e) {
 			e.stopPropagation();
 			const setKey = this.dataset.setkey;
-			const idx = state.favoriteSets.indexOf(setKey);
+			const idx = state.favoriteSets.findIndex(
+				(fav) => fav.setKey === setKey && fav.person === "You"
+			);
 			if (idx === -1) {
-				state.favoriteSets.push(setKey);
+				state.favoriteSets.push({setKey, person: "You"});
 			} else {
 				state.favoriteSets.splice(idx, 1);
 			}
@@ -1877,6 +1909,10 @@ export function setupShareFavoritesButton() {
 		if (!name) return;
 		setCurrentPersonId();
 		setCurrentPersonName(name);
+		// Update all favorites from 'You' to the entered name
+		window.state.favoriteSets = window.state.favoriteSets.map(fav =>
+			fav.person === "You" ? { ...fav, person: name } : fav
+		);
 		if (
 			!window.state ||
 			!Array.isArray(window.state.favoriteSets) ||
@@ -1886,12 +1922,13 @@ export function setupShareFavoritesButton() {
 			return;
 		}
 		// 3. Copy favorites (name + favorites)
-		// Only share your own favorites (person: CURRENT_PERSON_ID)
+		const userFavorites = window.state.favoriteSets
+			.filter((fav) => fav.person === getCurrentPersonName())
+			.map((fav) => fav.setKey);
+		console.log('[DEBUG] Sharing favorites for', getCurrentPersonName(), userFavorites);
 		const payload = {
 			name,
-			favorites: window.state.favoriteSets
-				.filter(fav => fav.person === CURRENT_PERSON_ID)
-				.map(fav => fav.setKey),
+			favorites: userFavorites,
 		};
 		let encoded;
 		try {
@@ -1969,6 +2006,10 @@ export function tryImportSharedFavorites() {
 	} catch {
 		payload = null;
 	}
+	if (payload && Array.isArray(payload.favorites) && payload.favorites.length === 0) {
+		alert("This shared link does not contain any favorites to import.");
+		return;
+	}
 	window._sharedFavoritesPayload = payload;
 	renderSharedFavoritesOverlay();
 }
@@ -1977,6 +2018,7 @@ export function tryImportSharedFavorites() {
 function renderSharedFavoritesOverlay() {
 	const legend = document.getElementById("shared-favorites-legend");
 	const list = document.getElementById("shared-favorites-list");
+	const overlay = legend ? legend.closest("#shared-favorites-overlay") : null;
 	if (!legend || !list) return;
 	const payload = window._sharedFavoritesPayload;
 	if (
@@ -1985,6 +2027,7 @@ function renderSharedFavoritesOverlay() {
 		typeof payload.name !== "string"
 	) {
 		legend.classList.add("hidden");
+		if (overlay) overlay.classList.add("hidden");
 		return;
 	}
 	// Show sender's name
@@ -1995,7 +2038,7 @@ function renderSharedFavoritesOverlay() {
 	html += payload.favorites
 		.map((fav) => {
 			// Support both old (string) and new ({setKey, person}) formats
-			const setKey = typeof fav === 'string' ? fav : fav.setKey;
+			const setKey = typeof fav === "string" ? fav : fav.setKey;
 			let found = null;
 			["arena", "districtX"].forEach((venue) => {
 				if (found) return;
@@ -2025,11 +2068,7 @@ function renderSharedFavoritesOverlay() {
 				});
 			});
 			if (found) {
-				return `<div class="mb-1"><span class="font-bold">${
-					found.artist
-				}</span> <span class="text-xs text-gray-400">(${found.day}, ${
-					found.stage
-				}, ${found.venue}, ${found.time})</span></div>`;
+				return `<div class="mb-1"><span class="font-bold">${found.artist}</span> <span class="text-xs text-gray-400">(${found.day}, ${found.stage}, ${found.venue}, ${found.time})</span></div>`;
 			} else {
 				return `<div class="mb-1 text-red-400">Unknown set: ${setKey}</div>`;
 			}
@@ -2037,23 +2076,65 @@ function renderSharedFavoritesOverlay() {
 		.join("");
 	list.innerHTML = html;
 	legend.classList.remove("hidden");
+	if (overlay) overlay.classList.remove("hidden");
+	console.log(
+		"[DEBUG] Shared favorites overlay rendered, legend and overlay unhidden."
+	);
 	// Import button
 	const importBtn = document.getElementById("import-shared-favorites");
 	if (importBtn) {
-		importBtn.onclick = function () {
+		// Remove previous handlers to avoid duplicates
+		const newImportBtn = importBtn.cloneNode(true);
+		importBtn.parentNode.replaceChild(newImportBtn, importBtn);
+		console.log("[DEBUG] Import button handler attached.");
+		newImportBtn.onclick = function () {
+			console.log("[DEBUG] Import button clicked.");
 			if (!payload || !Array.isArray(payload.favorites)) return;
 			if (!window.state) return;
-			setCurrentPersonName(payload.name); // Set as current user
-			// Add imported favorites with person name
-			const imported = payload.favorites.map(setKey => ({ setKey, person: payload.name }));
-			// Avoid duplicates
+			const currentName = getCurrentPersonName
+				? getCurrentPersonName()
+				: "You";
+			// Add imported favorites for both sender and current user
+			const importedSender = payload.favorites.map((setKey) => ({
+				setKey: typeof setKey === "string" ? setKey : setKey.setKey,
+				person: payload.name,
+			}));
+			const importedYou = payload.favorites.map((setKey) => ({
+				setKey: typeof setKey === "string" ? setKey : setKey.setKey,
+				person: currentName,
+			}));
+			// Avoid duplicates (must check both setKey and person)
 			const all = [
 				...window.state.favoriteSets,
-				...imported.filter(fav => !window.state.favoriteSets.some(f => f.setKey === fav.setKey && f.person === f.person))
+				...importedSender.filter(
+					(fav) =>
+						!window.state.favoriteSets.some(
+							(f) =>
+								f.setKey === fav.setKey &&
+								f.person === fav.person
+						)
+				),
+				...importedYou.filter(
+					(fav) =>
+						!window.state.favoriteSets.some(
+							(f) =>
+								f.setKey === fav.setKey &&
+								f.person === fav.person
+						)
+				),
 			];
 			window.state.favoriteSets = all;
-			if (typeof window.saveFavorites === "function") window.saveFavorites();
-			window.location.search = '';
+			if (typeof window.saveFavorites === "function")
+				window.saveFavorites();
+			console.log("Imported favorites", window.state.favoriteSets);
+			// Force all UI re-renders
+			if (window.showDay && window.state.currentDay)
+				window.showDay(window.state.currentDay);
+			if (window.showDistrictXDay && window.state.districtXCurrentDay)
+				window.showDistrictXDay(window.state.districtXCurrentDay);
+			if (window.showFavoritesModalWithActiveDay)
+				window.showFavoritesModalWithActiveDay(window.state.currentDay);
+			window.location.search = "";
 		};
 	}
 	// Hide button
@@ -2061,18 +2142,22 @@ function renderSharedFavoritesOverlay() {
 	if (hideBtn) {
 		hideBtn.onclick = function () {
 			legend.classList.add("hidden");
+			if (overlay) overlay.classList.add("hidden");
 		};
 	}
 }
 
 // Patch getPeopleForSet to return both 'You' and all other people (no deduplication by label)
 function getPeopleForSetDisplay(setKey) {
-    const currentId = getCurrentPersonId ? getCurrentPersonId() : CURRENT_PERSON_ID;
-    const currentName = getCurrentPersonName();
-    const people = state.favoriteSets.filter(fav => fav.setKey === setKey)
-        .map(fav => fav.person === currentId ? "You" : fav.person)
-        .filter((v, i, arr) => arr.indexOf(v) === i);
-    return people;
+	const currentId = getCurrentPersonId
+		? getCurrentPersonId()
+		: CURRENT_PERSON_ID;
+	const currentName = getCurrentPersonName();
+	const people = state.favoriteSets
+		.filter((fav) => fav.setKey === setKey)
+		.map((fav) => (fav.person === currentId ? "You" : fav.person))
+		.filter((v, i, arr) => arr.indexOf(v) === i);
+	return people;
 }
 
 // 6. Initialize share button and import overlay on DOM ready

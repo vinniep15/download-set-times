@@ -25,12 +25,16 @@ function getSetKey(artist, day, stage, start) {
 
 // Helper to find if a set is favorited by a person
 function isFavoriteBy(setKey, person = "You") {
-    return state.favoriteSets.some(fav => fav.setKey === setKey && fav.person === person);
+	return state.favoriteSets.some(
+		(fav) => fav.setKey === setKey && fav.person === person
+	);
 }
 
 // Helper to get all people for a setKey
 function getPeopleForSet(setKey) {
-    return state.favoriteSets.filter(fav => fav.setKey === setKey).map(fav => fav.person);
+	return state.favoriteSets
+		.filter((fav) => fav.setKey === setKey)
+		.map((fav) => fav.person);
 }
 
 /**
@@ -67,7 +71,10 @@ export function loadFavorites() {
 			const arr = JSON.parse(favs);
 			// Migrate old format if needed
 			if (Array.isArray(arr) && typeof arr[0] === "string") {
-				state.favoriteSets = arr.map(setKey => ({ setKey, person: "You" }));
+				state.favoriteSets = arr.map((setKey) => ({
+					setKey,
+					person: "You",
+				}));
 			} else {
 				state.favoriteSets = arr;
 			}
@@ -127,21 +134,23 @@ export function loadFavorites() {
  * @param {Element} svg - SVG heart icon element (optional)
  */
 export function toggleFavoriteSet(setKey, svg) {
-	const idx = state.favoriteSets.findIndex(fav => fav.setKey === setKey && fav.person === "You");
-    if (idx !== -1) {
-        if (svg) {
-            svg.setAttribute("fill", "none");
-            svg.setAttribute("stroke", "currentColor");
-        }
-        state.favoriteSets.splice(idx, 1);
-    } else {
-        if (svg) {
-            svg.setAttribute("fill", "#06b6d4");
-            svg.setAttribute("stroke", "none");
-        }
-        state.favoriteSets.push({ setKey, person: "You" });
-    }
-    saveFavorites();
+	const idx = state.favoriteSets.findIndex(
+		(fav) => fav.setKey === setKey && fav.person === "You"
+	);
+	if (idx !== -1) {
+		if (svg) {
+			svg.setAttribute("fill", "none");
+			svg.setAttribute("stroke", "currentColor");
+		}
+		state.favoriteSets.splice(idx, 1);
+	} else {
+		if (svg) {
+			svg.setAttribute("fill", "#06b6d4");
+			svg.setAttribute("stroke", "none");
+		}
+		state.favoriteSets.push({setKey, person: "You"});
+	}
+	saveFavorites();
 }
 
 /**
@@ -164,7 +173,10 @@ export function showFavoritesOnly(show) {
 	if (show) {
 		allSetBlocks.forEach((block) => {
 			const setKey = block.dataset.setkey;
-			if (setKey && !state.favoriteSets.some(fav => fav.setKey === setKey)) {
+			if (
+				setKey &&
+				!state.favoriteSets.some((fav) => fav.setKey === setKey)
+			) {
 				block.style.display = "none";
 			} else {
 				block.style.display = "";
@@ -192,15 +204,9 @@ export function checkFirstVisit() {
 	const visited = loadFromStorage(VISITED_KEY) || false;
 
 	if (!visited) {
-		// Mark as visited
 		saveToStorage(VISITED_KEY, true);
-
-		// Show favorites modal for first-time users
-		setTimeout(() => {
-			document
-				.getElementById("favorites-modal")
-				?.classList.remove("hidden");
-		}, 1000);
+		// Instead of showing modal, set a flag
+		state.showFavoritesModalAfterData = true;
 	}
 }
 
@@ -271,7 +277,11 @@ function findConflictsForVenue(venue, day, stages) {
 
 		state.data[venue][day][stage].forEach((set) => {
 			const setKey = getSetKey(set.artist, day, stage, set.start);
-			if (state.favoriteSets.some(fav => fav.setKey === setKey) && set.start && set.end) {
+			if (
+				state.favoriteSets.some((fav) => fav.setKey === setKey) &&
+				set.start &&
+				set.end
+			) {
 				favoriteSets.push({
 					artist: set.artist,
 					stage: stage,
@@ -325,7 +335,7 @@ function findCrossVenueConflicts() {
 			state.data.arena[day][stage].forEach((set) => {
 				const setKey = getSetKey(set.artist, day, stage, set.start);
 				if (
-					state.favoriteSets.some(fav => fav.setKey === setKey) &&
+					state.favoriteSets.some((fav) => fav.setKey === setKey) &&
 					set.start &&
 					set.end
 				) {
@@ -350,7 +360,7 @@ function findCrossVenueConflicts() {
 			state.data.districtX[day][stage].forEach((set) => {
 				const setKey = getSetKey(set.artist, day, stage, set.start);
 				if (
-					state.favoriteSets.some(fav => fav.setKey === setKey) &&
+					state.favoriteSets.some((fav) => fav.setKey === setKey) &&
 					set.start &&
 					set.end
 				) {
@@ -402,7 +412,9 @@ export function findConflictsForSet(set, stage, day, venue) {
 		!set ||
 		!set.start ||
 		!set.end ||
-		!state.favoriteSets.some(fav => fav.setKey === getSetKey(set.artist, day, stage, set.start))
+		!state.favoriteSets.some(
+			(fav) => fav.setKey === getSetKey(set.artist, day, stage, set.start)
+		)
 	) {
 		return [];
 	}
@@ -419,7 +431,16 @@ export function findConflictsForSet(set, stage, day, venue) {
 			if (Array.isArray(state.data[venue][day][otherStage])) {
 				state.data[venue][day][otherStage].forEach((otherSet) => {
 					if (
-						!state.favoriteSets.some(fav => fav.setKey === getSetKey(otherSet.artist, day, otherStage, otherSet.start))
+						!state.favoriteSets.some(
+							(fav) =>
+								fav.setKey ===
+								getSetKey(
+									otherSet.artist,
+									day,
+									otherStage,
+									otherSet.start
+								)
+						)
 					)
 						return;
 					if (!otherSet.start || !otherSet.end) return;
@@ -449,7 +470,16 @@ export function findConflictsForSet(set, stage, day, venue) {
 			if (Array.isArray(state.data[otherVenue][day][otherStage])) {
 				state.data[otherVenue][day][otherStage].forEach((otherSet) => {
 					if (
-						!state.favoriteSets.some(fav => fav.setKey === getSetKey(otherSet.artist, day, otherStage, otherSet.start))
+						!state.favoriteSets.some(
+							(fav) =>
+								fav.setKey ===
+								getSetKey(
+									otherSet.artist,
+									day,
+									otherStage,
+									otherSet.start
+								)
+						)
 					)
 						return;
 					if (!otherSet.start || !otherSet.end) return;

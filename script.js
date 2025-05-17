@@ -37,10 +37,7 @@ import {
 	populateDistrictXStageDropdown,
 	populateArenaStageDropdown,
 } from "./js/dropdowns.js";
-import {
-	setupShareFavoritesButton,
-	tryImportSharedFavorites
-} from "./js/ui.js";
+import {setupShareFavoritesButton, tryImportSharedFavorites} from "./js/ui.js";
 
 // Export functions to window for backward compatibility with inline event handlers
 window.showDay = showDay;
@@ -166,6 +163,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 			window.patchGridForSharedFavorites &&
 				window.patchGridForSharedFavorites();
 		}, 1000);
+
+		// Show favorites modal after data is loaded, if first visit
+		if (state.showFavoritesModalAfterData) {
+			setTimeout(() => {
+				window.showFavoritesModal();
+				state.showFavoritesModalAfterData = false;
+			}, 0);
+		}
 
 		console.log("Download Festival Set Times App initialized successfully");
 	} catch (error) {
