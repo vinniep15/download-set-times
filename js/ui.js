@@ -886,25 +886,189 @@ export function populateMobileStageDropdown(stageNames) {
 }
 
 /**
- * Show the favorites selection modal
+ * Show favorites modal with proper event handlers
  */
 export function showFavoritesModal() {
-	const modal = document.getElementById("favorites-modal");
+	const favoritesModal = document.getElementById("favorites-modal");
+	if (!favoritesModal) return;
 
-	// Clear existing content
-	clearFavoritesModalContent();
+	favoritesModal.classList.remove("hidden");
 
-	// Populate main festival days (Fri-Sun)
-	populateMainFestivalDays();
+	// Clear all day containers
+	["friday", "saturday", "sunday"].forEach((day) => {
+		const dayContainer = document.getElementById(`${day}-artists`);
+		if (dayContainer) dayContainer.innerHTML = "";
+	});
 
-	// Add Wednesday and Thursday tabs for District X
-	addPreFestivalDayTabs();
+	// Helper to create artist row (name + heart only)
+	function createArtistRow(artist) {
+		const artistDiv = document.createElement("div");
+		artistDiv.className = "flex items-center mb-2";
 
-	// Set up event listeners
-	setupFavoritesModalEvents();
+		// Heart icon button
+		const heartBtn = document.createElement("button");
+		heartBtn.className = "heart-icon mr-2";
+		heartBtn.dataset.artist = artist;
+		const isFavorite = state.favoriteArtists.includes(artist);
+		heartBtn.innerHTML = `
+			<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" fill=\"${
+				isFavorite ? "#06b6d4" : "none"
+			}\" viewBox=\"0 0 24 24\" stroke=\"${
+			isFavorite ? "none" : "currentColor"
+		}\" stroke-width=\"1.5\">
+				<path d=\"M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+			</svg>
+		`;
+		heartBtn.addEventListener("click", function (e) {
+			e.stopPropagation();
+			const idx = state.favoriteArtists.indexOf(artist);
+			if (idx === -1) {
+				state.favoriteArtists.push(artist);
+			} else {
+				state.favoriteArtists.splice(idx, 1);
+			}
+			showFavoritesModal();
+		});
+		artistDiv.appendChild(heartBtn);
 
-	// Show the modal
-	modal.classList.remove("hidden");
+		// Artist name
+		const nameSpan = document.createElement("span");
+		nameSpan.className = "text-sm";
+		nameSpan.textContent = artist;
+		artistDiv.appendChild(nameSpan);
+
+		return artistDiv;
+	}
+
+	// Helper to render a venue section for a day
+	function renderVenueSection(day, venue, title, colorClass) {
+		const venueDiv = document.createElement("div");
+		venueDiv.className = venue === "arena" ? "mb-6" : "mt-8";
+		venueDiv.innerHTML = `<h3 class=\"text-lg font-bold text-${colorClass} mb-2\">${title}</h3>`;
+
+		Object.keys(state.data[venue][day] || {}).forEach((stage) => {
+			if (
+				!Array.isArray(state.data[venue][day][stage]) ||
+				state.data[venue][day][stage].length === 0
+			)
+				return;
+			const stageDiv = document.createElement("div");
+			stageDiv.className = "mb-4";
+			stageDiv.innerHTML = `<h4 class=\"text-md font-semibold text-gray-300 mb-1\">${stage}</h4>`;
+
+			const artistsDiv = document.createElement("div");
+			artistsDiv.className = "grid grid-cols-2 gap-2";
+
+			// Render artists in set-times order, no duplicates per stage
+			const seen = new Set();
+			(state.data[venue][day][stage] || []).forEach((set) => {
+				if (!set.artist || seen.has(set.artist)) return;
+				seen.add(set.artist);
+				artistsDiv.appendChild(createArtistRow(set.artist));
+			});
+
+			stageDiv.appendChild(artistsDiv);
+			venueDiv.appendChild(stageDiv);
+		});
+		return venueDiv;
+	}
+
+	// Ensure Wednesday and Thursday tabs are present in the favorites modal if there is District X data for those days
+	function ensurePreFestivalDayTabs() {
+		const tabContainer = document.querySelector(".day-tab").parentElement;
+		const contentContainer = document.querySelector(".space-y-4");
+
+		// Remove all existing day-tab buttons
+		[...tabContainer.querySelectorAll(".day-tab")].forEach((tab) =>
+			tab.remove()
+		);
+
+		// Define the correct order
+		const days = ["wednesday", "thursday", "friday", "saturday", "sunday"];
+		const dayLabels = {
+			wednesday: "Wednesday (District X)",
+			thursday: "Thursday (District X)",
+			friday: "Friday",
+			saturday: "Saturday",
+			sunday: "Sunday",
+		};
+
+		days.forEach((day) => {
+			let shouldShow = false;
+			if (["wednesday", "thursday"].includes(day)) {
+				shouldShow =
+					state.data.districtX &&
+					state.data.districtX[day] &&
+					Object.keys(state.data.districtX[day]).length > 0;
+			} else {
+				shouldShow =
+					(state.data.arena &&
+						state.data.arena[day] &&
+						Object.keys(state.data.arena[day]).length > 0) ||
+					(state.data.districtX &&
+						state.data.districtX[day] &&
+						Object.keys(state.data.districtX[day]).length > 0);
+			}
+			if (shouldShow) {
+				const tab = document.createElement("button");
+				tab.className = "day-tab py-2 px-4";
+				tab.dataset.day = day;
+				tab.textContent = dayLabels[day];
+				tabContainer.appendChild(tab);
+				// Create content container if missing
+				if (!document.getElementById(`${day}-artists`)) {
+					const dayContent = document.createElement("div");
+					dayContent.id = `${day}-artists`;
+					dayContent.className = "day-content hidden";
+					contentContainer.appendChild(dayContent);
+				}
+			}
+		});
+	}
+
+	// Call this before rendering modal content
+	ensurePreFestivalDayTabs();
+
+	// Render each day tab content (now including wednesday and thursday if present)
+	["wednesday", "thursday", "friday", "saturday", "sunday"].forEach((day) => {
+		const dayContainer = document.getElementById(`${day}-artists`);
+		if (!dayContainer) return;
+		// Arena (only for fri/sat/sun)
+		if (
+			["friday", "saturday", "sunday"].includes(day) &&
+			state.data.arena[day] &&
+			Object.keys(state.data.arena[day]).length > 0
+		) {
+			dayContainer.appendChild(
+				renderVenueSection(day, "arena", "Arena Bands", "cyan-500")
+			);
+		}
+		// District X (for any day)
+		if (
+			state.data.districtX &&
+			state.data.districtX[day] &&
+			Object.keys(state.data.districtX[day]).length > 0
+		) {
+			dayContainer.appendChild(
+				renderVenueSection(
+					day,
+					"districtX",
+					"District X Bands",
+					"yellow-500"
+				)
+			);
+		}
+	});
+
+	// Ensure only the active tab's content is visible (all 5 days)
+	const activeTab = document.querySelector(".day-tab.active-tab");
+	const activeDay = activeTab ? activeTab.dataset.day : "friday";
+	["wednesday", "thursday", "friday", "saturday", "sunday"].forEach((day) => {
+		const dayContent = document.getElementById(`${day}-artists`);
+		if (dayContent) {
+			dayContent.classList.toggle("hidden", day !== activeDay);
+		}
+	});
 }
 
 /**
@@ -1354,4 +1518,75 @@ export function updateDistrictXMobileStageText(text) {
 export function updateDistrictXMobileDayText(text) {
 	const dayText = document.getElementById("districtx-current-day-mobile");
 	if (dayText) dayText.textContent = text;
+}
+
+// --- Make day tab header scrollable and fix tab order ---
+// Always wrap the #favorites-day-tabs in a .day-tab-scroll container
+const origTabContainer = document.getElementById("favorites-day-tabs");
+if (
+	origTabContainer &&
+	!origTabContainer.classList.contains("day-tab-scroll")
+) {
+	const wrapper = document.createElement("div");
+	wrapper.className =
+		"day-tab-scroll w-full overflow-x-auto flex flex-nowrap border-b border-gray-600";
+	// Move all tab buttons into the wrapper
+	while (origTabContainer.firstChild) {
+		wrapper.appendChild(origTabContainer.firstChild);
+	}
+	origTabContainer.parentNode.replaceChild(wrapper, origTabContainer);
+}
+
+// Ensure Wednesday and Thursday tabs are present in the correct order
+function ensurePreFestivalDayTabs() {
+	// Always use the scrollable wrapper for tab operations
+	const tabScroll = document.querySelector(".day-tab-scroll");
+	const contentContainer = document.querySelector(".space-y-4");
+	const allDays = ["wednesday", "thursday", "friday", "saturday", "sunday"];
+
+	// Remove all existing .day-tab elements from the scrollable wrapper
+	Array.from(tabScroll.querySelectorAll(".day-tab")).forEach((tab) =>
+		tab.remove()
+	);
+
+	// Ensure content containers exist for all days
+	allDays.forEach((day) => {
+		if (!document.getElementById(`${day}-artists`)) {
+			const dayContent = document.createElement("div");
+			dayContent.id = `${day}-artists`;
+			dayContent.className = "day-content hidden";
+			contentContainer.appendChild(dayContent);
+		}
+	});
+
+	// Re-create and append tabs in correct order, only if data exists for that day
+	allDays.forEach((day) => {
+		// Only show Wednesday/Thursday if District X data exists for that day
+		if (
+			(day === "wednesday" || day === "thursday") &&
+			(!state.data.districtX ||
+				!state.data.districtX[day] ||
+				Object.keys(state.data.districtX[day]).length === 0)
+		) {
+			return;
+		}
+		// Only show Friday/Saturday/Sunday if Arena or District X data exists
+		if (
+			["friday", "saturday", "sunday"].includes(day) &&
+			!state.data.arena[day] &&
+			(!state.data.districtX ||
+				!state.data.districtX[day] ||
+				Object.keys(state.data.districtX[day]).length === 0)
+		) {
+			return;
+		}
+		const tab = document.createElement("button");
+		tab.className = "day-tab py-2 px-4";
+		tab.dataset.day = day;
+		tab.textContent =
+			day.charAt(0).toUpperCase() +
+			day.slice(1) +
+			(day === "wednesday" || day === "thursday" ? " (District X)" : "");
+		tabScroll.appendChild(tab);
+	});
 }
