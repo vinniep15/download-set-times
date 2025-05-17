@@ -7,7 +7,7 @@
 		<script src="https://cdn.tailwindcss.com"></script>
 		<link rel="stylesheet" href="styles.css" />
 		<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-		<script src="script.js"></script>
+		<script type="module" src="script.js"></script>
 	</head>
 	<body class="bg-black text-white p-4">
 		<header
@@ -126,20 +126,6 @@
 			<h2 class="text-xl font-bold mb-3 border-b border-gray-700 pb-2">
 				Arena Bands
 			</h2>
-
-			<!-- My Artists Toggle (responsive placement) -->
-			<div
-				class="md:hidden my-artists-toggle flex items-center mb-4 justify-end"
-			>
-				<span class="text-sm mr-2">My Artists Only</span>
-				<label class="switch">
-					<input
-						type="checkbox"
-						id="global-favorites-toggle-mobile"
-					/>
-					<span class="slider round"></span>
-				</label>
-			</div>
 
 			<!-- Mobile UI (visible only on small screens) -->
 			<div class="block md:hidden mb-4">
@@ -294,50 +280,158 @@
 				></div>
 			</div>
 		</div>
+
 		<!-- District X Bands Section -->
 		<div class="mt-12">
 			<h2 class="text-xl font-bold mb-3 border-b border-gray-700 pb-2">
 				District X
 			</h2>
 
-			<!-- Day Selector -->
-			<div class="flex gap-2 mb-4 overflow-x-auto">
-				<button
-					onclick="showDistrictXDay('wednesday')"
-					class="districtx-day-btn bg-gray-700 px-4 py-2 rounded active-btn"
-				>
-					Wednesday
-				</button>
-				<button
-					onclick="showDistrictXDay('thursday')"
-					class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
-				>
-					Thursday
-				</button>
-				<button
-					onclick="showDistrictXDay('friday')"
-					class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
-				>
-					Friday
-				</button>
-				<button
-					onclick="showDistrictXDay('saturday')"
-					class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
-				>
-					Saturday
-				</button>
-				<button
-					onclick="showDistrictXDay('sunday')"
-					class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
-				>
-					Sunday
-				</button>
+			<!-- Mobile UI for District X (visible only on small screens) -->
+			<div class="block md:hidden mb-4">
+				<!-- Stage Selector Dropdown (Mobile) -->
+				<div class="relative inline-block text-left w-full mb-3">
+					<button
+						id="districtx-stage-dropdown-btn-mobile"
+						class="bg-cyan-600 px-4 py-2 rounded flex items-center justify-between w-full"
+					>
+						<span id="districtx-current-stage-mobile"
+							>All Stages</span
+						>
+						<svg
+							class="w-4 h-4 ml-2 transition-transform duration-300"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							></path>
+						</svg>
+					</button>
+					<div
+						id="districtx-stage-dropdown-mobile"
+						class="hidden absolute z-30 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
+					>
+						<div class="py-1" role="menu">
+							<!-- Menu items will be populated by JavaScript -->
+						</div>
+					</div>
+				</div>
+
+				<!-- Day Selector Dropdown (Mobile) -->
+				<div class="relative inline-block text-left w-full">
+					<button
+						id="districtx-day-dropdown-btn-mobile"
+						class="bg-cyan-600 px-4 py-2 rounded flex items-center justify-between w-full"
+					>
+						<span id="districtx-current-day-mobile">Wednesday</span>
+						<svg
+							class="w-4 h-4 ml-2"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							></path>
+						</svg>
+					</button>
+					<div
+						id="districtx-day-dropdown-mobile"
+						class="hidden absolute z-10 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
+					>
+						<div class="py-1" role="menu">
+							<button
+								onclick="showDistrictXDay('wednesday'); updateDistrictXMobileDayText('Wednesday');"
+								class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+								role="menuitem"
+							>
+								Wednesday
+							</button>
+							<button
+								onclick="showDistrictXDay('thursday'); updateDistrictXMobileDayText('Thursday');"
+								class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+								role="menuitem"
+							>
+								Thursday
+							</button>
+							<button
+								onclick="showDistrictXDay('friday'); updateDistrictXMobileDayText('Friday');"
+								class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+								role="menuitem"
+							>
+								Friday
+							</button>
+							<button
+								onclick="showDistrictXDay('saturday'); updateDistrictXMobileDayText('Saturday');"
+								class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+								role="menuitem"
+							>
+								Saturday
+							</button>
+							<button
+								onclick="showDistrictXDay('sunday'); updateDistrictXMobileDayText('Sunday');"
+								class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+								role="menuitem"
+							>
+								Sunday
+							</button>
+						</div>
+					</div>
+				</div>
 			</div>
 
-			<div
-				id="districtx-stage-buttons"
-				class="flex gap-2 mb-4 overflow-x-auto"
-			></div>
+			<!-- Desktop UI for District X (hidden on mobile) -->
+			<div class="hidden md:block">
+				<!-- Day Selector Buttons (Desktop) -->
+				<div class="flex gap-2 mb-4 overflow-x-auto">
+					<button
+						onclick="showDistrictXDay('wednesday')"
+						class="districtx-day-btn bg-gray-700 px-4 py-2 rounded active-btn"
+					>
+						Wednesday
+					</button>
+					<button
+						onclick="showDistrictXDay('thursday')"
+						class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
+					>
+						Thursday
+					</button>
+					<button
+						onclick="showDistrictXDay('friday')"
+						class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
+					>
+						Friday
+					</button>
+					<button
+						onclick="showDistrictXDay('saturday')"
+						class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
+					>
+						Saturday
+					</button>
+					<button
+						onclick="showDistrictXDay('sunday')"
+						class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
+					>
+						Sunday
+					</button>
+				</div>
+
+				<!-- Stage Buttons (Desktop) -->
+				<div
+					id="districtx-stage-buttons"
+					class="flex gap-2 mb-4 overflow-x-auto"
+				></div>
+			</div>
 
 			<!-- Schedule Container -->
 			<div class="overflow-x-auto">

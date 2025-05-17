@@ -784,3 +784,58 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+#districtx-stage-dropdown-mobile,
+#districtx-day-dropdown-mobile {
+  z-index: 30 !important;
+  transform-origin: top center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Poster container max height for desktop */
+.poster-rendering {
+    width: auto !important;
+    max-width: 800px !important;
+    padding: 20px !important;
+    background-color: black;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Add scrollbar styling for better user experience */
+  .poster-rendering::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .poster-rendering::-webkit-scrollbar-track {
+    background: #333;
+    border-radius: 5px;
+  }
+  
+  .poster-rendering::-webkit-scrollbar-thumb {
+    background: #06b6d4;
+    border-radius: 5px;
+  }
+  
+  /* Make the poster modal more usable */
+  .poster-modal {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 20px;
+    overflow: hidden;
+  }
+
+  #poster-content {
+    width: 100% !important;
+    margin: 0 auto !important;
+    max-height: none !important; /* Remove any height constraints */
+  }
+  
+  /* Make sure the download button is visible */
+  #poster-modal button {
+    margin: 10px auto !important;
+  }
