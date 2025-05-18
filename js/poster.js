@@ -5,6 +5,10 @@
 
 import {state} from "./core.js";
 import {timeToMinutes, formatTimeDisplay} from "./utils.js";
+import { CustomAlert } from "./ui.js";
+
+//Declare imported CustomAlert function.
+const customAlert = new CustomAlert();
 
 /**
  * Initialize poster generator button
@@ -32,7 +36,7 @@ export function setupPosterButton() {
 export function generatePersonalizedPoster() {
 	// Check if we have favorites
 	if (!state.favoriteSets || state.favoriteSets.length === 0) {
-		alert("Please add some favorite artists first!");
+		customAlert.alert("Please add some favorite artists first!");
 		return;
 	}
 

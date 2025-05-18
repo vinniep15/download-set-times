@@ -1906,7 +1906,7 @@ export function setupShareFavoritesButton() {
             !Array.isArray(window.state.favoriteSets) ||
             !window.state.favoriteSets.length
         ) {
-            alert("You have not selected any favorites to share!");
+            customAlert.alert("You have not selected any favorites to share!");
             return;
         }
         return new Promise((resolve) => {
@@ -2293,6 +2293,53 @@ async function main() {
 
 	tryImportSharedFavorites();
 }
+
+//7. Initialize Custom Alert Styling
+export function CustomAlert() {
+    this.alert = function(message, title) {
+        return new Promise((resolve) => {
+            // Create modal for the name input
+            const modal = document.createElement("div");
+            modal.className =
+                "fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50";
+            modal.id = "alert-modal";
+
+            // Create input container
+            const container = document.createElement("div");
+            container.className =
+                "bg-gray-800 rounded-lg p-6 max-w-md mx-auto text-center border-2 border-cyan-500 shadow-lg";
+
+            // Add message
+            const title = document.createElement("h2");
+            title.className = "text-xl font-bold text-cyan-400 mb-4";
+            title.innerText = message;
+
+            // Create button
+            const buttonGroup = document.createElement("div");
+            buttonGroup.className = "flex space-x-4 justify-center";
+
+            const confirmButton = document.createElement("button");
+            confirmButton.className =
+                "px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-500 transition";
+            confirmButton.innerText = "Ok";
+            confirmButton.onclick = () => {
+                modal.remove();
+                resolve(name);
+            };
+
+            // Assemble the modal
+            buttonGroup.appendChild(confirmButton);
+
+            container.appendChild(title);
+            container.appendChild(buttonGroup);
+            modal.appendChild(container);
+
+            document.body.appendChild(modal);
+        });
+    }
+}
+
+let customAlert = new CustomAlert();
 
 // --- Initialization logic ---
 let isCallbackPage = window.location.pathname.endsWith("callback.html");
