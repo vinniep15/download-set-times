@@ -1895,70 +1895,138 @@ export function showFavoritesModalPatched() {
 
 // 1. Share button setup
 export function setupShareFavoritesButton() {
-	const btn = document.getElementById("share-favorites-btn");
-	if (!btn) return;
-	// Remove previous handlers
-	const newBtn = btn.cloneNode(true);
-	btn.parentNode.replaceChild(newBtn, btn);
-	newBtn.addEventListener("click", function (e) {
-		e.preventDefault();
-		e.stopPropagation();
-		// 2. Prompt for name
-		let name = window.prompt(
-			"Enter your name to share your favorites:",
-			getCurrentPersonName()
-		);
-		if (name === null) return;
-		name = name.trim();
-		if (!name) return;
-		setCurrentPersonId();
-		setCurrentPersonName(name);
-		// Update all favorites from 'You' to the entered name
-		window.state.favoriteSets = window.state.favoriteSets.map((fav) =>
-			fav.person === "You" ? {...fav, person: name} : fav
-		);
-		if (
-			!window.state ||
-			!Array.isArray(window.state.favoriteSets) ||
-			!window.state.favoriteSets.length
-		) {
-			alert("You have not selected any favorites to share!");
-			return;
-		}
-		// 3. Copy favorites (name + favorites)
-		const userFavorites = window.state.favoriteSets
-			.filter((fav) => fav.person === getCurrentPersonName())
-			.map((fav) => fav.setKey);
-		console.log(
-			"[DEBUG] Sharing favorites for",
-			getCurrentPersonName(),
-			userFavorites
-		);
-		const payload = {
-			name,
-			favorites: userFavorites,
-		};
-		let encoded;
-		try {
-			encoded = encodeURIComponent(JSON.stringify(payload));
-		} catch {
-			alert("Failed to encode favorites for sharing.");
-			return;
-		}
-		const url = `${window.location.origin}${window.location.pathname}?shared=${encoded}`;
-		if (navigator.clipboard && navigator.clipboard.writeText) {
-			navigator.clipboard.writeText(url).then(
-				() => {
-					showShareTooltip(newBtn, "Link copied!");
-				},
-				() => {
-					fallbackCopyTextToClipboard(url, newBtn);
-				}
-			);
-		} else {
-			fallbackCopyTextToClipboard(url, newBtn);
-		}
-	});
+    const btn = document.getElementById("share-favorites-btn");
+    if (!btn) return;
+    // Remove previous handlers
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+    newBtn.addEventListener("click", function(e) {
+        if (
+            !window.state ||
+            !Array.isArray(window.state.favoriteSets) ||
+            !window.state.favoriteSets.length
+        ) {
+            alert("You have not selected any favorites to share!");
+            return;
+        }
+        return new Promise((resolve) => {
+            // Create modal for the name input
+            const modal = document.createElement("div");
+            const currentName = getCurrentPersonName();
+            modal.className =
+                "fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50";
+            modal.id = "name-input-modal";
+
+            // Create input container
+            const container = document.createElement("div");
+            container.className =
+                "bg-gray-800 rounded-lg p-6 max-w-md mx-auto text-center border-2 border-cyan-500 shadow-lg";
+
+            // Add title
+            const title = document.createElement("h2");
+            title.className = "text-xl font-bold text-cyan-400 mb-4";
+            title.innerText = "Enter Your Name";
+
+            // Create input field
+            const inputWrapper = document.createElement("div");
+            inputWrapper.className = "mb-6";
+
+            const label = document.createElement("label");
+            label.className =
+                "block text-left text-sm font-medium text-gray-300 mb-2";
+            label.htmlFor = "name-input";
+            label.innerText = "Enter your name:";
+
+            const input = document.createElement("input");
+            input.type = "text";
+            input.id = "name-input";
+            input.className =
+                "w-full px-3 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-cyan-500";
+            input.value = currentName;
+            input.maxLength = 30;
+
+            inputWrapper.appendChild(label);
+            inputWrapper.appendChild(input);
+
+            // Create button
+            const buttonGroup = document.createElement("div");
+            buttonGroup.className = "flex space-x-4 justify-center";
+
+            const confirmButton = document.createElement("button");
+            confirmButton.className =
+                "px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-500 transition";
+            confirmButton.innerText = "Continue";
+            confirmButton.onclick = () => {
+                if (input.value === null) return;
+                name = input.value.trim();
+                if (!name) return;
+                setCurrentPersonId();
+                setCurrentPersonName(name);
+                modal.remove();
+                // Update all favorites from 'You' to the entered name
+                window.state.favoriteSets = window.state.favoriteSets.map((fav) =>
+                    fav.person === "You" ? {
+                        ...fav,
+                        person: name
+                    } : fav
+                );
+                // 3. Copy favorites (name + favorites)
+                const userFavorites = window.state.favoriteSets
+                    .filter((fav) => fav.person === getCurrentPersonName())
+                    .map((fav) => fav.setKey);
+                console.log(
+                    "[DEBUG] Sharing favorites for",
+                    getCurrentPersonName(),
+                    userFavorites
+                );
+                const payload = {
+                    name,
+                    favorites: userFavorites,
+                };
+                let encoded;
+                try {
+                    encoded = encodeURIComponent(JSON.stringify(payload));
+                } catch {
+                    alert("Failed to encode favorites for sharing.");
+                    return;
+                }
+                const url = `${window.location.origin}${window.location.pathname}?shared=${encoded}`;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(
+                        () => {
+                            showShareTooltip(newBtn, "Link copied!");
+                        },
+                        () => {
+                            fallbackCopyTextToClipboard(url, newBtn);
+                        }
+                    );
+                } else {
+                    fallbackCopyTextToClipboard(url, newBtn);
+                }
+            };
+
+            // Add keyboard event listener
+            input.addEventListener("keyup", (event) => {
+                if (event.key === "Enter") {
+                    confirmButton.click();
+                }
+            });
+
+            // Set focus on input
+            setTimeout(() => input.focus(), 100);
+
+            // Assemble the modal
+            buttonGroup.appendChild(confirmButton);
+
+            container.appendChild(title);
+            container.appendChild(inputWrapper);
+            container.appendChild(buttonGroup);
+            modal.appendChild(container);
+
+            document.body.appendChild(modal);
+        });
+    });
+
 }
 
 function showShareTooltip(btn, message) {
