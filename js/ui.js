@@ -1895,138 +1895,136 @@ export function showFavoritesModalPatched() {
 
 // 1. Share button setup
 export function setupShareFavoritesButton() {
-    const btn = document.getElementById("share-favorites-btn");
-    if (!btn) return;
-    // Remove previous handlers
-    const newBtn = btn.cloneNode(true);
-    btn.parentNode.replaceChild(newBtn, btn);
-    newBtn.addEventListener("click", function(e) {
-        if (
-            !window.state ||
-            !Array.isArray(window.state.favoriteSets) ||
-            !window.state.favoriteSets.length
-        ) {
-            customAlert.alert("You have not selected any favorites to share!");
-            return;
-        }
-        return new Promise((resolve) => {
-            // Create modal for the name input
-            const modal = document.createElement("div");
-            const currentName = getCurrentPersonName();
-            modal.className =
-                "fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50";
-            modal.id = "name-input-modal";
+	const btn = document.getElementById("share-favorites-btn");
+	if (!btn) return;
+	// Remove previous handlers
+	const newBtn = btn.cloneNode(true);
+	btn.parentNode.replaceChild(newBtn, btn);
+	newBtn.addEventListener("click", function (e) {
+		if (
+			!window.state ||
+			!Array.isArray(window.state.favoriteSets) ||
+			!window.state.favoriteSets.length
+		) {
+			customAlert.alert("You have not selected any favorites to share!");
+			return;
+		}
+		return new Promise((resolve) => {
+			// Create modal for the name input
+			const modal = document.createElement("div");
+			const currentName = getCurrentPersonName();
+			modal.className =
+				"fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50";
+			modal.id = "name-input-modal";
 
-            // Create input container
-            const container = document.createElement("div");
-            container.className =
-                "bg-gray-800 rounded-lg p-6 max-w-md mx-auto text-center border-2 border-cyan-500 shadow-lg";
+			// Create input container
+			const container = document.createElement("div");
+			container.className =
+				"bg-gray-800 rounded-lg p-6 max-w-md mx-auto text-center border-2 border-cyan-500 shadow-lg";
 
-            // Add title
-            const title = document.createElement("h2");
-            title.className = "text-xl font-bold text-cyan-400 mb-4";
-            title.innerText = "Enter Your Name";
+			// Add title
+			const title = document.createElement("h2");
+			title.className = "text-xl font-bold text-cyan-400 mb-4";
+			title.innerText = "Enter Your Name";
 
-            // Create input field
-            const inputWrapper = document.createElement("div");
-            inputWrapper.className = "mb-6";
+			// Create input field
+			const inputWrapper = document.createElement("div");
+			inputWrapper.className = "mb-6";
 
-            const label = document.createElement("label");
-            label.className =
-                "block text-left text-sm font-medium text-gray-300 mb-2";
-            label.htmlFor = "name-input";
-            label.innerText = "Enter your name:";
+			const label = document.createElement("label");
+			label.className =
+				"block text-left text-sm font-medium text-gray-300 mb-2";
+			label.htmlFor = "name-input";
+			label.innerText = "Enter your name:";
 
-            const input = document.createElement("input");
-            input.type = "text";
-            input.id = "name-input";
-            input.className =
-                "w-full px-3 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-cyan-500";
-            input.value = currentName;
-            input.maxLength = 30;
+			const input = document.createElement("input");
+			input.type = "text";
+			input.id = "name-input";
+			input.className =
+				"w-full px-3 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-cyan-500";
+			input.value = currentName;
+			input.maxLength = 30;
 
-            inputWrapper.appendChild(label);
-            inputWrapper.appendChild(input);
+			inputWrapper.appendChild(label);
+			inputWrapper.appendChild(input);
 
-            // Create button
-            const buttonGroup = document.createElement("div");
-            buttonGroup.className = "flex space-x-4 justify-center";
+			// Create button
+			const buttonGroup = document.createElement("div");
+			buttonGroup.className = "flex space-x-4 justify-center";
 
-            const confirmButton = document.createElement("button");
-            confirmButton.className =
-                "px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-500 transition";
-            confirmButton.innerText = "Continue";
-            confirmButton.onclick = () => {
-                if (input.value === null) return;
-                name = input.value.trim();
-                if (!name) return;
-                setCurrentPersonId();
-                setCurrentPersonName(name);
-                modal.remove();
-                // Update all favorites from 'You' to the entered name
-                window.state.favoriteSets = window.state.favoriteSets.map((fav) =>
-                    fav.person === "You" ? {
-                        ...fav,
-                        person: name
-                    } : fav
-                );
-                // 3. Copy favorites (name + favorites)
-                const userFavorites = window.state.favoriteSets
-                    .filter((fav) => fav.person === getCurrentPersonName())
-                    .map((fav) => fav.setKey);
-                console.log(
-                    "[DEBUG] Sharing favorites for",
-                    getCurrentPersonName(),
-                    userFavorites
-                );
-                const payload = {
-                    name,
-                    favorites: userFavorites,
-                };
-                let encoded;
-                try {
-                    encoded = encodeURIComponent(JSON.stringify(payload));
-                } catch {
-                    alert("Failed to encode favorites for sharing.");
-                    return;
-                }
-                const url = `${window.location.origin}${window.location.pathname}?shared=${encoded}`;
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(url).then(
-                        () => {
-                            showShareTooltip(newBtn, "Link copied!");
-                        },
-                        () => {
-                            fallbackCopyTextToClipboard(url, newBtn);
-                        }
-                    );
-                } else {
-                    fallbackCopyTextToClipboard(url, newBtn);
-                }
-            };
+			const confirmButton = document.createElement("button");
+			confirmButton.className =
+				"px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-500 transition";
+			confirmButton.innerText = "Continue";
+			confirmButton.onclick = () => {
+				if (input.value === null) return;
+				name = input.value.trim();
+				if (!name) return;
+				setCurrentPersonId();
+				setCurrentPersonName(name);
+				modal.remove();
+				// Update all favorites from 'You' to the entered name
+				window.state.favoriteSets = window.state.favoriteSets.map(
+					(fav) =>
+						fav.person === "You"
+							? {
+									...fav,
+									person: name,
+							  }
+							: fav
+				);
+				// 3. Copy favorites (name + favorites)
+				const userFavorites = window.state.favoriteSets
+					.filter((fav) => fav.person === getCurrentPersonName())
+					.map((fav) => fav.setKey);
 
-            // Add keyboard event listener
-            input.addEventListener("keyup", (event) => {
-                if (event.key === "Enter") {
-                    confirmButton.click();
-                }
-            });
+				const payload = {
+					name,
+					favorites: userFavorites,
+				};
+				let encoded;
+				try {
+					encoded = encodeURIComponent(JSON.stringify(payload));
+				} catch {
+					alert("Failed to encode favorites for sharing.");
+					return;
+				}
+				const url = `${window.location.origin}${window.location.pathname}?shared=${encoded}`;
+				if (navigator.clipboard && navigator.clipboard.writeText) {
+					navigator.clipboard.writeText(url).then(
+						() => {
+							showShareTooltip(newBtn, "Link copied!");
+						},
+						() => {
+							fallbackCopyTextToClipboard(url, newBtn);
+						}
+					);
+				} else {
+					fallbackCopyTextToClipboard(url, newBtn);
+				}
+			};
 
-            // Set focus on input
-            setTimeout(() => input.focus(), 100);
+			// Add keyboard event listener
+			input.addEventListener("keyup", (event) => {
+				if (event.key === "Enter") {
+					confirmButton.click();
+				}
+			});
 
-            // Assemble the modal
-            buttonGroup.appendChild(confirmButton);
+			// Set focus on input
+			setTimeout(() => input.focus(), 100);
 
-            container.appendChild(title);
-            container.appendChild(inputWrapper);
-            container.appendChild(buttonGroup);
-            modal.appendChild(container);
+			// Assemble the modal
+			buttonGroup.appendChild(confirmButton);
 
-            document.body.appendChild(modal);
-        });
-    });
+			container.appendChild(title);
+			container.appendChild(inputWrapper);
+			container.appendChild(buttonGroup);
+			modal.appendChild(container);
 
+			document.body.appendChild(modal);
+		});
+	});
 }
 
 function showShareTooltip(btn, message) {
@@ -2157,18 +2155,13 @@ function renderSharedFavoritesOverlay() {
 	list.innerHTML = html;
 	legend.classList.remove("hidden");
 	if (overlay) overlay.classList.remove("hidden");
-	console.log(
-		"[DEBUG] Shared favorites overlay rendered, legend and overlay unhidden."
-	);
 	// Import button
 	const importBtn = document.getElementById("import-shared-favorites");
 	if (importBtn) {
 		// Remove previous handlers to avoid duplicates
 		const newImportBtn = importBtn.cloneNode(true);
 		importBtn.parentNode.replaceChild(newImportBtn, importBtn);
-		console.log("[DEBUG] Import button handler attached.");
 		newImportBtn.onclick = function () {
-			console.log("[DEBUG] Import button clicked.");
 			if (!payload || !Array.isArray(payload.favorites)) return;
 			if (!window.state) return;
 			const currentName = getCurrentPersonName
@@ -2206,7 +2199,6 @@ function renderSharedFavoritesOverlay() {
 			window.state.favoriteSets = all;
 			if (typeof window.saveFavorites === "function")
 				window.saveFavorites();
-			console.log("Imported favorites", window.state.favoriteSets);
 			// Force all UI re-renders
 			if (window.showDay && window.state.currentDay)
 				window.showDay(window.state.currentDay);
@@ -2296,47 +2288,47 @@ async function main() {
 
 //7. Initialize Custom Alert Styling
 export function CustomAlert() {
-    this.alert = function(message, title) {
-        return new Promise((resolve) => {
-            // Create modal for the name input
-            const modal = document.createElement("div");
-            modal.className =
-                "fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50";
-            modal.id = "alert-modal";
+	this.alert = function (message, title) {
+		return new Promise((resolve) => {
+			// Create modal for the name input
+			const modal = document.createElement("div");
+			modal.className =
+				"fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50";
+			modal.id = "alert-modal";
 
-            // Create input container
-            const container = document.createElement("div");
-            container.className =
-                "bg-gray-800 rounded-lg p-6 max-w-md mx-auto text-center border-2 border-cyan-500 shadow-lg";
+			// Create input container
+			const container = document.createElement("div");
+			container.className =
+				"bg-gray-800 rounded-lg p-6 max-w-md mx-auto text-center border-2 border-cyan-500 shadow-lg";
 
-            // Add message
-            const title = document.createElement("h2");
-            title.className = "text-xl font-bold text-cyan-400 mb-4";
-            title.innerText = message;
+			// Add message
+			const title = document.createElement("h2");
+			title.className = "text-xl font-bold text-cyan-400 mb-4";
+			title.innerText = message;
 
-            // Create button
-            const buttonGroup = document.createElement("div");
-            buttonGroup.className = "flex space-x-4 justify-center";
+			// Create button
+			const buttonGroup = document.createElement("div");
+			buttonGroup.className = "flex space-x-4 justify-center";
 
-            const confirmButton = document.createElement("button");
-            confirmButton.className =
-                "px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-500 transition";
-            confirmButton.innerText = "Ok";
-            confirmButton.onclick = () => {
-                modal.remove();
-                resolve(name);
-            };
+			const confirmButton = document.createElement("button");
+			confirmButton.className =
+				"px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-500 transition";
+			confirmButton.innerText = "Ok";
+			confirmButton.onclick = () => {
+				modal.remove();
+				resolve(name);
+			};
 
-            // Assemble the modal
-            buttonGroup.appendChild(confirmButton);
+			// Assemble the modal
+			buttonGroup.appendChild(confirmButton);
 
-            container.appendChild(title);
-            container.appendChild(buttonGroup);
-            modal.appendChild(container);
+			container.appendChild(title);
+			container.appendChild(buttonGroup);
+			modal.appendChild(container);
 
-            document.body.appendChild(modal);
-        });
-    }
+			document.body.appendChild(modal);
+		});
+	};
 }
 
 let customAlert = new CustomAlert();

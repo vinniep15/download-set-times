@@ -58,6 +58,17 @@ window.showFavoritesOnly = showFavoritesOnly;
 
 // --- Download Festival Weather Forecast ---
 async function fetchWeather() {
+	// Only fetch weather if festival is within 16 days from today
+	const today = new Date();
+	const festStart = new Date("2025-06-11");
+	const maxForecastDays = 16;
+	const daysToStart = Math.floor((festStart - today) / (1000 * 60 * 60 * 24));
+	if (daysToStart > maxForecastDays) {
+		console.log(
+			"Weather API: Festival is too far in the future for forecast"
+		);
+		return null;
+	}
 	const start = "2025-06-11";
 	const end = "2025-06-15";
 	const url = `https://api.open-meteo.com/v1/forecast?latitude=52.8306&longitude=-1.3756&start_date=${start}&end_date=${end}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=Europe%2FLondon`;
@@ -107,7 +118,7 @@ function renderWeather(forecast) {
 	container.innerHTML = "";
 	if (!forecast || !forecast.time) {
 		container.innerHTML =
-			'<span class="text-sm">Weather unavailable - this will auto update closer to Download!</span>';
+			'<span class="text-sm">Weather forecast will be available closer to the event!</span>';
 		return;
 	}
 	const dayLabels = ["Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -201,7 +212,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 			}, 0);
 		}
 
-		console.log("Download Festival Set Times App initialized successfully");
 		runPageViewCounter();
 	} catch (error) {
 		console.error("Initialization error:", error);
@@ -225,21 +235,22 @@ window.showFavoritesOnly = state.showFavoritesOnly;
 
 // --- Simple Page View Counter (local only, unique to device) ---
 function runPageViewCounter() {
-	console.log('Page view counter script running (local only, unique to device)');
-	const el = document.getElementById('page-views');
+	const el = document.getElementById("page-views");
 	if (!el) {
-		console.error('Page view counter: #page-views element not found');
+		console.error("Page view counter: #page-views element not found");
 		return;
 	}
 	const initial = 8 + 59 + 25 + 44 + 34; // 170
 	// Generate or retrieve a unique device ID
-	let deviceId = localStorage.getItem('pageViewsDeviceId');
+	let deviceId = localStorage.getItem("pageViewsDeviceId");
 	if (!deviceId) {
-		deviceId = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now();
-		localStorage.setItem('pageViewsDeviceId', deviceId);
+		deviceId = crypto.randomUUID
+			? crypto.randomUUID()
+			: Math.random().toString(36).slice(2) + Date.now();
+		localStorage.setItem("pageViewsDeviceId", deviceId);
 	}
 	// Use a key unique to this device
-	const key = 'pageViewsLocal_' + deviceId;
+	const key = "pageViewsLocal_" + deviceId;
 	let localCount;
 	try {
 		const stored = localStorage.getItem(key);
@@ -250,12 +261,11 @@ function runPageViewCounter() {
 		}
 		localStorage.setItem(key, localCount);
 	} catch (e) {
-		console.error('Page view counter localStorage error:', e);
+		console.error("Page view counter localStorage error:", e);
 		localCount = initial;
 	}
-	el.style.display = 'block';
-	el.style.color = '#f59e42';
-	el.style.fontWeight = 'bold';
+	el.style.display = "block";
+	el.style.color = "#f59e42";
+	el.style.fontWeight = "bold";
 	el.textContent = `Local views (this device): ${localCount}`;
-	console.log('Page views (localStorage, device):', localCount, 'Device ID:', deviceId);
 }
