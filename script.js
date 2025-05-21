@@ -213,8 +213,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 				state.showFavoritesModalAfterData = false;
 			}, 0);
 		}
-
-		runPageViewCounter();
 	} catch (error) {
 		console.error("Initialization error:", error);
 		document.getElementById(
@@ -234,40 +232,3 @@ window.currentStage = state.currentStage;
 window.districtXCurrentStage = state.districtXCurrentStage;
 window.favoriteArtists = state.favoriteArtists;
 window.showFavoritesOnly = state.showFavoritesOnly;
-
-// --- Simple Page View Counter (local only, unique to device) ---
-function runPageViewCounter() {
-	const el = document.getElementById("page-views");
-	if (!el) {
-		console.error("Page view counter: #page-views element not found");
-		return;
-	}
-	const initial = 8 + 59 + 25 + 44 + 34; // 170
-	// Generate or retrieve a unique device ID
-	let deviceId = localStorage.getItem("pageViewsDeviceId");
-	if (!deviceId) {
-		deviceId = crypto.randomUUID
-			? crypto.randomUUID()
-			: Math.random().toString(36).slice(2) + Date.now();
-		localStorage.setItem("pageViewsDeviceId", deviceId);
-	}
-	// Use a key unique to this device
-	const key = "pageViewsLocal_" + deviceId;
-	let localCount;
-	try {
-		const stored = localStorage.getItem(key);
-		if (stored === null) {
-			localCount = initial;
-		} else {
-			localCount = parseInt(stored, 10) + 1;
-		}
-		localStorage.setItem(key, localCount);
-	} catch (e) {
-		console.error("Page view counter localStorage error:", e);
-		localCount = initial;
-	}
-	el.style.display = "block";
-	el.style.color = "#f59e42";
-	el.style.fontWeight = "bold";
-	el.textContent = `Local views (this device): ${localCount}`;
-}
