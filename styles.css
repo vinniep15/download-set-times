@@ -702,6 +702,18 @@
     }
   }
 
+  @media (max-width: 768px) {
+    .stage-name,
+    .w-40 {
+      width: 90px !important;
+      min-width: 90px !important;
+      max-width: 90px !important;
+      font-size: 13px !important;
+      padding-left: 4px !important;
+      padding-right: 4px !important;
+    }
+  }
+
   #stage-dropdown-mobile,
 #day-dropdown-mobile {
   z-index: 20 !important; /* Ensure dropdowns appear above other elements */
@@ -848,36 +860,3 @@
     font-size: 1rem;
     margin-bottom: 0.5em;
   }
-
-@media (max-width: 768px) {
-  /* Make stage name column narrower on mobile */
-  .stage-name {
-    width: 90px !important;
-    min-width: 90px !important;
-    font-size: 12px !important;
-    padding-left: 4px !important;
-    padding-right: 2px !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-    line-height: 1.1 !important;
-  }
-  .stage-row {
-    height: 56px !important;
-  }
-  /* Reduce padding in set blocks for mobile */
-  .set-block {
-    padding: 2px 4px !important;
-    font-size: 12px !important;
-  }
-  /* Make time header smaller */
-  .time-slot {
-    width: 38px !important;
-    min-width: 38px !important;
-    max-width: 38px !important;
-    font-size: 11px !important;
-    padding: 0 !important;
-  }
-  .time-header {
-    font-size: 11px !important;
-  }
-}
