@@ -24,6 +24,7 @@ import {
 	checkFirstVisit,
 	checkForConflicts,
 	showFavoritesOnly,
+	toggleFavoriteSet,
 } from "./js/favourites.js";
 import {setupEventListeners, setupOutsideClickListeners} from "./js/events.js";
 import {
@@ -55,6 +56,7 @@ window.setupDistrictXDropdownsDirectly = setupDistrictXDropdownsDirectly;
 window.populateDistrictXStageDropdown = populateDistrictXStageDropdown;
 window.populateArenaStageDropdown = populateArenaStageDropdown;
 window.showFavoritesOnly = showFavoritesOnly;
+window.toggleFavoriteSet = toggleFavoriteSet;
 
 // --- Download Festival Weather Forecast ---
 async function fetchWeather() {

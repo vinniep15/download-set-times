@@ -575,9 +575,9 @@ export function filterStage(stage) {
 export function showDistrictXDay(day) {
 	state.districtXCurrentDay = day;
 
-	// Update button styling
+	// Update button styling using data-day attribute for reliable matching
 	document.querySelectorAll(".districtx-day-btn").forEach((btn) => {
-		if (btn.textContent.toLowerCase() === day) {
+		if ((btn.dataset.day || btn.textContent.trim().toLowerCase()) === day) {
 			btn.classList.add("active-btn");
 			btn.classList.remove("bg-gray-700");
 		} else {
@@ -596,12 +596,24 @@ export function showDistrictXDay(day) {
 		return;
 	}
 
+	// Always reset stage filter to 'all' when changing day
+	state.districtXCurrentStage = "all";
+
 	renderDistrictXSchedule(day);
 
-	// Apply current stage filter
+	// After rendering, ensure the 'All Stages' button gets the active class
 	setTimeout(() => {
+		document.querySelectorAll('#districtx-stage-buttons .stage-btn').forEach(btn => {
+			if (btn.textContent.trim().toLowerCase() === 'all stages') {
+				btn.classList.add('active-btn');
+				btn.classList.remove('bg-gray-700');
+			} else {
+				btn.classList.remove('active-btn');
+				btn.classList.add('bg-gray-700');
+			}
+		});
 		filterDistrictXStage(state.districtXCurrentStage);
-	}, 50);
+	}, 0);
 }
 
 /**
@@ -687,6 +699,17 @@ function renderDistrictXStageButtons(stages) {
  */
 export function filterDistrictXStage(stage) {
 	state.districtXCurrentStage = stage;
+
+	// Update stage button active state
+	document.querySelectorAll('#districtx-stage-buttons .stage-btn').forEach(btn => {
+		if (btn.textContent.trim().toLowerCase() === (stage === 'all' ? 'all stages' : stage.toLowerCase())) {
+			btn.classList.add('active-btn');
+			btn.classList.remove('bg-gray-700');
+		} else {
+			btn.classList.remove('active-btn');
+			btn.classList.add('bg-gray-700');
+		}
+	});
 
 	// Show/hide based on filter
 	document

@@ -242,27 +242,7 @@
 
 			<!-- Desktop UI (hidden on mobile) -->
 			<div class="hidden md:block">
-				<div class="flex items-center justify-between mb-4">
-					<!-- Existing stage buttons will be here -->
-					<div
-						id="stage-buttons"
-						class="flex gap-2 overflow-x-auto"
-					></div>
-
-					<!-- My Artists Toggle (Desktop) -->
-					<div class="flex items-center ml-4">
-						<span class="text-sm mr-2">My Artists Only</span>
-						<label class="switch">
-							<input
-								type="checkbox"
-								id="global-favorites-toggle-desktop"
-							/>
-							<span class="slider round"></span>
-						</label>
-					</div>
-				</div>
-
-				<!-- Day selector buttons for desktop -->
+				<!-- Day selector buttons for desktop (moved above stage buttons) -->
 				<div class="flex flex-nowrap gap-2 mb-4">
 					<button
 						onclick="showDay('friday')"
@@ -282,6 +262,25 @@
 					>
 						Sunday
 					</button>
+				</div>
+				<div class="flex items-center justify-between mb-4">
+					<!-- Existing stage buttons will be here -->
+					<div
+						id="stage-buttons"
+						class="flex gap-2 overflow-x-auto"
+					></div>
+
+					<!-- My Artists Toggle (Desktop) -->
+					<div class="flex items-center ml-4">
+						<span class="text-sm mr-2">My Artists Only</span>
+						<label class="switch">
+							<input
+								type="checkbox"
+								id="global-favorites-toggle-desktop"
+							/>
+							<span class="slider round"></span>
+						</label>
+					</div>
 				</div>
 			</div>
 
@@ -411,30 +410,35 @@
 					<button
 						onclick="showDistrictXDay('wednesday')"
 						class="districtx-day-btn bg-gray-700 px-4 py-2 rounded active-btn"
+						data-day="wednesday"
 					>
 						Wednesday
 					</button>
 					<button
 						onclick="showDistrictXDay('thursday')"
 						class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
+						data-day="thursday"
 					>
 						Thursday
 					</button>
 					<button
 						onclick="showDistrictXDay('friday')"
 						class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
+						data-day="friday"
 					>
 						Friday
 					</button>
 					<button
 						onclick="showDistrictXDay('saturday')"
 						class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
+						data-day="saturday"
 					>
 						Saturday
 					</button>
 					<button
 						onclick="showDistrictXDay('sunday')"
 						class="districtx-day-btn bg-gray-700 px-4 py-2 rounded"
+						data-day="sunday"
 					>
 						Sunday
 					</button>
@@ -444,7 +448,10 @@
 				<div
 					id="districtx-stage-buttons"
 					class="flex gap-2 mb-4 overflow-x-auto"
-				></div>
+				>
+					<button class="districtx-stage-btn bg-gray-700 px-4 py-2 rounded active-btn">All Stages</button>
+					<!-- Other stage buttons will be populated by JS -->
+				</div>
 			</div>
 
 			<!-- Schedule Container -->
@@ -534,7 +541,6 @@
 		<!-- End Overlay Management UI -->
 	</body>
 	<footer class="w-full mt-12 text-center text-xs text-gray-400 pb-4">
-		<div id="page-views" class="mb-2">Page Views:</div>
 		<span id="page-views-label" class="block mb-1"></span>
 		Looking for more gigs and festivals? Discover and track your next events
 		at
