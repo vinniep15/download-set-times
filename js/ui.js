@@ -312,7 +312,7 @@ function createEventBlock(set, stage, day, venue) {
 				(fav) => fav.setKey === setKey && fav.person === "You"
 			);
 			if (idx === -1) {
-				state.favoriteSets.push({ setKey, person: "You" });
+				state.favoriteSets.push({setKey, person: "You"});
 			} else {
 				state.favoriteSets.splice(idx, 1);
 			}
@@ -320,7 +320,9 @@ function createEventBlock(set, stage, day, venue) {
 			// Re-render both main grid and modal if open
 			if (
 				document.getElementById("favorites-modal") &&
-				!document.getElementById("favorites-modal").classList.contains("hidden")
+				!document
+					.getElementById("favorites-modal")
+					.classList.contains("hidden")
 			) {
 				const activeTab = document.querySelector(".day-tab.active-tab");
 				const activeDay = activeTab ? activeTab.dataset.day : day;
@@ -335,43 +337,55 @@ function createEventBlock(set, stage, day, venue) {
 		}
 	});
 	// Remove heartBtn from pointer/touch event bubbling for mobile
-	heartBtn.addEventListener("touchstart", function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-	}, {passive: false});
-	heartBtn.addEventListener("touchend", function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		if (typeof window.toggleFavoriteSet === "function") {
-			window.toggleFavoriteSet(setKey, heartBtn.querySelector("svg"));
-		} else {
-			// Fallback: legacy inline logic
-			const idx = state.favoriteSets.findIndex(
-				(fav) => fav.setKey === setKey && fav.person === "You"
-			);
-			if (idx === -1) {
-				state.favoriteSets.push({ setKey, person: "You" });
+	heartBtn.addEventListener(
+		"touchstart",
+		function (e) {
+			e.stopPropagation();
+			e.preventDefault();
+		},
+		{passive: false}
+	);
+	heartBtn.addEventListener(
+		"touchend",
+		function (e) {
+			e.stopPropagation();
+			e.preventDefault();
+			if (typeof window.toggleFavoriteSet === "function") {
+				window.toggleFavoriteSet(setKey, heartBtn.querySelector("svg"));
 			} else {
-				state.favoriteSets.splice(idx, 1);
+				// Fallback: legacy inline logic
+				const idx = state.favoriteSets.findIndex(
+					(fav) => fav.setKey === setKey && fav.person === "You"
+				);
+				if (idx === -1) {
+					state.favoriteSets.push({setKey, person: "You"});
+				} else {
+					state.favoriteSets.splice(idx, 1);
+				}
+				saveFavorites();
+				// Re-render both main grid and modal if open
+				if (
+					document.getElementById("favorites-modal") &&
+					!document
+						.getElementById("favorites-modal")
+						.classList.contains("hidden")
+				) {
+					const activeTab = document.querySelector(
+						".day-tab.active-tab"
+					);
+					const activeDay = activeTab ? activeTab.dataset.day : day;
+					showFavoritesModalWithActiveDay(activeDay);
+				}
+				// Always re-render the main grid
+				if (venue === "arena") {
+					showDay(day);
+				} else {
+					showDistrictXDay(day);
+				}
 			}
-			saveFavorites();
-			// Re-render both main grid and modal if open
-			if (
-				document.getElementById("favorites-modal") &&
-				!document.getElementById("favorites-modal").classList.contains("hidden")
-			) {
-				const activeTab = document.querySelector(".day-tab.active-tab");
-				const activeDay = activeTab ? activeTab.dataset.day : day;
-				showFavoritesModalWithActiveDay(activeDay);
-			}
-			// Always re-render the main grid
-			if (venue === "arena") {
-				showDay(day);
-			} else {
-				showDistrictXDay(day);
-			}
-		}
-	}, {passive: false});
+		},
+		{passive: false}
+	);
 	block.appendChild(heartBtn);
 
 	// Apply animation
@@ -787,7 +801,7 @@ export function showEventDetails(event, set, stage, day, venue, isMobile) {
 	}
 
 	// Defensive: if event or event.currentTarget is null, do not try to get bounding rect
-	let rect = { top: 0, left: 0, width: 0, height: 0 };
+	let rect = {top: 0, left: 0, width: 0, height: 0};
 	let scrollTop = window.scrollY || document.documentElement.scrollTop;
 	let scrollLeft = window.scrollX || document.documentElement.scrollLeft;
 	if (event && event.currentTarget) {
