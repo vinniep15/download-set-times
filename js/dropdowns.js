@@ -34,9 +34,12 @@ export function setupDropdowns() {
 
 	// OUTSIDE CLICK HANDLER
 	setupOutsideClickHandler();
-
-	fixArenaDropdowns();
+	// fixArenaDropdowns(); // No longer needed
 }
+
+// Track currently open mobile dropdown and arrow
+let openMobileDropdown = null;
+let openMobileArrow = null;
 
 /**
  * Set up a simple dropdown with direct DOM manipulation
@@ -57,59 +60,48 @@ function setupSimpleDropdown(btnId, menuId) {
 		e.preventDefault();
 		e.stopPropagation();
 
-		// Close all other dropdowns
-		document
-			.querySelectorAll("[id$='-dropdown-mobile']")
-			.forEach((dropdown) => {
-				if (dropdown.id !== menuId) {
-					dropdown.classList.add("hidden");
-					dropdown.style.display = "none";
-				}
-			});
+		const arrow = this.querySelector("svg");
 
-		// Reset all other arrows
-		document
-			.querySelectorAll("[id$='-dropdown-btn-mobile'] svg")
-			.forEach((arrow) => {
-				if (!arrow.closest(`#${btnId}`)) {
-					arrow.style.transform = "";
-				}
-			});
+		// If another dropdown is open, close it first
+		if (openMobileDropdown && openMobileDropdown !== menu) {
+			openMobileDropdown.classList.add("hidden");
+			openMobileDropdown.style.display = "none";
+			if (openMobileArrow) openMobileArrow.style.transform = "";
+			openMobileDropdown = null;
+			openMobileArrow = null;
+		}
 
-		// Toggle this dropdown
 		const isHidden = menu.classList.contains("hidden");
 		if (isHidden) {
 			// Show dropdown
 			menu.classList.remove("hidden");
 			menu.style.display = "block";
-
-			// Rotate arrow
-			const arrow = this.querySelector("svg");
 			if (arrow) arrow.style.transform = "rotate(180deg)";
+			openMobileDropdown = menu;
+			openMobileArrow = arrow;
 		} else {
 			// Hide dropdown
 			menu.classList.add("hidden");
 			menu.style.display = "none";
-
-			// Reset arrow
-			const arrow = this.querySelector("svg");
 			if (arrow) arrow.style.transform = "";
+			openMobileDropdown = null;
+			openMobileArrow = null;
 		}
 	});
 
-	// Add click handlers to menu items
+	// Add click handlers to menu items (delegated, so always works after repopulation)
 	const menuContainer = menu.querySelector('div[role="menu"]');
 	if (menuContainer) {
-		menuContainer.querySelectorAll("button").forEach((button) => {
-			button.addEventListener("click", () => {
-				// Hide the dropdown after selection
+		menuContainer.addEventListener("click", function (event) {
+			const button = event.target.closest("button");
+			if (button) {
 				menu.classList.add("hidden");
 				menu.style.display = "none";
-
-				// Reset arrow
 				const arrow = newBtn.querySelector("svg");
 				if (arrow) arrow.style.transform = "";
-			});
+				openMobileDropdown = null;
+				openMobileArrow = null;
+			}
 		});
 	}
 }
@@ -442,97 +434,7 @@ export function setupDistrictXDropdownsDirectly() {
  * Direct fix for Arena dropdowns not showing
  */
 export function fixArenaDropdowns() {
-	// Stage dropdown fix
-	const stageBtn = document.getElementById("stage-dropdown-btn-mobile");
-	const stageMenu = document.getElementById("stage-dropdown-mobile");
-
-	if (stageBtn && stageMenu) {
-		// Remove old listeners by replacing with fresh clone
-		const newStageBtn = stageBtn.cloneNode(true);
-		stageBtn.parentNode.replaceChild(newStageBtn, stageBtn);
-
-		// Extra-strength click handler
-		newStageBtn.addEventListener("click", function (e) {
-			e.preventDefault();
-			e.stopPropagation();
-
-			// Force close any open dropdowns
-			document
-				.querySelectorAll("div[id$='-dropdown-mobile']")
-				.forEach((menu) => {
-					if (menu.id !== "stage-dropdown-mobile") {
-						menu.classList.add("hidden");
-						menu.style.display = "none";
-					}
-				});
-
-			// Toggle with maximum force
-			if (stageMenu.classList.contains("hidden")) {
-				// Show dropdown with priority styling
-				stageMenu.classList.remove("hidden");
-				stageMenu.style.cssText =
-					"display: block !important; z-index: 9999 !important; position: absolute !important;";
-
-				// Rotate arrow
-				const arrow = this.querySelector("svg");
-				if (arrow) arrow.style.transform = "rotate(180deg)";
-			} else {
-				// Hide dropdown
-				stageMenu.classList.add("hidden");
-				stageMenu.style.display = "none";
-
-				// Reset arrow
-				const arrow = this.querySelector("svg");
-				if (arrow) arrow.style.transform = "";
-			}
-		});
-	}
-
-	// Day dropdown (same approach)
-	const dayBtn = document.getElementById("day-dropdown-btn-mobile");
-	const dayMenu = document.getElementById("day-dropdown-mobile");
-
-	if (dayBtn && dayMenu) {
-		// Remove old listeners
-		const newDayBtn = dayBtn.cloneNode(true);
-		dayBtn.parentNode.replaceChild(newDayBtn, dayBtn);
-
-		// Extra-strength click handler
-		newDayBtn.addEventListener("click", function (e) {
-			e.preventDefault();
-			e.stopPropagation();
-
-			// Force close any open dropdowns
-			document
-				.querySelectorAll("div[id$='-dropdown-mobile']")
-				.forEach((menu) => {
-					if (menu.id !== "day-dropdown-mobile") {
-						menu.classList.add("hidden");
-						menu.style.display = "none";
-					}
-				});
-
-			// Toggle with maximum force
-			if (dayMenu.classList.contains("hidden")) {
-				// Show dropdown with priority styling
-				dayMenu.classList.remove("hidden");
-				dayMenu.style.cssText =
-					"display: block !important; z-index: 9999 !important; position: absolute !important;";
-
-				// Rotate arrow
-				const arrow = this.querySelector("svg");
-				if (arrow) arrow.style.transform = "rotate(180deg)";
-			} else {
-				// Hide dropdown
-				dayMenu.classList.add("hidden");
-				dayMenu.style.display = "none";
-
-				// Reset arrow
-				const arrow = this.querySelector("svg");
-				if (arrow) arrow.style.transform = "";
-			}
-		});
-	}
+	// No longer needed; handled by improved setupSimpleDropdown
 }
 
 /**
