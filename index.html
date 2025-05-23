@@ -63,6 +63,27 @@
 					</svg>
 					<span class="hidden xs:inline">Generate</span> Poster
 				</button>
+				<!-- Campsite Map Modal Trigger Button (next to poster/artists controls) -->
+				<button
+					id="open-map-btn"
+					class="bg-cyan-700 hover:bg-cyan-600 text-white py-1 sm:py-2 px-2 sm:px-4 rounded text-sm sm:text-base flex items-center"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-4 w-4 sm:h-5 sm:w-5 mr-1"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M9 17v-2a4 4 0 014-4h2m4 0V7a2 2 0 00-2-2h-2.586a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 0010.586 2H7a2 2 0 00-2 2v12a2 2 0 002 2h2"
+						/>
+					</svg>
+					<span class="hidden xs:inline">Camp</span> Map
+				</button>
 			</div>
 		</header>
 
@@ -543,6 +564,107 @@
 			</div>
 		</div>
 		<!-- End Overlay Management UI -->
+
+		<!-- Map Modal Popup -->
+		<div
+			id="map-modal"
+			class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden"
+		>
+			<div
+				class="bg-gray-900 rounded-lg p-4 relative max-w-3xl w-full mx-2"
+			>
+				<button
+					id="close-map-btn"
+					class="absolute top-2 right-2 text-white bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-600"
+				>
+					&times;
+				</button>
+				<h2 class="text-xl font-bold text-cyan-400 mb-2">
+					Campsite & Car Park Map
+				</h2>
+				<div
+					style="
+						width: 100%;
+						max-width: 1200px;
+						margin: auto;
+						position: relative;
+					"
+				>
+					<div
+						id="map-zoom-container"
+						style="
+							overflow: hidden;
+							border-radius: 12px;
+							box-shadow: 0 2px 16px #0008;
+						"
+					>
+						<img
+							id="map-image"
+							src="assets/download-map.jpeg"
+							alt="Download Festival Campsite & Car Park Map"
+							style="
+								width: 100%;
+								height: auto;
+								transition: transform 0.3s
+									cubic-bezier(0.4, 2, 0.6, 1);
+								display: block;
+							"
+						/>
+						<canvas
+							id="map-canvas"
+							style="
+								position: absolute;
+								left: 0;
+								top: 0;
+								width: 100%;
+								height: 100%;
+								pointer-events: none;
+							"
+						></canvas>
+						<!--
+						<img src="assets/download-map.jpeg" usemap="#image-map">
+						<map name="image-map">
+						    <area target="" alt="Plus" title="Plus" href="" coords="1762,981,1717,862,1706,806,1844,646,1911,691,1848,769,1874,762,1937,777,1974,739,2011,758,2000,777,2011,795,2041,810,2063,799,2193,873,2178,918,1940,907,1803,1014,1803,1014,1758,981" shape="poly">
+						    <area target="" alt="Eco" title="Eco" href="" coords="1851,981,1859,1025,2108,1074,2175,921,1937,914" shape="poly">
+						    <area target="" alt="General" title="General" href="" coords="2346,572,2119,1077,2242,1081,2602,1044,2598,858,2565,654,2502,613,2468,613,2416,583" shape="poly">
+						    <area target="" alt="General" title="General" href="" coords="2580,524,2732,498,2788,516,2855,505,2926,528,2959,661,2896,672,2870,713,2873,780,2989,769,3052,981,3000,1011,2781,836,2769,710,2580,732,2569,650,2598,635" shape="poly">
+						    <area target="" alt="Quiet" title="Quiet" href="" coords="1041,747,1085,1059,769,1092,695,1092,643,862" shape="poly">
+						    <area target="" alt="General" title="General" href="" coords="1048,751,1089,736,1141,743,1197,699,1264,959,1193,1044,1178,1115,1230,1148,1245,1185,1312,1230,1238,1427,1197,1393,1097,1122" shape="poly">
+						    <area target="" alt="General" title="General" href="" coords="1279,1341,1595,1438,1509,1635,1405,1612,1427,1546,1238,1438" shape="poly">
+						    <area target="" alt="General" title="General" href="" coords="2836,1011,2944,1100,2859,1170,2877,1189,3015,1260,2981,1274,2866,1267,2821,1234,2799,1215,2636,1063,2669,1025,2721,1040,2743,1063" shape="poly">
+						    <area target="" alt="Access" title="Access" href="" coords="2320,1746,2305,1854,2305,1943,2331,1947,2238,2229,2011,2159,2123,1902,2145,1880,2137,1854,2089,1821,2082,1783" shape="poly">
+						    <area target="" alt="RIP" title="RIP" href="" coords="1067,1754,1171,1817,1256,1713,1543,1761,1602,1757,1803,1731,1821,1798,2030,1772,2045,1809,2100,1873,2108,1895,1985,2170,1870,2118,1814,2237,1710,2385,1639,2437,1624,2452,1584,2452,1513,2385,1372,2300,1387,2252,1063,2051,1067,2021,911,1958" shape="poly">
+						    <area target="" alt="Ready To Rock" title="Ready To Rock" href="" coords="2468,1300,2483,1364,2717,1423,2807,1375,2636,1334" shape="poly">
+						    <area target="" alt="Campervan" title="Campervan" href="" coords="3030,2356,2937,2330,2840,2389,2743,2344,2621,2300,2769,2188,2892,2133,3007,2088,3093,2066,3405,2043,3416,2084,3342,2125,3264,2181,3186,2248,3123,2296" shape="poly">
+						    <area target="" alt="Campervan Plus" title="Campervan Plus" href="" coords="2795,1512,2795,1460,2821,1438,3071,1401,3137,1427,3189,1453,3264,1464,3290,1516,3275,1575,2836,1538" shape="poly">
+						</map>
+						-->
+					</div>
+				</div>
+				<div style="margin-top: 1rem; text-align: center">
+					<label
+						for="ticket-type-select"
+						style="
+							color: #fff;
+							font-weight: bold;
+							margin-right: 0.5em;
+						"
+						>Ticket Type:</label
+					>
+					<select id="ticket-type-select">
+						<option value="general">General</option>
+						<option value="access">Access</option>
+						<option value="rip">RIP</option>
+						<option value="eco">Eco</option>
+						<option value="quiet">Quiet</option>
+						<option value="plus">Plus</option>
+						<option value="ready_to_rock">Ready To Rock</option>
+						<option value="campervan">Camervan</option>
+						<option value="campervan_plus">Camervan Plus</option>
+					</select>
+				</div>
+			</div>
+		</div>
 	</body>
 	<footer class="w-full mt-12 text-center text-xs text-gray-400 pb-4">
 		Looking for more gigs and festivals? Discover and track your next events
@@ -555,4 +677,31 @@
 			>Your Next Show</a
 		>
 	</footer>
+
+	<script>
+		// Improved zoom on hover for map image
+		const mapImg = document.getElementById("map-image");
+		const zoomContainer = document.getElementById("map-zoom-container");
+		const ZOOM = 2.5; // Increase zoom factor for more detail
+		if (mapImg && zoomContainer) {
+			zoomContainer.addEventListener("mousemove", function (e) {
+				const rect = zoomContainer.getBoundingClientRect();
+				const x = (e.clientX - rect.left) / rect.width;
+				const y = (e.clientY - rect.top) / rect.height;
+				// Calculate max translate so image never shows empty space
+				const maxX = ((ZOOM - 1) * rect.width) / (2 * ZOOM);
+				const maxY = ((ZOOM - 1) * rect.height) / (2 * ZOOM);
+				const tx = (x - 0.5) * 2 * maxX;
+				const ty = (y - 0.5) * 2 * maxY;
+				mapImg.style.transform = `scale(${ZOOM}) translate(${
+					(-tx / rect.width) * 100
+				}%, ${(-ty / rect.height) * 100}%)`;
+				mapImg.style.cursor = "zoom-in";
+			});
+			zoomContainer.addEventListener("mouseleave", function () {
+				mapImg.style.transform = "";
+				mapImg.style.cursor = "";
+			});
+		}
+	</script>
 </html>

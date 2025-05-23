@@ -860,3 +860,107 @@
     font-size: 1rem;
     margin-bottom: 0.5em;
   }
+
+  body {
+    background: #111;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    margin: 0;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #18181b;
+  }
+  /* #open-map-btn {
+    background: #06b6d4;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  } */
+  /* #open-map-btn:hover {
+    background: #0891b2;
+  } */
+  #map-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+  }
+  #map-modal.hidden {
+    display: none;
+  }
+  #map-modal .bg-gray-900 {
+    background: #18181b;
+    border-radius: 1rem;
+    padding: 2rem;
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+  }
+  #close-map-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #374151;
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #close-map-btn:hover {
+    background: #52525b;
+  }
+  #map-modal .map-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+#map-image {
+  width: 100%;
+  display: block;
+  border-radius: 1rem;
+}
+#map-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+#ticket-type-select {
+  background: #27272a;
+  color: #fff;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  font-size: 1rem;
+}
+/* SVG highlight styles (applied via JS) */
+  .camp-highlight {
+    opacity: 1 !important;
+    stroke-width: 5 !important;
+  }
+  .camp-dim {
+    opacity: 0.2 !important;
+    stroke-width: 2 !important;
+  }

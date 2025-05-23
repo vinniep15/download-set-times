@@ -1,0 +1,14 @@
+<svg id="download-map-svg" viewBox="0 0 1053 768" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <image href="assets/download-map.jpg" x="0" y="0" width="1053" height="768" />
+  <!-- Example: Yellow Camp Polygon (approximate, adjust as needed) -->
+  <polygon id="camp-yellow" points="60,60 260,60 260,210 60,210" fill="rgba(255,255,0,0.3)" stroke="#FFD600" stroke-width="3" />
+  <polygon id="camp-blue" points="270,60 370,60 370,210 270,210" fill="rgba(0,180,255,0.3)" stroke="#00B4FF" stroke-width="3" />
+  <polygon id="camp-purple" points="380,60 480,60 480,210 380,210" fill="rgba(160,32,240,0.3)" stroke="#A020F0" stroke-width="3" />
+  <polygon id="camp-red" points="490,60 590,60 590,210 490,210" fill="rgba(255,0,0,0.3)" stroke="#FF0000" stroke-width="3" />
+  <polygon id="camp-orange" points="600,60 700,60 700,210 600,210" fill="rgba(255,140,0,0.3)" stroke="#FF8C00" stroke-width="3" />
+  <polygon id="camp-quiet" points="710,60 810,60 810,210 710,210" fill="rgba(0,255,255,0.3)" stroke="#00FFFF" stroke-width="3" />
+  <polygon id="camp-eco" points="820,60 920,60 920,210 820,210" fill="rgba(0,255,0,0.3)" stroke="#00FF00" stroke-width="3" />
+  <polygon id="camp-plus" points="930,60 1030,60 1030,210 930,210" fill="rgba(255,255,255,0.3)" stroke="#FFFFFF" stroke-width="3" />
+  <polygon id="camp-accessible" points="500,300 600,300 600,400 500,400" fill="rgba(0,200,255,0.3)" stroke="#06b6d4" stroke-width="3" />
+  <polygon id="camp-rip" points="100,300 200,300 200,400 100,400" fill="rgba(255,215,0,0.3)" stroke="#FFD700" stroke-width="3" />
+</svg>

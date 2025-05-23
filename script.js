@@ -155,6 +155,351 @@ function getWeatherIcon(code) {
 	return "❓";
 }
 
+// --- Campsite Map Modal Logic (static image version) ---
+const openMapBtn = document.getElementById("open-map-btn");
+const mapModal = document.getElementById("map-modal");
+const closeMapBtn = document.getElementById("close-map-btn");
+
+openMapBtn.addEventListener("click", () => {
+	mapModal.classList.remove("hidden");
+});
+
+closeMapBtn.addEventListener("click", () => {
+	mapModal.classList.add("hidden");
+});
+
+// --- CAMP AREA HIGHLIGHTING LOGIC ---
+// Define camp area polygons (image pixel coordinates, adjust as needed)
+const CAMP_AREAS = {
+	plus: [
+		[
+			{x: 1762, y: 981},
+			{x: 1717, y: 862},
+			{x: 1706, y: 806},
+			{x: 1844, y: 646},
+			{x: 1911, y: 691},
+			{x: 1848, y: 769},
+			{x: 1874, y: 762},
+			{x: 1937, y: 777},
+			{x: 1974, y: 739},
+			{x: 2011, y: 758},
+			{x: 2000, y: 777},
+			{x: 2011, y: 795},
+			{x: 2041, y: 810},
+			{x: 2063, y: 799},
+			{x: 2193, y: 873},
+			{x: 2178, y: 918},
+			{x: 1940, y: 907},
+			{x: 1803, y: 1014},
+			{x: 1803, y: 1014},
+			{x: 1758, y: 981},
+		],
+	],
+	eco: [
+		[
+			{x: 1851, y: 981},
+			{x: 1859, y: 1025},
+			{x: 2108, y: 1074},
+			{x: 2175, y: 921},
+			{x: 1937, y: 914},
+		],
+	],
+	general: [
+		[
+			{x: 2346, y: 572},
+			{x: 2119, y: 1077},
+			{x: 2242, y: 1081},
+			{x: 2602, y: 1044},
+			{x: 2598, y: 858},
+			{x: 2565, y: 654},
+			{x: 2502, y: 613},
+			{x: 2468, y: 613},
+			{x: 2416, y: 583},
+		],
+		[
+			{x: 2580, y: 524},
+			{x: 2732, y: 498},
+			{x: 2788, y: 516},
+			{x: 2855, y: 505},
+			{x: 2926, y: 528},
+			{x: 2959, y: 661},
+			{x: 2896, y: 672},
+			{x: 2870, y: 713},
+			{x: 2873, y: 780},
+			{x: 2989, y: 769},
+			{x: 3052, y: 981},
+			{x: 3000, y: 1011},
+			{x: 2781, y: 836},
+			{x: 2769, y: 710},
+			{x: 2580, y: 732},
+			{x: 2569, y: 650},
+			{x: 2598, y: 635},
+		],
+		[
+			{x: 1048, y: 751},
+			{x: 1089, y: 736},
+			{x: 1141, y: 743},
+			{x: 1197, y: 699},
+			{x: 1264, y: 959},
+			{x: 1193, y: 1044},
+			{x: 1178, y: 1115},
+			{x: 1230, y: 1148},
+			{x: 1245, y: 1185},
+			{x: 1312, y: 1230},
+			{x: 1238, y: 1427},
+			{x: 1197, y: 1393},
+			{x: 1097, y: 1122},
+		],
+		[
+			{x: 1279, y: 1341},
+			{x: 1595, y: 1438},
+			{x: 1509, y: 1635},
+			{x: 1405, y: 1612},
+			{x: 1427, y: 1546},
+			{x: 1238, y: 1438},
+		],
+		[
+			{x: 2836, y: 1011},
+			{x: 2944, y: 1100},
+			{x: 2859, y: 1170},
+			{x: 2877, y: 1189},
+			{x: 3015, y: 1260},
+			{x: 2981, y: 1274},
+			{x: 2866, y: 1267},
+			{x: 2821, y: 1234},
+			{x: 2799, y: 1215},
+			{x: 2636, y: 1063},
+			{x: 2669, y: 1025},
+			{x: 2721, y: 1040},
+			{x: 2743, y: 1063},
+		],
+	],
+	quiet: [
+		[
+			{x: 1041, y: 747},
+			{x: 1085, y: 1059},
+			{x: 769, y: 1092},
+			{x: 695, y: 1092},
+			{x: 643, y: 862},
+		],
+	],
+	access: [
+		[
+			{x: 2320, y: 1746},
+			{x: 2305, y: 1854},
+			{x: 2305, y: 1943},
+			{x: 2331, y: 1947},
+			{x: 2238, y: 2229},
+			{x: 2011, y: 2159},
+			{x: 2123, y: 1902},
+			{x: 2145, y: 1880},
+			{x: 2137, y: 1854},
+			{x: 2089, y: 1821},
+			{x: 2082, y: 1783},
+		],
+	],
+	rip: [
+		[
+			{x: 1067, y: 1754},
+			{x: 1171, y: 1817},
+			{x: 1256, y: 1713},
+			{x: 1543, y: 1761},
+			{x: 1602, y: 1757},
+			{x: 1803, y: 1731},
+			{x: 1821, y: 1798},
+			{x: 2030, y: 1772},
+			{x: 2045, y: 1809},
+			{x: 2100, y: 1873},
+			{x: 2108, y: 1895},
+			{x: 1985, y: 2170},
+			{x: 1870, y: 2118},
+			{x: 1814, y: 2237},
+			{x: 1710, y: 2385},
+			{x: 1639, y: 2437},
+			{x: 1624, y: 2452},
+			{x: 1584, y: 2452},
+			{x: 1513, y: 2385},
+			{x: 1372, y: 2300},
+			{x: 1387, y: 2252},
+			{x: 1063, y: 2051},
+			{x: 1067, y: 2021},
+			{x: 911, y: 1958},
+		],
+	],
+	campervan: [
+		[
+			{x: 3030, y: 2356},
+			{x: 2937, y: 2330},
+			{x: 2840, y: 2389},
+			{x: 2743, y: 2344},
+			{x: 2621, y: 2300},
+			{x: 2769, y: 2188},
+			{x: 2892, y: 2133},
+			{x: 3007, y: 2088},
+			{x: 3093, y: 2066},
+			{x: 3405, y: 2043},
+			{x: 3416, y: 2084},
+			{x: 3342, y: 2125},
+			{x: 3264, y: 2181},
+			{x: 3186, y: 2248},
+			{x: 3123, y: 2296},
+		],
+	],
+	campervan_plus: [
+		[
+			{x: 2795, y: 1512},
+			{x: 2795, y: 1460},
+			{x: 2821, y: 1438},
+			{x: 3071, y: 1401},
+			{x: 3137, y: 1427},
+			{x: 3189, y: 1453},
+			{x: 3264, y: 1464},
+			{x: 3290, y: 1516},
+			{x: 3275, y: 1575},
+			{x: 2836, y: 1538},
+		],
+	],
+	ready_to_rock: [
+		[
+			{x: 2468, y: 1300},
+			{x: 2483, y: 1364},
+			{x: 2717, y: 1423},
+			{x: 2807, y: 1375},
+			{x: 2636, y: 1334},
+		],
+	],
+};
+
+// Map ticket types to allowed areas
+const TICKET_AREAS = {
+	general: ["general"],
+	access: ["access"],
+	rip: ["rip"],
+	eco: ["eco"],
+	quiet: ["quiet"],
+	plus: ["plus"],
+	ready_to_rock: ["ready_to_rock"],
+	campervan: ["campervan"],
+	campervan_plus: ["campervan_plus"],
+};
+
+const mapImage = document.getElementById("map-image");
+const mapCanvas = document.getElementById("map-canvas");
+const ticketSelect = document.getElementById("ticket-type-select");
+
+function resizeCanvasToImage() {
+	if (!mapImage.complete) return;
+	mapCanvas.width = mapImage.naturalWidth;
+	mapCanvas.height = mapImage.naturalHeight;
+	mapCanvas.style.width = mapImage.offsetWidth + "px";
+	mapCanvas.style.height = mapImage.offsetHeight + "px";
+}
+
+// --- Only highlight allowed areas, do not dim others ---
+function drawHighlights() {
+	if (mapCanvas.style.opacity === "0") return; // Don't draw if hidden for zoom
+	const ctx = mapCanvas.getContext("2d");
+	ctx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+	const ticket = ticketSelect.value;
+	const allowed = TICKET_AREAS[ticket] || [];
+	// Draw each allowed area with a bold, glowing, and more opaque style
+	allowed.forEach((area) => {
+		(CAMP_AREAS[area] || []).forEach((poly) => {
+			ctx.save();
+			ctx.globalAlpha = 0.7; // More opaque
+			ctx.shadowColor = areaColor(area);
+			ctx.shadowBlur = 32; // Glow effect
+			ctx.fillStyle = areaColor(area);
+			ctx.beginPath();
+			poly.forEach((pt, i) => {
+				if (i === 0) ctx.moveTo(pt.x, pt.y);
+				else ctx.lineTo(pt.x, pt.y);
+			});
+			ctx.closePath();
+			ctx.fill();
+			ctx.shadowBlur = 0;
+			ctx.globalAlpha = 1;
+			// Add a thick white border for definition
+			ctx.lineWidth = 10;
+			ctx.strokeStyle = "#fff";
+			ctx.stroke();
+			// Add a colored border for the area
+			ctx.lineWidth = 4;
+			ctx.strokeStyle = areaColor(area);
+			ctx.stroke();
+			// Add a bright red border for extra definition
+			ctx.lineWidth = 2.5;
+			ctx.strokeStyle = "#ff1744"; // Bright red
+			ctx.stroke();
+			ctx.restore();
+		});
+	});
+}
+
+function areaColor(area) {
+	switch (area) {
+		case "general":
+			return "#06b6d4";
+		case "access":
+			return "#a3e635";
+		case "rip":
+			return "#fbbf24";
+		case "eco":
+			return "#22d3ee";
+		case "quiet":
+			return "#818cf8";
+		case "plus":
+			return "#f472b6";
+		default:
+			return "#fff";
+	}
+}
+
+// Sync canvas with image size and zoom
+function syncCanvas() {
+	resizeCanvasToImage();
+	drawHighlights();
+}
+
+// Redraw on ticket change
+if (ticketSelect) {
+	ticketSelect.addEventListener("change", drawHighlights);
+}
+
+// Redraw on image load/resize
+if (mapImage) {
+	mapImage.addEventListener("load", syncCanvas);
+	window.addEventListener("resize", syncCanvas);
+	// If already loaded
+	if (mapImage.complete) setTimeout(syncCanvas, 100);
+}
+
+// If modal is opened, sync canvas
+// Use existing mapModal variable if present, else define
+var _mapModal =
+	typeof mapModal !== "undefined"
+		? mapModal
+		: document.getElementById("map-modal");
+if (_mapModal) {
+	const observer = new MutationObserver(() => {
+		if (!_mapModal.classList.contains("hidden")) {
+			setTimeout(syncCanvas, 100);
+		}
+	});
+	observer.observe(_mapModal, {attributes: true, attributeFilter: ["class"]});
+}
+
+// --- Hide highlights when zooming (hovering) ---
+if (mapImage && mapCanvas) {
+	mapImage.addEventListener("mouseenter", () => {
+		mapCanvas.style.opacity = "0";
+	});
+	mapImage.addEventListener("mouseleave", () => {
+		mapCanvas.style.opacity = "1";
+		drawHighlights();
+	});
+}
+
 // Initialize application
 document.addEventListener("DOMContentLoaded", async function () {
 	try {
