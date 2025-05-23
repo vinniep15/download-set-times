@@ -5,7 +5,7 @@
 
 import {state} from "./core.js";
 import {timeToMinutes, formatTimeDisplay} from "./utils.js";
-import { CustomAlert } from "./ui.js";
+import {CustomAlert} from "./ui.js";
 
 //Declare imported CustomAlert function.
 const customAlert = new CustomAlert();
@@ -483,93 +483,58 @@ export function loadPosterStyles() {
 	styleSheet.id = "poster-styles";
 	styleSheet.innerHTML = `
     .download-poster-style {
-      background-color: #030b1f;
-      background: radial-gradient(circle at center, #072c4e 0%, #04142c 50%, #030b1f 100%);
+      /* Remove background-color and background for poster, let styles.css handle it */
+      border-radius: 12px;
+      box-shadow: 0 0 40px 8px #06b6d4, 0 0 0 2px #06b6d4;
       position: relative;
       overflow: hidden;
       font-family: 'Arial', sans-serif;
       text-transform: uppercase;
     }
-    
-    .poster-bg-main {
+    .download-poster-style:before {
+      content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(ellipse at bottom, #0c2347 0%, #030b1f 100%);
-      z-index: 1;
-    }
-    
-    .poster-bg-effect {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(-45deg, rgba(6, 182, 212, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+      inset: 0;
+      border-radius: 12px;
+      pointer-events: none;
+      box-shadow: 0 0 60px 10px #06b6d4, 0 0 0 3px #06b6d4;
+      opacity: 0.18;
       z-index: 2;
     }
-    
-    .poster-bg-bubbles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: radial-gradient(rgba(6, 182, 212, 0.15) 2px, transparent 2px);
-      background-size: 40px 40px;
-      z-index: 3;
+    .poster-bg-main, .poster-bg-effect, .poster-bg-bubbles, .poster-bg-swirl, .poster-bg-noise {
+      display: none !important;
     }
-    
-    .poster-bg-swirl {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url("data:image/svg+xml,%3Csvg width='1200' height='800' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0C200 100 400 500 600 400 800 300 1000 500 1200 800V800H0V0Z' fill='rgba(6, 182, 212, 0.05)'/%3E%3C/svg%3E") no-repeat center center;
-      background-size: cover;
-      z-index: 4;
-      opacity: 0.3;
-    }
-    
-    .poster-bg-noise {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.03;
-      z-index: 5;
-    }
-    
     .download-logo-text {
       font-family: 'Arial Black', 'Impact', sans-serif;
       letter-spacing: -0.5px;
-      text-shadow: 0 0 10px rgba(6, 182, 212, 0.7);
+      text-shadow: 0 0 10px #06b6d4, 0 0 20px #06b6d4;
     }
-    
-    .poster-container-mobile {
-      width: 95%;
-      max-height: 90vh;
-      overflow-y: auto;
+    .poster-day-heading {
+      position: relative;
+      z-index: 20;
+      display: block;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #fff;
+      margin: 32px 0 16px 0;
+      padding: 8px 0 8px 0;
+      text-align: center;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 12px #000, 0 0 8px #06b6d4;
     }
-    
-    .poster-content-mobile {
-      min-height: auto !important;
+    .poster-day-heading-bg {
+      position: absolute;
+      left: 0; right: 0; top: 0; bottom: 0;
+      background: rgba(3,11,31,0.7);
+      border-radius: 8px;
+      z-index: 10;
+      pointer-events: none;
     }
-    
-    @media (max-width: 768px) {
-      .download-logo-text {
-        font-size: 2rem !important;
-      }
-    }
-    
-    @media (max-width: 350px) {
-      .download-logo-text {
-        font-size: 1.75rem !important;
+    @media (max-width: 600px) {
+      .poster-day-heading {
+        font-size: 1.2rem;
+        margin: 18px 0 10px 0;
+        padding: 6px 0 6px 0;
       }
     }
   `;
