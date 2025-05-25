@@ -539,8 +539,20 @@ document.addEventListener("DOMContentLoaded", async function () {
 		setupOutsideClickListeners();
 		setupDropdowns();
 
-		const forecast = await fetchWeather();
-		renderWeather(forecast);
+		// Weather forecast logic
+		const today = new Date();
+		const festStart = new Date("2025-06-11");
+		const maxForecastDays = 16;
+		const daysToStart = Math.floor((festStart - today) / (1000 * 60 * 60 * 24));
+		const weatherContainer = document.getElementById("weather-forecast");
+		if (daysToStart > maxForecastDays) {
+			if (weatherContainer) {
+				weatherContainer.innerHTML = '<span class="text-sm">Weather forecast available from 16 days before the festival.</span>';
+			}
+		} else {
+			const forecast = await fetchWeather();
+			renderWeather(forecast);
+		}
 
 		tryImportSharedFavorites();
 		// Ensure share button is attached after DOM is fully rendered
