@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="styles.css" />
 		<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 		<script type="module" src="js/ui.js"></script>
+		<script type="module" src="js/countdown.js"></script>
 		<script type="module" src="script.js"></script>
 	</head>
 	<body class="bg-black text-white p-4">
@@ -25,6 +26,20 @@
 
 			<!-- Move buttons into the header for better mobile layout -->
 			<div class="flex gap-1 sm:gap-2 items-center">
+				<div class="timer-container">
+        			<div class="timer-unit">
+           				<div class="timer-number" id="days">00</div>
+            			<div class="timer-label">DAYS</div>
+        			</div>
+        			<div class="timer-unit">
+            			<div class="timer-number" id="hours">00</div>
+            			<div class="timer-label">HRS</div>
+        			</div>
+        			<div class="timer-unit">
+            			<div class="timer-number" id="minutes">00</div>
+            			<div class="timer-label">MINS</div>
+        			</div>
+				</div>
 				<button
 					id="open-favorites"
 					class="bg-cyan-600 px-2 sm:px-3 py-1 sm:py-2 rounded text-sm sm:text-base flex items-center"
