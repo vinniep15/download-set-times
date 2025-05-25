@@ -1110,6 +1110,6 @@
   .header-buttons > button {
     width: auto;
     min-width: 120px;
-    justify-content: flex-start;
+    justify-content: center;
   }
 }
