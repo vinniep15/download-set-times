@@ -37,6 +37,7 @@
 					<div class="timer-label">MINS</div>
 				</div>
 			</div>
+
 			<div class="flex gap-1 sm:gap-2 items-center header-buttons">
 				<button
 					id="open-favorites"
@@ -273,6 +274,16 @@
 				</label>
 			</div>
 
+			<!-- View Mode Toggle (Mobile) -->
+			<div class="flex items-center justify-end mb-4 md:hidden">
+				<span class="text-xs text-gray-300 mr-2">List</span>
+				<label class="switch view-switch">
+					<input type="checkbox" id="view-mode-toggle-mobile" />
+					<span class="slider round"></span>
+				</label>
+				<span class="text-xs text-gray-300">Timeline</span>
+			</div>
+
 			<!-- Desktop UI (hidden on mobile) -->
 			<div class="hidden md:block">
 				<!-- Day selector buttons for desktop (moved above stage buttons) -->
@@ -303,8 +314,8 @@
 						class="flex gap-2 overflow-x-auto"
 					></div>
 
-					<!-- My Artists Toggle (Desktop) -->
-					<div class="flex items-center ml-4">
+					<!-- My Artists Toggle (Desktop) and View Toggle -->
+					<div class="flex items-center ml-4 gap-4">
 						<span class="text-sm mr-2">My Artists Only</span>
 						<label class="switch">
 							<input
@@ -313,6 +324,15 @@
 							/>
 							<span class="slider round"></span>
 						</label>
+						<!-- View Mode Toggle -->
+						<div class="flex items-center gap-2 view-toggle-group">
+							<span class="text-xs text-gray-300">List</span>
+							<label class="switch view-switch">
+								<input type="checkbox" id="view-mode-toggle-desktop" />
+								<span class="slider round"></span>
+							</label>
+							<span class="text-xs text-gray-300">Timeline</span>
+						</div>
 					</div>
 				</div>
 			</div>

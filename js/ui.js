@@ -15,6 +15,15 @@ import {showDay} from "./ui.js";
 // Track modal state
 let eventModal = null;
 
+// --- View Mode Logic ---
+const VIEW_MODE_KEY = 'view-mode';
+function getViewMode() {
+	return sessionStorage.getItem(VIEW_MODE_KEY) || 'timeline';
+}
+function setViewMode(mode) {
+	sessionStorage.setItem(VIEW_MODE_KEY, mode);
+}
+
 // Helper to generate a unique key for a set
 function getSetKey(artist, day, stage, start) {
 	return `${artist}|${day}|${stage}|${start}`;
@@ -153,10 +162,8 @@ function showDayPatched(day) {
 		console.warn(`showDay called for non-arena day: ${day}`);
 		return;
 	}
-	// ...original showDay code...
-	const stages = Object.keys(state.data.arena[day]);
 	state.currentDay = day;
-
+	const stages = Object.keys(state.data.arena[day]);
 	const stageButtons = document.getElementById("stage-buttons");
 	stageButtons.innerHTML =
 		`<button onclick="filterStage('all')" class="stage-btn px-4 py-2 rounded ${
@@ -165,40 +172,34 @@ function showDayPatched(day) {
 		stages
 			.map(
 				(stage) => `
-        <button onclick="filterStage('${stage}')" class="stage-btn px-4 py-2 rounded ${
+			<button onclick="filterStage('${stage}')" class="stage-btn px-4 py-2 rounded ${
 					state.currentStage === stage ? "active-btn" : "bg-gray-700"
 				}">${stage}</button>
-        `
+		`
 			)
 			.join("");
-
 	const container = document.getElementById("schedule");
 	container.innerHTML = "";
-
-	// Header Row
-	const header = document.createElement("div");
-	header.className =
-		"flex sticky top-0 z-10 bg-black border-b border-gray-700 time-header";
-	header.innerHTML =
-		`<div class="w-40 flex-shrink-0"></div>` +
-		state.allTimes
-			.map((t) => {
+	const viewMode = getViewMode();
+	if (viewMode === 'timeline') {
+		// Timeline view (original)
+		const header = document.createElement("div");
+		header.className = "flex sticky top-0 z-10 bg-black border-b border-gray-700 time-header";
+		header.innerHTML = `<div class="w-40 flex-shrink-0"></div>` +
+			state.allTimes.map((t) => {
 				const [h, m] = t.split(":").map(Number);
 				const isNextDay = h >= 0 && h < 6;
-				return `<div class="time-slot text-sm text-center py-2 ${
-					isNextDay ? "bg-gray-900 text-yellow-400" : ""
-				}">${isNextDay ? "(+1) " : ""}${t}</div>`;
-			})
-			.join("");
-	container.appendChild(header);
-
-	// Stage Rows
-	stages.forEach((stage) => renderStageRow(container, day, stage, "arena"));
-
-	updateDaySelection(day);
-	filterStage(state.currentStage);
+				return `<div class="time-slot text-sm text-center py-2 ${isNextDay ? "bg-gray-900 text-yellow-400" : ""}">${isNextDay ? "(+1) " : ""}${t}</div>`;
+			}).join("");
+		container.appendChild(header);
+		stages.forEach((stage) => renderStageRow(container, day, stage, "arena"));
+		updateDaySelection(day);
+		filterStage(state.currentStage);
+	} else {
+		// List view
+		renderArenaListView(day);
+	}
 }
-
 export {showDayPatched as showDay};
 
 /**
@@ -702,9 +703,72 @@ function renderDistrictXSchedule(day) {
 	const header = createTimeHeaderRow();
 	container.appendChild(header);
 
-	// Create rows for each stage
-	stages.forEach((stage) => {
-		renderStageRow(container, day, stage, "districtX");
+	// Determine view mode
+	const viewMode = getViewMode();
+	if (viewMode === 'list') {
+		// List view
+		renderDistrictXListView(day);
+	} else {
+		// Timeline view (original)
+		stages.forEach((stage) => renderStageRow(container, day, stage, "districtX"));
+	}
+}
+
+/**
+ * --- District X List View Renderer ---
+ */
+function renderDistrictXListView(day) {
+	const container = document.getElementById("districtx-schedule");
+	container.innerHTML = '';
+	const stages = Object.keys(state.data.districtX[day]);
+	let allSets = [];
+	stages.forEach(stage => {
+		const sets = state.data.districtX[day][stage].map(set => ({...set, stage}));
+		allSets = allSets.concat(sets);
+	});
+	if (state.showFavoritesOnly) {
+		allSets = allSets.filter(set => {
+			const setKey = getSetKey(set.artist, day, set.stage, set.start);
+			return state.favoriteSets.some(fav => fav.setKey === setKey);
+		});
+	}
+	const setsByHour = {};
+	allSets.forEach(set => {
+		if (!set.start) return;
+		const hour = set.start.split(":")[0];
+		if (!setsByHour[hour]) setsByHour[hour] = [];
+		setsByHour[hour].push(set);
+	});
+	const sortedHours = Object.keys(setsByHour).sort((a,b)=>a-b);
+	sortedHours.forEach(hour => {
+		const hourBlock = document.createElement('div');
+		hourBlock.className = 'mb-4';
+		hourBlock.innerHTML = `<div class=\"font-bold text-cyan-400 text-lg mb-2\">${hour}:00</div>`;
+		setsByHour[hour].forEach(set => {
+			const setKey = getSetKey(set.artist, day, set.stage, set.start);
+			const isFavorite = state.favoriteSets.some(fav => fav.setKey === setKey);
+			const hasConflict = checkForSetConflict(set, set.stage, day, "districtX");
+			const div = document.createElement('div');
+			div.className = 'flex items-center gap-3 bg-gray-900 rounded p-2 mb-1 relative';
+			if (isFavorite) {
+				div.classList.add('favorite-list-item');
+			}
+			if (hasConflict) {
+				div.classList.add('conflict-list-item');
+			}
+			div.innerHTML = `
+				<span class=\"font-semibold text-white\">${set.artist}</span>
+				<span class=\"text-xs text-gray-400\">${set.stage}</span>
+				<span class=\"text-xs text-cyan-300\">${set.start} - ${set.end}</span>
+				${isFavorite ? `<span class=\"ml-2 text-cyan-400\" title=\"Favorite\">` +
+					`<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\">`+
+					`<path d=\"m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z\"/>`+
+					`</svg></span>` : ''}
+				${hasConflict ? '<span class="ml-2 px-2 py-0.5 text-xs font-bold bg-red-600 text-white rounded" title="Schedule Clash">CLASH</span>' : ''}
+			`;
+			hourBlock.appendChild(div);
+		});
+		container.appendChild(hourBlock);
 	});
 }
 
@@ -1126,6 +1190,66 @@ export function setupBlockHoverEvents(block, set, stage, day, venue) {
 			event.preventDefault();
 			showEventDetails(event, set, stage, day, venue, false);
 		}
+	});
+}
+
+// --- Arena List View Renderer ---
+function renderArenaListView(day) {
+	const container = document.getElementById("schedule");
+	container.innerHTML = '';
+	const stages = Object.keys(state.data.arena[day]);
+	// Gather all sets for the day
+	let allSets = [];
+	stages.forEach(stage => {
+		const sets = state.data.arena[day][stage].map(set => ({...set, stage}));
+		allSets = allSets.concat(sets);
+	});
+	// Filter favorites if needed
+	if (state.showFavoritesOnly) {
+		allSets = allSets.filter(set => {
+			const setKey = getSetKey(set.artist, day, set.stage, set.start);
+			return state.favoriteSets.some(fav => fav.setKey === setKey);
+		});
+	}
+	// Group by hour
+	const setsByHour = {};
+	allSets.forEach(set => {
+		if (!set.start) return;
+		const hour = set.start.split(":")[0];
+		if (!setsByHour[hour]) setsByHour[hour] = [];
+		setsByHour[hour].push(set);
+	});
+	const sortedHours = Object.keys(setsByHour).sort((a,b)=>a-b);
+	// Render
+	sortedHours.forEach(hour => {
+		const hourBlock = document.createElement('div');
+		hourBlock.className = 'mb-4';
+		hourBlock.innerHTML = `<div class=\"font-bold text-cyan-400 text-lg mb-2\">${hour}:00</div>`;
+		setsByHour[hour].forEach(set => {
+			const setKey = getSetKey(set.artist, day, set.stage, set.start);
+			const isFavorite = state.favoriteSets.some(fav => fav.setKey === setKey);
+			const hasConflict = checkForSetConflict(set, set.stage, day, "arena");
+			const div = document.createElement('div');
+			div.className = 'flex items-center gap-3 bg-gray-900 rounded p-2 mb-1 relative';
+			if (isFavorite) {
+				div.classList.add('favorite-list-item');
+			}
+			if (hasConflict) {
+				div.classList.add('conflict-list-item');
+			}
+			div.innerHTML = `
+				<span class=\"font-semibold text-white\">${set.artist}</span>
+				<span class=\"text-xs text-gray-400\">${set.stage}</span>
+				<span class=\"text-xs text-cyan-300\">${set.start} - ${set.end}</span>
+				${isFavorite ? `<span class=\"ml-2 text-cyan-400\" title=\"Favorite\">` +
+					`<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\">`+
+					`<path d=\"m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z\"/>`+
+					`</svg></span>` : ''}
+				${hasConflict ? '<span class="ml-2 px-2 py-0.5 text-xs font-bold bg-red-600 text-white rounded" title="Schedule Clash">CLASH</span>' : ''}
+			`;
+			hourBlock.appendChild(div);
+		});
+		container.appendChild(hourBlock);
 	});
 }
 
@@ -1719,6 +1843,29 @@ export function showConflictAlert(conflicts) {
 	setTimeout(closeAlert, 15000);
 }
 
+// --- View selector slider event listeners ---
+function syncViewModeToggles() {
+	const mode = getViewMode();
+	const desktop = document.getElementById('view-mode-toggle-desktop');
+	const mobile = document.getElementById('view-mode-toggle-mobile');
+	if (desktop) desktop.checked = (mode === 'timeline');
+	if (mobile) mobile.checked = (mode === 'timeline');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+	syncViewModeToggles();
+	const desktop = document.getElementById('view-mode-toggle-desktop');
+	const mobile = document.getElementById('view-mode-toggle-mobile');
+	function handleToggle(e) {
+		const timeline = e.target.checked;
+		setViewMode(timeline ? 'timeline' : 'list');
+		syncViewModeToggles();
+		showDay(state.currentDay || 'friday');
+	}
+	if (desktop) desktop.addEventListener('change', handleToggle);
+	if (mobile) mobile.addEventListener('change', handleToggle);
+});
+
 /**
  * Initialize dropdown menu behaviors
  */
@@ -2100,6 +2247,7 @@ export function setupShareFavoritesButton() {
 			});
 
 			// Set focus on input
+
 			setTimeout(() => input.focus(), 100);
 
 			// Assemble the modal
