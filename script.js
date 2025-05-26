@@ -60,20 +60,44 @@ window.toggleFavoriteSet = toggleFavoriteSet;
 
 // --- Download Festival Weather Forecast ---
 async function fetchWeather() {
-	// Only fetch weather if festival is within 16 days from today
+	// Check if festival is within API data availability
 	const today = new Date();
 	const festStart = new Date("2025-06-11");
+	const festEnd = new Date("2025-06-15");
 	const maxForecastDays = 16;
 	const daysToStart = Math.floor((festStart - today) / (1000 * 60 * 60 * 24));
+
+	// Check if festival dates are too far in the future
 	if (daysToStart > maxForecastDays) {
 		console.log(
-			"Weather API: Festival is too far in the future for forecast"
+			`Weather API: Festival is ${daysToStart} days away. Forecast only available within ${maxForecastDays} days.`
 		);
 		return null;
 	}
+
+	// Check if festival dates are too far in the past
+	const daysPast = Math.floor((today - festEnd) / (1000 * 60 * 60 * 24));
+	if (daysPast > 365) {
+		console.log(
+			`Weather API: Festival was ${daysPast} days ago. Historical data only available for past year.`
+		);
+		return null;
+	}
+
 	const start = "2025-06-11";
 	const end = "2025-06-15";
-	const url = `https://api.open-meteo.com/v1/forecast?latitude=52.8306&longitude=-1.3756&start_date=${start}&end_date=${end}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=Europe%2FLondon`;
+
+	// Use appropriate API endpoint based on date
+	let baseUrl;
+	if (festEnd < today) {
+		// Use historical weather API for past dates
+		baseUrl = "https://archive-api.open-meteo.com/v1/era5";
+	} else {
+		// Use forecast API for future dates
+		baseUrl = "https://api.open-meteo.com/v1/forecast";
+	}
+
+	const url = `${baseUrl}?latitude=52.8306&longitude=-1.3756&start_date=${start}&end_date=${end}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=Europe%2FLondon`;
 	const timeoutMs = 5000; // 5 seconds
 	let timeoutId;
 	let didTimeout = false;

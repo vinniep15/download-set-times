@@ -51,8 +51,6 @@ export function saveFavorites() {
 	} catch {
 		state.storageWarning = true;
 	}
-	// Only check for conflicts on save (not on every toggle)
-	checkForConflicts();
 }
 
 /**
@@ -144,11 +142,34 @@ export function toggleFavoriteSet(setKey, svg) {
 		}
 		state.favoriteSets.splice(idx, 1);
 	} else {
+		// Check for conflicts before adding the new favorite
+		const existingConflicts = checkForConflicts();
+
+		// Add the favorite
 		if (svg) {
 			svg.setAttribute("fill", "#06b6d4");
 			svg.setAttribute("stroke", "none");
 		}
 		state.favoriteSets.push({setKey, person: "You"});
+
+		// Check for conflicts after adding the favorite
+		const newConflicts = checkForConflicts();
+
+		// Only show conflict alert if adding this artist created new conflicts
+		if (newConflicts && newConflicts.length > existingConflicts.length) {
+			// Find just the new conflicts to display
+			const conflictsToShow = newConflicts.filter((conflict) => {
+				// Check if this conflict involves the newly added artist
+				const [artist, day, stage, start] = setKey.split("|");
+				return (
+					conflict.artist1 === artist || conflict.artist2 === artist
+				);
+			});
+
+			if (conflictsToShow.length > 0) {
+				showConflictAlert(conflictsToShow);
+			}
+		}
 	}
 	saveFavorites();
 }
@@ -212,9 +233,10 @@ export function checkFirstVisit() {
 
 /**
  * Check for schedule conflicts between favorite artists
+ * @returns {Array} Array of conflicts found, empty if none
  */
 export function checkForConflicts() {
-	if (state.favoriteSets.length < 2) return; // Need at least 2 favorites to have a conflict
+	if (state.favoriteSets.length < 2) return []; // Need at least 2 favorites to have a conflict
 
 	const conflicts = [];
 
@@ -250,11 +272,6 @@ export function checkForConflicts() {
 	const crossVenueConflicts = findCrossVenueConflicts();
 	if (crossVenueConflicts.length > 0) {
 		conflicts.push(...crossVenueConflicts);
-	}
-
-	// Display conflicts if any are found
-	if (conflicts.length > 0) {
-		showConflictAlert(conflicts);
 	}
 
 	return conflicts;
