@@ -12,7 +12,7 @@ import {initState} from "./core.js";
 import {setupEventListeners} from "./events.js";
 // Import URL shortener functions
 import * as urlShortener from "./url-shortener.js";
-const { shortenUrl, expandUrl } = urlShortener;
+const {shortenUrl, expandUrl} = urlShortener;
 
 // Track modal state
 let eventModal = null;
@@ -2337,42 +2337,59 @@ export function setupShareFavoritesButton() {
 
 				// Show loading state
 				showShareTooltip(newBtn, "Generating link...");
-				
+
 				// Create URL with encoded data in hash fragment
-				shortenUrl(encoded).then(hashFragment => {
-					console.log("Successfully encoded data for URL");
-					const shortUrl = `${window.location.origin}${window.location.pathname}#${hashFragment}`;
-					
-					// Copy to clipboard
-					if (navigator.clipboard && navigator.clipboard.writeText) {
-						navigator.clipboard.writeText(shortUrl).then(
-							() => {
-								showShareTooltip(newBtn, "Link copied!");
-							},
-							() => {
-								fallbackCopyTextToClipboard(shortUrl, newBtn);
-							}
-						);
-					} else {
-						fallbackCopyTextToClipboard(shortUrl, newBtn);
-					}
-				}).catch(error => {
-					console.error("Error shortening URL:", error);
-					// Fallback to using the long URL if shortening fails
-					const longUrl = `${window.location.origin}${window.location.pathname}?shared=${encoded}`;
-					if (navigator.clipboard && navigator.clipboard.writeText) {
-						navigator.clipboard.writeText(longUrl).then(
-							() => {
-								showShareTooltip(newBtn, "Link copied (long)!");
-							},
-							() => {
-								fallbackCopyTextToClipboard(longUrl, newBtn);
-							}
-						);
-					} else {
-						fallbackCopyTextToClipboard(longUrl, newBtn);
-					}
-				});
+				shortenUrl(encoded)
+					.then((hashFragment) => {
+						console.log("Successfully encoded data for URL");
+						const shortUrl = `${window.location.origin}${window.location.pathname}#${hashFragment}`;
+
+						// Copy to clipboard
+						if (
+							navigator.clipboard &&
+							navigator.clipboard.writeText
+						) {
+							navigator.clipboard.writeText(shortUrl).then(
+								() => {
+									showShareTooltip(newBtn, "Link copied!");
+								},
+								() => {
+									fallbackCopyTextToClipboard(
+										shortUrl,
+										newBtn
+									);
+								}
+							);
+						} else {
+							fallbackCopyTextToClipboard(shortUrl, newBtn);
+						}
+					})
+					.catch((error) => {
+						console.error("Error shortening URL:", error);
+						// Fallback to using the long URL if shortening fails
+						const longUrl = `${window.location.origin}${window.location.pathname}?shared=${encoded}`;
+						if (
+							navigator.clipboard &&
+							navigator.clipboard.writeText
+						) {
+							navigator.clipboard.writeText(longUrl).then(
+								() => {
+									showShareTooltip(
+										newBtn,
+										"Link copied (long)!"
+									);
+								},
+								() => {
+									fallbackCopyTextToClipboard(
+										longUrl,
+										newBtn
+									);
+								}
+							);
+						} else {
+							fallbackCopyTextToClipboard(longUrl, newBtn);
+						}
+					});
 			};
 
 			// Add keyboard event listener
@@ -2437,23 +2454,26 @@ function fallbackCopyTextToClipboard(text, btn) {
 export async function tryImportSharedFavorites() {
 	// Check for hash fragment first (new approach)
 	const hashFragment = window.location.hash.substring(1); // Remove the #
-	
+
 	// Also support legacy URL parameters
 	const params = new URLSearchParams(window.location.search);
 	const shared = params.get("shared");
 	const shortId = params.get("s"); // Check for shortened URL parameter
-	
+
 	// Return if we have nothing to import
 	if (!shared && !shortId && !hashFragment) return;
-	
+
 	let encodedData = shared;
-	
+
 	// If we have a hash fragment, use that first (new approach)
 	if (hashFragment) {
 		try {
 			console.log("Attempting to decode hash fragment");
 			const expanded = await expandUrl(hashFragment);
-			console.log("Expanded data received:", expanded ? "Success" : "Not found");
+			console.log(
+				"Expanded data received:",
+				expanded ? "Success" : "Not found"
+			);
 			if (expanded) {
 				encodedData = expanded;
 			} else {
@@ -2462,7 +2482,9 @@ export async function tryImportSharedFavorites() {
 			}
 		} catch (error) {
 			console.error("Error decoding hash fragment:", error);
-			alert("Failed to load the shared favorites. The link may be invalid.");
+			alert(
+				"Failed to load the shared favorites. The link may be invalid."
+			);
 			return;
 		}
 	}
@@ -2471,7 +2493,10 @@ export async function tryImportSharedFavorites() {
 		try {
 			console.log("Attempting to expand short ID:", shortId);
 			const expanded = await expandUrl(shortId);
-			console.log("Expanded data received:", expanded ? "Success" : "Not found");
+			console.log(
+				"Expanded data received:",
+				expanded ? "Success" : "Not found"
+			);
 			if (expanded) {
 				encodedData = expanded;
 			} else {
@@ -2480,11 +2505,13 @@ export async function tryImportSharedFavorites() {
 			}
 		} catch (error) {
 			console.error("Error expanding shortened URL:", error);
-			alert("Failed to load the shared favorites. The link may be invalid.");
+			alert(
+				"Failed to load the shared favorites. The link may be invalid."
+			);
 			return;
 		}
 	}
-	
+
 	// Now process the encoded data
 	let payload = null;
 	try {

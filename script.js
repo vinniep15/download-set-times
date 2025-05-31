@@ -584,9 +584,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 			renderWeather(forecast);
 		}
 
-		tryImportSharedFavorites();
-		// Ensure share button is attached after DOM is fully rendered
-		setTimeout(setupShareFavoritesButton, 0);
+		// Import shared favorites if any (now handles async operation)
+		tryImportSharedFavorites()
+			.then(() => {
+				// Ensure share button is attached after DOM is fully rendered and
+				// any shared favorites have been processed
+				setTimeout(setupShareFavoritesButton, 0);
+			})
+			.catch((error) => {
+				console.error("Error importing shared favorites:", error);
+				setTimeout(setupShareFavoritesButton, 0);
+			});
 		// Patch overlays after rendering
 		setTimeout(() => {
 			window.patchGridForSharedFavorites &&
