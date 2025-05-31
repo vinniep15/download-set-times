@@ -161,7 +161,8 @@ function renderWeather(forecast) {
 		div.innerHTML = `
 			<span class="font-bold text-cyan-400">${day}</span>
 			<span class="text-2xl">${icon}</span>
-			<span class="text-xs">${max}° / ${min}°C</span>
+			<span class="text-xs">High: ${max}°C</span>
+			<span class="text-xs">Low: ${min}°C</span>
 			<span class="text-xs text-blue-300">${rain}mm</span>
 		`;
 		container.appendChild(div);
@@ -180,17 +181,19 @@ function getWeatherIcon(code) {
 }
 
 // --- Campsite Map Modal Logic (static image version) ---
-const openMapBtn = document.getElementById("open-map-btn");
 const mapModal = document.getElementById("map-modal");
 const closeMapBtn = document.getElementById("close-map-btn");
 
-openMapBtn.addEventListener("click", () => {
-	mapModal.classList.remove("hidden");
-});
+// Map is now opened via the menu button in menu.js
 
-closeMapBtn.addEventListener("click", () => {
-	mapModal.classList.add("hidden");
-});
+// Only add close button event listener if the element exists
+if (closeMapBtn) {
+	closeMapBtn.addEventListener("click", () => {
+		if (mapModal) {
+			mapModal.classList.add("hidden");
+		}
+	});
+}
 
 // --- CAMP AREA HIGHLIGHTING LOGIC ---
 // Define camp area polygons (image pixel coordinates, adjust as needed)

@@ -10,7 +10,9 @@ import {generatePersonalizedPoster} from "./poster.js";
 import {loadData, extractStageNames} from "./data.js";
 import {initState} from "./core.js";
 import {setupEventListeners} from "./events.js";
-import {showDay} from "./ui.js";
+// Import URL shortener functions
+import * as urlShortener from "./url-shortener.js";
+const { shortenUrl, expandUrl } = urlShortener;
 
 // Track modal state
 let eventModal = null;
@@ -1891,27 +1893,87 @@ export function showConflictAlert(conflicts) {
 	setTimeout(closeAlert, 15000);
 }
 
-// --- View selector slider event listeners ---
+// --- View selector button event listeners ---
 function syncViewModeToggles() {
 	const mode = getViewMode();
-	const desktop = document.getElementById("view-mode-toggle-desktop");
-	const mobile = document.getElementById("view-mode-toggle-mobile");
-	if (desktop) desktop.checked = mode === "timeline";
-	if (mobile) mobile.checked = mode === "timeline";
+	const isTimeline = mode === "timeline";
+
+	// Update the hidden checkbox state (keeping for backward compatibility)
+	const desktopCheckbox = document.getElementById("view-mode-toggle-desktop");
+	const mobileCheckbox = document.getElementById("view-mode-toggle-mobile");
+	if (desktopCheckbox) desktopCheckbox.checked = isTimeline;
+	if (mobileCheckbox) mobileCheckbox.checked = isTimeline;
+
+	// Update button styling
+	const desktopListBtn = document.getElementById("list-view-btn-desktop");
+	const desktopTimelineBtn = document.getElementById(
+		"timeline-view-btn-desktop"
+	);
+	const mobileListBtn = document.getElementById("list-view-btn-mobile");
+	const mobileTimelineBtn = document.getElementById(
+		"timeline-view-btn-mobile"
+	);
+
+	if (isTimeline) {
+		// Timeline view is active
+		if (desktopListBtn) desktopListBtn.classList.remove("bg-cyan-600");
+		if (desktopTimelineBtn) desktopTimelineBtn.classList.add("bg-cyan-600");
+		if (mobileListBtn) mobileListBtn.classList.remove("bg-cyan-600");
+		if (mobileTimelineBtn) mobileTimelineBtn.classList.add("bg-cyan-600");
+	} else {
+		// List view is active
+		if (desktopListBtn) desktopListBtn.classList.add("bg-cyan-600");
+		if (desktopTimelineBtn)
+			desktopTimelineBtn.classList.remove("bg-cyan-600");
+		if (mobileListBtn) mobileListBtn.classList.add("bg-cyan-600");
+		if (mobileTimelineBtn)
+			mobileTimelineBtn.classList.remove("bg-cyan-600");
+	}
 }
 
 document.addEventListener("DOMContentLoaded", () => {
 	syncViewModeToggles();
-	const desktop = document.getElementById("view-mode-toggle-desktop");
-	const mobile = document.getElementById("view-mode-toggle-mobile");
-	function handleToggle(e) {
-		const timeline = e.target.checked;
-		setViewMode(timeline ? "timeline" : "list");
+
+	// Set up click handlers for view toggle buttons
+	const desktopListBtn = document.getElementById("list-view-btn-desktop");
+	const desktopTimelineBtn = document.getElementById(
+		"timeline-view-btn-desktop"
+	);
+	const mobileListBtn = document.getElementById("list-view-btn-mobile");
+	const mobileTimelineBtn = document.getElementById(
+		"timeline-view-btn-mobile"
+	);
+
+	function setToListView() {
+		setViewMode("list");
 		syncViewModeToggles();
 		showDay(state.currentDay || "friday");
+		if (
+			state.data.districtX &&
+			state.data.districtX[state.districtXCurrentDay]
+		) {
+			showDistrictXDay(state.districtXCurrentDay);
+		}
 	}
-	if (desktop) desktop.addEventListener("change", handleToggle);
-	if (mobile) mobile.addEventListener("change", handleToggle);
+
+	function setToTimelineView() {
+		setViewMode("timeline");
+		syncViewModeToggles();
+		showDay(state.currentDay || "friday");
+		if (
+			state.data.districtX &&
+			state.data.districtX[state.districtXCurrentDay]
+		) {
+			showDistrictXDay(state.districtXCurrentDay);
+		}
+	}
+
+	if (desktopListBtn) desktopListBtn.addEventListener("click", setToListView);
+	if (desktopTimelineBtn)
+		desktopTimelineBtn.addEventListener("click", setToTimelineView);
+	if (mobileListBtn) mobileListBtn.addEventListener("click", setToListView);
+	if (mobileTimelineBtn)
+		mobileTimelineBtn.addEventListener("click", setToTimelineView);
 });
 
 /**
@@ -2272,19 +2334,45 @@ export function setupShareFavoritesButton() {
 					alert("Failed to encode favorites for sharing.");
 					return;
 				}
-				const url = `${window.location.origin}${window.location.pathname}?shared=${encoded}`;
-				if (navigator.clipboard && navigator.clipboard.writeText) {
-					navigator.clipboard.writeText(url).then(
-						() => {
-							showShareTooltip(newBtn, "Link copied!");
-						},
-						() => {
-							fallbackCopyTextToClipboard(url, newBtn);
-						}
-					);
-				} else {
-					fallbackCopyTextToClipboard(url, newBtn);
-				}
+
+				// Show loading state
+				showShareTooltip(newBtn, "Generating link...");
+				
+				// Create URL with encoded data in hash fragment
+				shortenUrl(encoded).then(hashFragment => {
+					console.log("Successfully encoded data for URL");
+					const shortUrl = `${window.location.origin}${window.location.pathname}#${hashFragment}`;
+					
+					// Copy to clipboard
+					if (navigator.clipboard && navigator.clipboard.writeText) {
+						navigator.clipboard.writeText(shortUrl).then(
+							() => {
+								showShareTooltip(newBtn, "Link copied!");
+							},
+							() => {
+								fallbackCopyTextToClipboard(shortUrl, newBtn);
+							}
+						);
+					} else {
+						fallbackCopyTextToClipboard(shortUrl, newBtn);
+					}
+				}).catch(error => {
+					console.error("Error shortening URL:", error);
+					// Fallback to using the long URL if shortening fails
+					const longUrl = `${window.location.origin}${window.location.pathname}?shared=${encoded}`;
+					if (navigator.clipboard && navigator.clipboard.writeText) {
+						navigator.clipboard.writeText(longUrl).then(
+							() => {
+								showShareTooltip(newBtn, "Link copied (long)!");
+							},
+							() => {
+								fallbackCopyTextToClipboard(longUrl, newBtn);
+							}
+						);
+					} else {
+						fallbackCopyTextToClipboard(longUrl, newBtn);
+					}
+				});
 			};
 
 			// Add keyboard event listener
@@ -2346,13 +2434,61 @@ function fallbackCopyTextToClipboard(text, btn) {
 }
 
 // 5. On page load: check for shared favorites in URL and show overlay
-export function tryImportSharedFavorites() {
+export async function tryImportSharedFavorites() {
+	// Check for hash fragment first (new approach)
+	const hashFragment = window.location.hash.substring(1); // Remove the #
+	
+	// Also support legacy URL parameters
 	const params = new URLSearchParams(window.location.search);
 	const shared = params.get("shared");
-	if (!shared) return;
+	const shortId = params.get("s"); // Check for shortened URL parameter
+	
+	// Return if we have nothing to import
+	if (!shared && !shortId && !hashFragment) return;
+	
+	let encodedData = shared;
+	
+	// If we have a hash fragment, use that first (new approach)
+	if (hashFragment) {
+		try {
+			console.log("Attempting to decode hash fragment");
+			const expanded = await expandUrl(hashFragment);
+			console.log("Expanded data received:", expanded ? "Success" : "Not found");
+			if (expanded) {
+				encodedData = expanded;
+			} else {
+				alert("This shared link has expired or is invalid.");
+				return;
+			}
+		} catch (error) {
+			console.error("Error decoding hash fragment:", error);
+			alert("Failed to load the shared favorites. The link may be invalid.");
+			return;
+		}
+	}
+	// If no hash fragment but we have a short ID, use legacy approach
+	else if (shortId) {
+		try {
+			console.log("Attempting to expand short ID:", shortId);
+			const expanded = await expandUrl(shortId);
+			console.log("Expanded data received:", expanded ? "Success" : "Not found");
+			if (expanded) {
+				encodedData = expanded;
+			} else {
+				alert("This shared link has expired or is invalid.");
+				return;
+			}
+		} catch (error) {
+			console.error("Error expanding shortened URL:", error);
+			alert("Failed to load the shared favorites. The link may be invalid.");
+			return;
+		}
+	}
+	
+	// Now process the encoded data
 	let payload = null;
 	try {
-		payload = JSON.parse(decodeURIComponent(shared));
+		payload = JSON.parse(decodeURIComponent(encodedData));
 		if (
 			!payload ||
 			typeof payload !== "object" ||
