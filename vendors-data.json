@@ -1,0 +1,247 @@
+{
+  "vendors": {
+    "arena": [
+      {
+        "id": "a1",
+        "name": "Metal Burger Co.",
+        "description": "Gourmet burgers with rock n' roll attitude",
+        "type": "food",
+        "location": "arena",
+        "locationDetail": "Near Main Stage",
+        "dietaryOptions": ["vegetarian", "glutenfree"],
+        "menu": [
+          {
+            "name": "Black Sabbath Burger",
+            "price": "£10.00",
+            "description": "Double beef patty with cheese and bacon",
+            "dietary": []
+          },
+          {
+            "name": "Veggie Maiden",
+            "price": "£9.00",
+            "description": "Plant-based patty with vegan cheese",
+            "dietary": ["vegetarian", "vegan"]
+          },
+          {
+            "name": "GF Metallica",
+            "price": "£10.00",
+            "description": "Gluten free bun with beef patty",
+            "dietary": ["glutenfree"]
+          }
+        ],
+        "paymentOptions": ["cash", "card"],
+        "openingTimes": "11:00-00:00",
+        "image": "burger.jpg"
+      },
+      {
+        "id": "a2",
+        "name": "Headbanger's Pizza",
+        "description": "Wood-fired pizzas with big flavors",
+        "type": "food",
+        "location": "arena",
+        "locationDetail": "Food Court",
+        "dietaryOptions": ["vegetarian", "vegan"],
+        "menu": [
+          {
+            "name": "Meat Lover's Mayhem",
+            "price": "£12.00",
+            "description": "Loaded with pepperoni, ham, and sausage",
+            "dietary": []
+          },
+          {
+            "name": "Vegan Vendetta",
+            "price": "£11.00",
+            "description": "Plant-based cheese and veggies",
+            "dietary": ["vegetarian", "vegan"]
+          }
+        ],
+        "paymentOptions": ["cash", "card"],
+        "openingTimes": "12:00-23:00",
+        "image": "pizza.jpg"
+      }
+    ],
+    "districtX": [
+      {
+        "id": "d1",
+        "name": "Punk Pancakes",
+        "description": "Sweet and savory pancakes with attitude",
+        "type": "food",
+        "location": "districtX",
+        "locationDetail": "Near District X Stage",
+        "dietaryOptions": ["vegetarian", "glutenfree"],
+        "menu": [
+          {
+            "name": "Classic Stack",
+            "price": "£8.00",
+            "description": "American style with maple syrup",
+            "dietary": ["vegetarian"]
+          },
+          {
+            "name": "GF Rock Stack",
+            "price": "£9.00",
+            "description": "Gluten free pancakes with berries",
+            "dietary": ["vegetarian", "glutenfree"]
+          }
+        ],
+        "paymentOptions": ["cash", "card"],
+        "openingTimes": "08:00-16:00",
+        "image": "pancakes.jpg"
+      },
+      {
+        "id": "d2",
+        "name": "Mosh Pit Bar",
+        "description": "Craft beers and festival drinks",
+        "type": "drinks",
+        "location": "districtX",
+        "locationDetail": "Center of District X",
+        "menu": [
+          {
+            "name": "Festival Lager",
+            "price": "£6.00",
+            "description": "Cold and refreshing"
+          },
+          {
+            "name": "Heavy Metal IPA",
+            "price": "£7.00",
+            "description": "Strong and hoppy"
+          },
+          {
+            "name": "Alcohol-Free Rocker",
+            "price": "£5.00",
+            "description": "Zero alcohol beer"
+          }
+        ],
+        "paymentOptions": ["cash", "card"],
+        "openingTimes": "11:00-02:00",
+        "image": "bar.jpg"
+      }
+    ],
+    "village": [
+      {
+        "id": "v1",
+        "name": "Rock Climbing Wall",
+        "description": "Test your climbing skills",
+        "type": "activity",
+        "location": "village",
+        "locationDetail": "Village Center",
+        "prices": "£5 per climb",
+        "openingTimes": "10:00-20:00",
+        "image": "climbing.jpg"
+      },
+      {
+        "id": "v2",
+        "name": "Merch Central",
+        "description": "Official Download Festival merchandise",
+        "type": "merchandise",
+        "location": "village",
+        "locationDetail": "Main Village Area",
+        "products": [
+          {
+            "name": "Festival T-Shirt",
+            "price": "£25.00"
+          },
+          {
+            "name": "Hoodie",
+            "price": "£45.00"
+          },
+          {
+            "name": "Poster",
+            "price": "£15.00"
+          }
+        ],
+        "paymentOptions": ["cash", "card"],
+        "openingTimes": "10:00-23:00",
+        "image": "merch.jpg"
+      },
+      {
+        "id": "v3",
+        "name": "Vegan Viking",
+        "description": "100% plant-based street food",
+        "type": "food",
+        "location": "village",
+        "locationDetail": "Food Market",
+        "dietaryOptions": ["vegan", "glutenfree", "nutfree"],
+        "menu": [
+          {
+            "name": "Seitan Kebab",
+            "price": "£9.00",
+            "description": "Plant-based kebab with salad and sauce",
+            "dietary": ["vegan"]
+          },
+          {
+            "name": "Buddha Bowl",
+            "price": "£10.00",
+            "description": "Fresh veggies, quinoa, and tahini dressing",
+            "dietary": ["vegan", "glutenfree", "nutfree"]
+          }
+        ],
+        "paymentOptions": ["cash", "card"],
+        "openingTimes": "11:00-22:00",
+        "image": "vegan.jpg"
+      }
+    ],
+    "campsite": [
+      {
+        "id": "c1",
+        "name": "Breakfast Club",
+        "description": "Morning fuel for festival goers",
+        "type": "food",
+        "location": "campsite",
+        "locationDetail": "Main Campsite Entrance",
+        "dietaryOptions": ["vegetarian", "glutenfree"],
+        "menu": [
+          {
+            "name": "Full English",
+            "price": "£9.00",
+            "description": "Eggs, bacon, sausage, beans, toast",
+            "dietary": []
+          },
+          {
+            "name": "Veggie Breakfast",
+            "price": "£8.00",
+            "description": "Veggie sausage, eggs, beans, mushrooms, toast",
+            "dietary": ["vegetarian"]
+          },
+          {
+            "name": "GF Breakfast",
+            "price": "£9.00",
+            "description": "Gluten free version of the Full English",
+            "dietary": ["glutenfree"]
+          }
+        ],
+        "paymentOptions": ["cash", "card"],
+        "openingTimes": "06:00-12:00",
+        "image": "breakfast.jpg"
+      },
+      {
+        "id": "c2",
+        "name": "Campsite Store",
+        "description": "Essentials for campers",
+        "type": "merchandise",
+        "location": "campsite",
+        "locationDetail": "Center of Campsite",
+        "products": [
+          {
+            "name": "Water (1.5L)",
+            "price": "£2.50"
+          },
+          {
+            "name": "Toilet Paper",
+            "price": "£1.50"
+          },
+          {
+            "name": "Wet Wipes",
+            "price": "£3.00"
+          },
+          {
+            "name": "Portable Charger",
+            "price": "£15.00"
+          }
+        ],
+        "paymentOptions": ["cash", "card"],
+        "openingTimes": "08:00-22:00",
+        "image": "store.jpg"
+      }
+    ]
+  }
+}

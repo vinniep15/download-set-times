@@ -1,0 +1,26 @@
+/* Additional menu styling to ensure consistent width */
+.menu-item span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* Improve the active state */
+.menu-item.active svg {
+  color: #06b6d4 !important; /* Make icon brighter when active */
+}
+
+/* Adjust icon size for consistency */
+.menu-item svg {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+}
+
+/* Add focus styles for accessibility */
+.menu-item:focus {
+  outline: 2px solid #06b6d4;
+  outline-offset: -2px;
+}

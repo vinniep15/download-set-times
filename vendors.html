@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Download Festival - Food & Activities</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="stylesheet" href="styles.css" />
+		<script type="module" src="script.js"></script>
+		<script type="module" src="js/menu.js"></script>
+		<script type="module" src="js/vendors.js"></script>
+	</head>
+	<body class="bg-black text-white p-4">
+		<header
+			class="flex flex-wrap items-center justify-between gap-2 mb-4 sm:mb-6 header-flex"
+		>
+			<div class="flex items-center gap-2 sm:gap-3 header-logo">
+				<img
+					src="assets/downloadlogo.svg"
+					alt="Download Festival"
+					class="h-8 sm:h-12"
+				/>
+				<h1 class="text-xl sm:text-2xl font-bold">Food & Activities</h1>
+			</div>
+
+			<!-- Menu Button -->
+			<button
+				id="menu-toggle-btn"
+				class="bg-cyan-700 hover:bg-cyan-600 text-white py-1 sm:py-2 px-2 sm:px-4 rounded text-sm sm:text-base flex items-center"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-6 w-6"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M4 6h16M4 12h16M4 18h16"
+					/>
+				</svg>
+				<span class="hidden xs:inline ml-2">Menu</span>
+			</button>
+		</header>
+
+		<!-- Side Menu Overlay -->
+		<div class="menu-overlay" id="menu-overlay"></div>
+
+		<!-- Side Menu -->
+		<div class="side-menu" id="side-menu">
+			<div class="p-4 border-b border-gray-700">
+				<div class="flex justify-between items-center">
+					<h2 class="text-lg font-bold text-cyan-400">
+						Download Festival
+					</h2>
+					<button
+						class="menu-close-btn text-gray-400 hover:text-white"
+						id="menu-close-btn"
+					>
+						&times;
+					</button>
+				</div>
+			</div>
+
+			<nav class="mt-4">
+				<a href="index.html" class="menu-item" id="menu-item-timetable">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5 text-cyan-400"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+						/>
+					</svg>
+					<span>Schedule</span>
+				</a>
+
+				<a
+					href="vendors.html"
+					class="menu-item active"
+					id="menu-item-food"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5 text-cyan-400"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+						/>
+					</svg>
+					<span>Food & Activities</span>
+				</a>
+			</nav>
+		</div>
+
+		<div class="mb-6">
+			<!-- Search and filter section -->
+			<div class="bg-gray-800 p-4 rounded-lg mb-4">
+				<div class="flex flex-col md:flex-row gap-4">
+					<!-- Search -->
+					<div class="flex-1">
+						<div class="relative">
+							<input
+								type="text"
+								id="vendor-search"
+								class="bg-gray-700 text-white rounded px-4 py-2 w-full pl-10"
+								placeholder="Search vendors..."
+							/>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5 text-gray-400 absolute left-3 top-2.5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+								/>
+							</svg>
+						</div>
+					</div>
+
+					<!-- Location Filter -->
+					<div class="flex-1">
+						<select
+							id="location-filter"
+							class="bg-gray-700 text-white rounded px-4 py-2 w-full"
+						>
+							<option value="all">All Locations</option>
+							<option value="arena">Arena</option>
+							<option value="districtX">District X</option>
+							<option value="village">Village</option>
+							<option value="campsite">Campsite</option>
+						</select>
+					</div>
+
+					<!-- Type Filter -->
+					<div class="flex-1">
+						<select
+							id="type-filter"
+							class="bg-gray-700 text-white rounded px-4 py-2 w-full"
+						>
+							<option value="all">All Types</option>
+							<option value="food">Food</option>
+							<option value="drinks">Drinks</option>
+							<option value="merchandise">Merchandise</option>
+							<option value="activity">Activities</option>
+						</select>
+					</div>
+				</div>
+
+				<!-- Dietary Requirements Filters -->
+				<div class="mt-4 flex flex-wrap gap-3" id="dietary-filters">
+					<div class="flex items-center">
+						<input
+							type="checkbox"
+							id="filter-vegan"
+							class="dietary-filter mr-2"
+							value="vegan"
+						/>
+						<label for="filter-vegan">Vegan</label>
+					</div>
+					<div class="flex items-center">
+						<input
+							type="checkbox"
+							id="filter-vegetarian"
+							class="dietary-filter mr-2"
+							value="vegetarian"
+						/>
+						<label for="filter-vegetarian">Vegetarian</label>
+					</div>
+					<div class="flex items-center">
+						<input
+							type="checkbox"
+							id="filter-glutenfree"
+							class="dietary-filter mr-2"
+							value="glutenfree"
+						/>
+						<label for="filter-glutenfree">Gluten Free</label>
+					</div>
+					<div class="flex items-center">
+						<input
+							type="checkbox"
+							id="filter-dairyfree"
+							class="dietary-filter mr-2"
+							value="dairyfree"
+						/>
+						<label for="filter-dairyfree">Dairy Free</label>
+					</div>
+					<div class="flex items-center">
+						<input
+							type="checkbox"
+							id="filter-nutfree"
+							class="dietary-filter mr-2"
+							value="nutfree"
+						/>
+						<label for="filter-nutfree">Nut Free</label>
+					</div>
+					<div class="flex items-center">
+						<input
+							type="checkbox"
+							id="filter-emergency"
+							class="dietary-filter mr-2"
+							value="emergency"
+						/>
+						<label for="filter-emergency"
+							>Likely to make you shit yourself</label
+						>
+					</div>
+				</div>
+			</div>
+
+			<!-- View Toggle -->
+			<div class="flex justify-end mb-4">
+				<div class="inline-flex bg-gray-700 rounded">
+					<button
+						id="grid-view-btn"
+						class="px-4 py-2 rounded-l bg-cyan-600 text-white"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-5 w-5"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+							/>
+						</svg>
+					</button>
+					<button
+						id="list-view-btn"
+						class="px-4 py-2 rounded-r text-white"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-5 w-5"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4 6h16M4 12h16M4 18h16"
+							/>
+						</svg>
+					</button>
+				</div>
+			</div>
+
+			<!-- Results Count -->
+			<div class="text-gray-400 mb-4">
+				Showing <span id="results-count">0</span> vendors
+			</div>
+
+			<!-- Vendors Container -->
+			<div
+				id="vendors-container"
+				class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+			>
+				<!-- Vendors will be loaded here -->
+				<div class="bg-gray-800 p-4 rounded-lg animate-pulse h-48">
+					<div class="h-6 bg-gray-700 rounded w-3/4 mb-3"></div>
+					<div class="h-4 bg-gray-700 rounded w-1/2 mb-2"></div>
+					<div class="h-4 bg-gray-700 rounded w-5/6 mb-2"></div>
+					<div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
+					<div class="h-8 bg-gray-700 rounded w-full mt-4"></div>
+				</div>
+				<div class="bg-gray-800 p-4 rounded-lg animate-pulse h-48">
+					<div class="h-6 bg-gray-700 rounded w-3/4 mb-3"></div>
+					<div class="h-4 bg-gray-700 rounded w-1/2 mb-2"></div>
+					<div class="h-4 bg-gray-700 rounded w-5/6 mb-2"></div>
+					<div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
+					<div class="h-8 bg-gray-700 rounded w-full mt-4"></div>
+				</div>
+				<div class="bg-gray-800 p-4 rounded-lg animate-pulse h-48">
+					<div class="h-6 bg-gray-700 rounded w-3/4 mb-3"></div>
+					<div class="h-4 bg-gray-700 rounded w-1/2 mb-2"></div>
+					<div class="h-4 bg-gray-700 rounded w-5/6 mb-2"></div>
+					<div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
+					<div class="h-8 bg-gray-700 rounded w-full mt-4"></div>
+				</div>
+			</div>
+		</div>
+
+		<footer class="w-full mt-12 text-center text-xs text-gray-400 pb-4">
+			Looking for more gigs and festivals? Discover and track your next
+			events at
+			<a
+				href="https://www.yournextshow.co.uk"
+				class="underline hover:text-cyan-400"
+				target="_blank"
+				rel="noopener"
+				>Your Next Show</a
+			>
+		</footer>
+	</body>
+</html>
