@@ -20,6 +20,7 @@ function initializeMenu() {
 	const sideMenu = document.getElementById("side-menu");
 	const menuFavorites = document.getElementById("menu-favorites");
 	const menuPosterGenerate = document.getElementById("menu-poster-generate");
+	const menuTimetableGenerate = document.getElementById("menu-timetable-generate");
 	const menuMapBtn = document.getElementById("menu-map-btn");
 
 	// Check if we're on the index page
@@ -78,6 +79,16 @@ function initializeMenu() {
 			// Call the generate poster function
 			if (typeof window.generatePersonalizedPoster === "function") {
 				window.generatePersonalizedPoster();
+			}
+			closeMenu();
+		});
+	}
+
+	if (menuTimetableGenerate) {
+		menuTimetableGenerate.addEventListener("click", function () {
+			// Call the generate timetable function
+			if (typeof window.showDaySelectionModal === "function") {
+				window.showDaySelectionModal();
 			}
 			closeMenu();
 		});
