@@ -397,6 +397,15 @@ const CAMP_AREAS = {
 			{x: 2636, y: 1334},
 		],
 	],
+	mini_moshers: [
+		[
+			{x: 770, y: 1098},
+			{x: 1088, y: 1058},
+			{x: 1098, y: 1118},
+			{x: 903, y: 1145},
+			{x: 904, y: 1102},
+		],
+	],
 };
 
 // Map ticket types to allowed areas
@@ -410,6 +419,7 @@ const TICKET_AREAS = {
 	ready_to_rock: ["ready_to_rock"],
 	campervan: ["campervan"],
 	campervan_plus: ["campervan_plus"],
+	mini_moshers: ["mini_moshers"],
 };
 
 const mapImage = document.getElementById("map-image");
@@ -478,6 +488,8 @@ function areaColor(area) {
 		case "quiet":
 			return "#818cf8";
 		case "plus":
+			return "#f472b6";
+		case "mini_moshers":
 			return "#f472b6";
 		default:
 			return "#fff";
