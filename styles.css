@@ -647,25 +647,7 @@
      TIMETABLE GENERATOR
      ============================================ */
 
-.timetable-capture-area {
-    position: absolute;
-    left: -9999px;
-    top: -9999px;
-    z-index: -1;
-    background-color: #000000;
-    background-image: url('assets/timetable_background2.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding: 0;
-    box-sizing: border-box;
-    color: #06b6d4;
-    overflow: hidden; /* Initial state, will be visible for measurement */
-
-    /* Define a BASE font size that will be scaled dynamically by JS */
-    font-size: 30px; /* This will be the base for all em units when no scale applied */
-    /* REMOVE any transform properties here */
-}
+/* REMOVED - See consolidated style at the bottom of the file */
 
 /* Add style for the top spacing element */
 .top-spacer {
@@ -1382,11 +1364,28 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 0;
+  padding: 20px;
   box-sizing: border-box;
   color: #06b6d4;
   overflow: hidden;
   font-size: 30px;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Ensure content within capture area is visible when the area is active */
+.timetable-capture-area * {
+  color: #06b6d4 !important;
+  visibility: inherit !important;
+}
+
+/* Make sure text content is properly styled */
+.timetable-capture-area .day-heading,
+.timetable-capture-area .stage-section h3,
+.timetable-capture-area .artist-entry {
+  color: #06b6d4 !important;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.7) !important;
 }
 
 /* ============================================
