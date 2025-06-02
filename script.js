@@ -39,9 +39,11 @@ import {
 	populateArenaStageDropdown,
 } from "./js/dropdowns.js";
 import {setupShareFavoritesButton, tryImportSharedFavorites} from "./js/ui.js";
+import {showDaySelectionModal} from "./js/timetable.js";
 
 // Export functions to window for backward compatibility with inline event handlers
 window.showDay = showDay;
+window.showDaySelectionModal = showDaySelectionModal;
 window.showDistrictXDay = showDistrictXDay;
 window.filterStage = filterStage;
 window.filterDistrictXStage = filterDistrictXStage;

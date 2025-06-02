@@ -1370,6 +1370,26 @@
 }
 
 /* ============================================
+   TIMETABLE WALLPAPER GENERATION
+   ============================================ */
+.timetable-capture-area {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  z-index: -999;
+  background-color: #000000;
+  background-image: url('assets/timetable_background2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 0;
+  box-sizing: border-box;
+  color: #06b6d4;
+  overflow: hidden;
+  font-size: 30px;
+}
+
+/* ============================================
    MENU ENHANCEMENTS FOR CONSISTENT WIDTH
    ============================================ */
 .menu-item span {

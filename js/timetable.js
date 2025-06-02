@@ -27,7 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
 function checkAndEnableDownloadButton(buttonId) {
     const btn = document.getElementById(buttonId);
     if (btn) {
-        if (window.state && window.state.data && Array.isArray(window.state.favoriteSets)) {
+        // Make sure we check if there are actually favorite sets selected
+        if (window.state && 
+            window.state.data && 
+            Array.isArray(window.state.favoriteSets) && 
+            window.state.favoriteSets.length > 0) {
             btn.disabled = false;
         } else {
             btn.disabled = true;
@@ -41,7 +45,7 @@ window.checkAndEnableDownloadButton = checkAndEnableDownloadButton;
 
 
 // --- Display Modal to select day ---
-window.showDaySelectionModal = function() {
+export function showDaySelectionModal() {
     if (
         !window.state ||
         !Array.isArray(window.state.favoriteSets) ||
@@ -259,11 +263,16 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
     // --- Insert HTML and Measure Content Size with BASE_ROOT_FONT_SIZE_PX ---
     timetableCaptureArea.innerHTML = htmlContent;
 
+    // Ensure the capture area is off-screen during all measurements
+    timetableCaptureArea.style.position = 'absolute';
+    timetableCaptureArea.style.left = '-9999px';
+    timetableCaptureArea.style.top = '-9999px';
     timetableCaptureArea.style.width = `${CONTENT_LAYOUT_WIDTH}px`;
     timetableCaptureArea.style.height = '';
     timetableCaptureArea.style.overflow = 'visible';
 
-    await new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 200)));
+    // Give the browser more time to render before measuring
+    await new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 300)));
 
     const contentHeightAtBaseFontSize = timetableCaptureArea.scrollHeight;
 
@@ -308,13 +317,14 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
     // --- Calculate Vertical Centering Offset ---
     const verticalOffset = (TARGET_PNG_HEIGHT - finalContentHeight) / 2;
 
-    // --- Apply final positioning ---
+    // --- Apply final positioning (still off-screen) ---
     timetableCaptureArea.style.position = 'absolute';
-    timetableCaptureArea.style.left = '0px';
-    timetableCaptureArea.style.top = `${verticalOffset}px`;
+    timetableCaptureArea.style.left = '-9999px';
+    timetableCaptureArea.style.top = `-9999px`;
 
 
     try {
+        console.log("Starting HTML to Canvas conversion...");
         const canvas = await html2canvas(timetableCaptureArea, {
             width: TARGET_PNG_WIDTH,
             height: TARGET_PNG_HEIGHT,
@@ -323,10 +333,21 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
             useCORS: true,
             backgroundColor: '#000000',
         });
+        console.log("Canvas generated successfully");
 
-        // --- Open Image in New Tab ---
+        // --- Create the image and download it ---
         const imgDataUrl = canvas.toDataURL('image/png');
-        window.open(imgDataUrl, '_blank');
+        
+        // Create a download link and trigger it
+        const downloadLink = document.createElement('a');
+        downloadLink.href = imgDataUrl;
+        downloadLink.download = `Download-Festival-${selectedDay || 'Schedule'}.png`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        console.log("Download initiated");
+        customAlert.alert("Your timetable wallpaper is downloading.");
 
     } catch (error) {
         console.error("Error generating timetable PNG:", error);
