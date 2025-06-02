@@ -34,6 +34,13 @@ export async function loadData() {
 			};
 		}
 
+		// Check for status of state.data before enabling timetable generation
+		if (typeof checkAndEnableDownloadButton === 'function') {
+            setTimeout(() => {
+                checkAndEnableDownloadButton('menu-timetable-generate');
+            }, 50); // Small delay to allow other DOM processing to finish
+        }
+
 		return state.data;
 	} catch (error) {
 		console.error("Error loading set times:", error);
