@@ -67,10 +67,54 @@ async function loadVendorData() {
 		const response = await fetch("vendors-data.json");
 		const data = await response.json();
 
-		// Flatten vendors by location into single array
-		state.vendors = Object.keys(data.vendors).reduce((acc, location) => {
-			return [...acc, ...data.vendors[location]];
-		}, []);
+		// Flatten vendors from zones into single array
+		state.vendors = [];
+		if (data.zones) {
+			Object.keys(data.zones).forEach((zoneName) => {
+				const zoneVendors = data.zones[zoneName].vendors || [];
+				// Map the new structure to the expected format
+				const mappedVendors = zoneVendors.map((vendor) => ({
+					...vendor,
+					location: zoneName.toLowerCase().replace(" ", ""), // Convert "District X" to "districtx"
+					zone: zoneName,
+					// Extract dietary options from tags
+					dietaryOptions: vendor.tags
+						? vendor.tags.filter((tag) =>
+								[
+									"Halal",
+									"Vegan",
+									"Vegetarian",
+									"GF_Free",
+									"Coeliac_friendly",
+								].includes(tag)
+						  )
+						: [],
+					// Set type based on tags or default to 'other'
+					type:
+						vendor.tags &&
+						vendor.tags.some((tag) =>
+							["Arena", "District X"].includes(tag)
+						)
+							? "food"
+							: "other",
+					// Add description placeholder
+					description: vendor.description || `Vendor in ${zoneName}`,
+					// Check if budget friendly
+					isCheap: vendor.tags
+						? vendor.tags.includes("Cheap")
+						: false,
+				}));
+				state.vendors.push(...mappedVendors);
+			});
+		} else {
+			// Fallback for old structure
+			state.vendors = Object.keys(data.vendors).reduce(
+				(acc, location) => {
+					return [...acc, ...data.vendors[location]];
+				},
+				[]
+			);
+		}
 
 		state.filteredVendors = [...state.vendors];
 	} catch (error) {
@@ -394,16 +438,24 @@ function createDietaryIconsHTML(dietaryOptions) {
 function formatDietaryOption(option) {
 	switch (option) {
 		case "vegetarian":
+		case "Vegetarian":
 			return "Vegetarian";
 		case "vegan":
+		case "Vegan":
 			return "Vegan";
 		case "glutenfree":
+		case "GF_Free":
 			return "Gluten-Free";
+		case "Coeliac_friendly":
+			return "Coeliac Friendly";
 		case "dairyfree":
 			return "Dairy-Free";
 		case "nutfree":
 			return "Nut-Free";
+		case "Halal":
+			return "Halal";
 		default:
+			return option;
 			return option;
 	}
 }
@@ -414,9 +466,14 @@ function formatDietaryOption(option) {
 function formatLocation(location) {
 	switch (location) {
 		case "arena":
+		case "Arena":
 			return "Arena";
-		case "districtX":
+		case "districtx":
+		case "District X":
 			return "District X";
+		case "other":
+		case "Other":
+			return "Other Areas";
 		case "village":
 			return "Village";
 		case "campsite":
