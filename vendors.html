@@ -6,6 +6,7 @@
 		<title>Download Vendors</title>
 		<script src="https://cdn.tailwindcss.com"></script>
 		<link rel="stylesheet" href="styles.css" />
+		<script type="module" src="js/navigation.js"></script>
 		<script type="module" src="js/menu.js"></script>
 		<script type="module" src="js/countdown.js"></script>
 		<style>
@@ -84,7 +85,7 @@
 				width: 250px;
 				height: 250px;
 				border-radius: 50%;
-				background: linear-gradient(135deg, #111 0%, #222 100%);
+				/* background: linear-gradient(135deg, #111 0%, #222 100%); */
 				box-shadow: 0 0 30px #00ffc3, 0 0 60px #00ffc3,
 					inset 0 0 20px rgba(0, 255, 195, 0.1);
 				display: flex;
@@ -106,52 +107,49 @@
 				outline: none;
 				border: none;
 			}
-			}
 
-			/* Arena specific styling - Based on main stage structure */
+			/* Arena specific styling - Background image with overlay */
 			.zone-bubble.arena {
 				background: linear-gradient(
 						135deg,
-						rgba(17, 17, 17, 0.9) 0%,
-						rgba(34, 34, 34, 0.9) 100%
+						rgba(35, 191, 207, 0.1) 0%,
+						rgba(0, 0, 0, 0.2) 50%,
+						rgba(35, 191, 207, 0.1) 100%
 					),
-					url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="stage" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23444;stop-opacity:1" /><stop offset="100%" style="stop-color:%23222;stop-opacity:1" /></linearGradient><linearGradient id="truss" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:%23666;stop-opacity:1" /><stop offset="50%" style="stop-color:%23888;stop-opacity:1" /><stop offset="100%" style="stop-color:%23666;stop-opacity:1" /></linearGradient><linearGradient id="led" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%2300ffc3;stop-opacity:0.8" /><stop offset="100%" style="stop-color:%2300ffff;stop-opacity:0.6" /></linearGradient></defs><rect x="15" y="130" width="170" height="50" fill="url(%23stage)" rx="8" stroke="%23666" stroke-width="1"/><rect x="25" y="140" width="150" height="30" fill="%23333" rx="4"/><polygon points="30,130 50,20 150,20 170,130" fill="url(%23truss)" stroke="%23777" stroke-width="1" opacity="0.9"/><rect x="35" y="25" width="6" height="105" fill="%23777"/><rect x="50" y="22" width="6" height="108" fill="%23777"/><rect x="65" y="20" width="6" height="110" fill="%23777"/><rect x="80" y="18" width="6" height="112" fill="%23777"/><rect x="95" y="16" width="6" height="114" fill="%23777"/><rect x="110" y="18" width="6" height="112" fill="%23777"/><rect x="125" y="20" width="6" height="110" fill="%23777"/><rect x="140" y="22" width="6" height="108" fill="%23777"/><rect x="155" y="25" width="6" height="105" fill="%23777"/><rect x="45" y="16" width="110" height="8" fill="%23555" rx="2"/><rect x="50" y="145" width="100" height="20" fill="%23222" rx="3"/><circle cx="65" cy="155" r="4" fill="url(%23led)"/><circle cx="85" cy="155" r="4" fill="url(%23led)"/><circle cx="105" cy="155" r="4" fill="url(%23led)"/><circle cx="125" cy="155" r="4" fill="url(%23led)"/><circle cx="145" cy="155" r="4" fill="url(%23led)"/><rect x="70" y="30" width="60" height="4" fill="%23999" opacity="0.7"/><rect x="70" y="40" width="60" height="4" fill="%23999" opacity="0.7"/><rect x="70" y="50" width="60" height="4" fill="%23999" opacity="0.7"/></svg>')
-						center/contain no-repeat;
+					url("assets/apex.jpg") center/cover no-repeat;
 			}
 
 			/* District X specific styling - Based on angular lettering design */
 			.zone-bubble.districtx {
 				background: linear-gradient(
 						135deg,
-						rgba(17, 17, 17, 0.9) 0%,
-						rgba(34, 34, 34, 0.9) 100%
+						rgba(0, 0, 0, 0.3) 0%,
+						rgba(20, 20, 20, 0.3) 50%,
+						rgba(0, 0, 0, 0.3) 100%
 					),
-					url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="xgrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23ff6b6b;stop-opacity:0.9" /><stop offset="50%" style="stop-color:%23ff8e53;stop-opacity:0.7" /><stop offset="100%" style="stop-color:%23ffaa00;stop-opacity:0.9" /></linearGradient><linearGradient id="metallic" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23666;stop-opacity:1" /><stop offset="50%" style="stop-color:%23999;stop-opacity:1" /><stop offset="100%" style="stop-color:%23444;stop-opacity:1" /></linearGradient></defs><polygon points="40,40 80,20 120,20 160,40 140,80 160,120 160,160 120,180 80,180 40,160 40,120 60,80" fill="url(%23metallic)" stroke="%23888" stroke-width="2"/><polygon points="50,50 90,30 110,30 150,50 130,90 150,130 150,150 110,170 90,170 50,150 50,130 70,90" fill="url(%23xgrad)" stroke="%23ff6b6b" stroke-width="1.5"/><polygon points="70,60 85,45 100,60 115,45 130,60 115,75 100,60 85,75" fill="%23333" opacity="0.8" stroke="%23555" stroke-width="1"/><polygon points="70,140 85,155 100,140 115,155 130,140 115,125 100,140 85,125" fill="%23333" opacity="0.8" stroke="%23555" stroke-width="1"/><rect x="85" y="85" width="30" height="30" fill="%23222" rx="4" stroke="%23444" stroke-width="1"/><polygon points="92,92 100,85 108,92 100,100" fill="%23ff6b6b" stroke="%23ff4444" stroke-width="0.5"/><polygon points="92,108 100,115 108,108 100,100" fill="%23ff6b6b" stroke="%23ff4444" stroke-width="0.5"/><rect x="95" y="95" width="10" height="3" fill="%23ffaa00" opacity="0.6"/><rect x="95" y="102" width="10" height="3" fill="%23ffaa00" opacity="0.6"/></svg>')
-						center/contain no-repeat;
+					url("assets/districtx.jpg") center/cover no-repeat;
 			}
 
-			/* RIP specific styling - Black theme with logo */
+			/* RIP specific styling - Black theme with background image */
 			.zone-bubble.rip {
 				background: linear-gradient(
 						135deg,
-						rgba(0, 0, 0, 0.95) 0%,
-						rgba(20, 20, 20, 0.95) 50%,
-						rgba(0, 0, 0, 0.95) 100%
+						rgba(0, 0, 0, 0.3) 0%,
+						rgba(20, 20, 20, 0.3) 50%,
+						rgba(0, 0, 0, 0.3) 100%
 					),
-					url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPCEtLSBSZWQgYmFja2dyb3VuZCBjaXJjbGUgLS0+CiAgPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI5MCIgZmlsbD0iI2ZmMDAwMCIgc3Ryb2tlPSIjZGQwMDAwIiBzdHJva2Utd2lkdGg9IjQiLz4KICA8IS0tIFdoaXRlIHNrdWxsIC0tPgogIDxyZWN0IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSI4MCIgZmlsbD0iI2ZmZmZmZiIgcng9IjEwIi8+CiAgPCEtLSBFeWUgc29ja2V0cyAtLT4KICA8Y2lyY2xlIGN4PSI3NSIgY3k9IjgwIiByPSIxMiIgZmlsbD0iIzAwMDAwMCIvPgogIDxjaXJjbGUgY3g9IjEyNSIgY3k9IjgwIiByPSIxMiIgZmlsbD0iIzAwMDAwMCIvPgogIDwhLS0gTm9zZSBob2xlIC0tPgogIDxwb2x5Z29uIHBvaW50cz0iMTAwLDkwIDEwNSwxMTAgOTUsMTEwIiBmaWxsPSIjMDAwMDAwIi8+CiAgPCEtLSBNb3V0aC9UZWV0aCAtLT4KICA8cmVjdCB4PSI4MCIgeT0iMTE1IiB3aWR0aD0iNDAiIGhlaWdodD0iMTAiIGZpbGw9IiMwMDAwMDAiLz4KICA8cmVjdCB4PSI4NSIgeT0iMTE1IiB3aWR0aD0iNSIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgPHJlY3QgeD0iOTUiIHk9IjExNSIgd2lkdGg9IjUiIGhlaWdodD0iOCIgZmlsbD0iI2ZmZmZmZiIvPgogIDxyZWN0IHg9IjEwNSIgeT0iMTE1IiB3aWR0aD0iNSIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgPHJlY3QgeD0iMTE1IiB5PSIxMTUiIHdpZHRoPSI1IiBoZWlnaHQ9IjgiIGZpbGw9IiNmZmZmZmYiLz4KICA8IS0tIFJJUCB0ZXh0IC0tPgogIDx0ZXh0IHg9IjEwMCIgeT0iMTYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmZmZmIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSJib2xkIj5SSVAgPC90ZXh0Pgo8L3N2Zz4K')
-						center/contain no-repeat;
+					url("assets/rip-logo.png") center/cover no-repeat;
 			}
 
 			/* Plus specific styling - White theme with + symbol */
 			.zone-bubble.plus {
 				background: linear-gradient(
 						135deg,
-						rgba(255, 255, 255, 0.95) 0%,
-						rgba(245, 245, 245, 0.95) 50%,
-						rgba(255, 255, 255, 0.95) 100%
+						rgba(0, 0, 0, 0.3) 0%,
+						rgba(20, 20, 20, 0.3) 50%,
+						rgba(0, 0, 0, 0.3) 100%
 					),
-					url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHg9IjQwIiB5PSIyMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMDAwMDAwIiByeD0iMyIvPgo8cmVjdCB4PSIyMCIgeT0iNDAiIHdpZHRoPSI2MCIgaGVpZ2h0PSIyMCIgZmlsbD0iIzAwMDAwMCIgcng9IjMiLz4KPC9zdmc+Cg==')
-						center/contain no-repeat;
+					url("assets/plus.jpg") center/cover no-repeat;
 			}
 
 			.zone-text {
@@ -172,21 +170,21 @@
 			}
 
 			.zone-bubble.arena .zone-text {
-				border-color: rgba(0, 255, 195, 0.6);
-				color: #00ffc3;
-				text-shadow: 0 0 10px rgba(0, 255, 195, 0.5);
+				border-color: rgba(35, 191, 207, 0.6);
+				color: #23BFCF;
+				text-shadow: 0 0 10px rgba(35, 191, 207, 0.5);
 			}
 
 			.zone-bubble.districtx .zone-text {
-				border-color: rgba(255, 107, 107, 0.6);
-				color: #ff6b6b;
-				text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+				border-color: rgba(74, 144, 255, 0.6);
+				color: #4a90ff;
+				text-shadow: 0 0 10px rgba(74, 144, 255, 0.5);
 			}
 
 			.zone-bubble.rip .zone-text {
-				border-color: rgba(255, 255, 255, 0.6);
-				color: #ffffff;
-				text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+				border-color: rgba(255, 0, 0, 0.6);
+				color: #ff0000;
+				text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
 				background: rgba(0, 0, 0, 0.8);
 			}
 
@@ -204,18 +202,23 @@
 				left: -50%;
 				width: 200%;
 				height: 200%;
-				background: linear-gradient(
-					45deg,
-					transparent,
-					rgba(0, 255, 195, 0.1),
-					transparent
-				);
-				transform: rotate(0deg);
-				transition: transform 0.6s ease;
+				background: transparent;
+				border-radius: 50%;
+				transform: rotate(0deg) scale(0);
+				transition: all 0.6s ease;
+				will-change: transform;
+				backface-visibility: hidden;
+				opacity: 0;
 			}
 
 			.zone-bubble:hover::before {
-				transform: rotate(180deg);
+				transform: rotate(180deg) scale(1);
+				opacity: 0.1;
+				background: radial-gradient(
+					circle,
+					rgba(255, 255, 255, 0.1) 0%,
+					transparent 70%
+				);
 			}
 
 			.zone-bubble:hover {
@@ -233,28 +236,28 @@
 			}
 
 			.zone-bubble.arena:hover {
-				box-shadow: 0 0 50px #00ffc3, 0 0 100px #00ffc3,
-					inset 0 0 30px rgba(0, 255, 195, 0.3),
-					0 20px 40px rgba(0, 0, 0, 0.4);
+				box-shadow: 0 0 50px #23BFCF, 0 0 100px #23BFCF,
+					inset 0 0 30px rgba(35, 191, 207, 0.3),
+					0 20px 40px rgba(0, 0, 0, 0.4) !important;
 			}
 
 			.zone-bubble.arena:focus {
 				outline: none;
-				box-shadow: 0 0 50px #00ffc3, 0 0 100px #00ffc3,
-					inset 0 0 30px rgba(0, 255, 195, 0.3),
-					0 20px 40px rgba(0, 0, 0, 0.4);
+				box-shadow: 0 0 50px #23BFCF, 0 0 100px #23BFCF,
+					inset 0 0 30px rgba(35, 191, 207, 0.3),
+					0 20px 40px rgba(0, 0, 0, 0.4) !important;
 			}
 
 			.zone-bubble.districtx:hover {
-				box-shadow: 0 0 50px #ff6b6b, 0 0 100px #ff6b6b,
-					inset 0 0 30px rgba(255, 107, 107, 0.3),
+				box-shadow: 0 0 50px #4a90ff, 0 0 100px #4a90ff,
+					inset 0 0 30px rgba(74, 144, 255, 0.3),
 					0 20px 40px rgba(0, 0, 0, 0.4);
 			}
 
 			.zone-bubble.districtx:focus {
 				outline: none;
-				box-shadow: 0 0 50px #ff6b6b, 0 0 100px #ff6b6b,
-					inset 0 0 30px rgba(255, 107, 107, 0.3),
+				box-shadow: 0 0 50px #4a90ff, 0 0 100px #4a90ff,
+					inset 0 0 30px rgba(74, 144, 255, 0.3),
 					0 20px 40px rgba(0, 0, 0, 0.4);
 			}
 
@@ -267,41 +270,41 @@
 			}
 
 			.zone-bubble.arena:hover .zone-text {
-				border-color: rgba(0, 255, 195, 0.8);
-				text-shadow: 0 0 15px rgba(0, 255, 195, 0.8);
+				border-color: rgba(35, 191, 207, 0.8) !important;
+				text-shadow: 0 0 15px rgba(35, 191, 207, 0.8) !important;
 			}
 
 			.zone-bubble.districtx:hover .zone-text {
-				border-color: rgba(255, 107, 107, 0.8);
-				text-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+				border-color: rgba(74, 144, 255, 0.8);
+				text-shadow: 0 0 15px rgba(74, 144, 255, 0.8);
 			}
 
 			@keyframes pulseGlow {
 				0%,
 				100% {
-					box-shadow: 0 0 30px #00ffc3, 0 0 60px #00ffc3,
-						inset 0 0 20px rgba(0, 255, 195, 0.1);
+					box-shadow: 0 0 30px #23BFCF, 0 0 60px #23BFCF,
+						inset 0 0 20px rgba(35, 191, 207, 0.1);
 				}
 				50% {
-					box-shadow: 0 0 50px #00ffc3, 0 0 100px #00ffc3,
-						inset 0 0 30px rgba(0, 255, 195, 0.2);
+					box-shadow: 0 0 50px #23BFCF, 0 0 100px #23BFCF,
+						inset 0 0 30px rgba(35, 191, 207, 0.2);
 				}
 			}
 
 			@keyframes pulseGlowDistrict {
 				0%,
 				100% {
-					box-shadow: 0 0 30px #ff6b6b, 0 0 60px #ff6b6b,
-						inset 0 0 20px rgba(255, 107, 107, 0.1);
+					box-shadow: 0 0 30px #4a90ff, 0 0 60px #4a90ff,
+						inset 0 0 20px rgba(74, 144, 255, 0.1);
 				}
 				50% {
-					box-shadow: 0 0 50px #ff6b6b, 0 0 100px #ff6b6b,
-						inset 0 0 30px rgba(255, 107, 107, 0.2);
+					box-shadow: 0 0 50px #4a90ff, 0 0 100px #4a90ff,
+						inset 0 0 30px rgba(74, 144, 255, 0.2);
 				}
 			}
 
 			.zone-bubble.arena {
-				animation: pulseGlow 3s infinite ease-in-out;
+				animation: pulseGlow 3s infinite ease-in-out !important;
 			}
 
 			.zone-bubble.districtx {
@@ -310,43 +313,48 @@
 
 			.zone-bubble.rip {
 				animation: pulseGlowRIP 3s infinite ease-in-out;
-				background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
 			}
 
 			.zone-bubble.rip:hover {
-				box-shadow: 0 0 50px #ffffff, 0 0 100px #ffffff,
-					inset 0 0 30px rgba(255, 255, 255, 0.3),
+				box-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000,
+					inset 0 0 30px rgba(255, 0, 0, 0.3),
 					0 20px 40px rgba(0, 0, 0, 0.4);
 			}
 
 			.zone-bubble.rip:focus {
 				outline: none;
+				box-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000,
+					inset 0 0 30px rgba(255, 0, 0, 0.3),
+					0 20px 40px rgba(0, 0, 0, 0.4);
+			}
+
+			.zone-bubble.rip:hover .zone-text {
+				border-color: rgba(255, 0, 0, 0.8);
+				text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+			}
+
+			.zone-bubble.plus {
+				animation: pulseGlowPlus 3s infinite ease-in-out;
+			}
+
+			.zone-bubble.plus:hover {
 				box-shadow: 0 0 50px #ffffff, 0 0 100px #ffffff,
 					inset 0 0 30px rgba(255, 255, 255, 0.3),
 					0 20px 40px rgba(0, 0, 0, 0.4);
 			}
 
-			.zone-bubble.rip:hover .zone-text {
-				border-color: rgba(255, 255, 255, 0.8);
-				text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-			}
-
-			.zone-bubble.plus {
-				animation: pulseGlowPlus 3s infinite ease-in-out;
-				background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #ffffff 100%);
-			}
-
-			.zone-bubble.plus:hover {
-				box-shadow: 0 0 50px #000000, 0 0 100px #000000,
-					inset 0 0 30px rgba(0, 0, 0, 0.2),
-					0 20px 40px rgba(0, 0, 0, 0.4);
-			}
-
 			.zone-bubble.plus:focus {
 				outline: none;
-				box-shadow: 0 0 50px #000000, 0 0 100px #000000,
-					inset 0 0 30px rgba(0, 0, 0, 0.2),
+				box-shadow: 0 0 50px #ffffff, 0 0 100px #ffffff,
+					inset 0 0 30px rgba(255, 255, 255, 0.3),
 					0 20px 40px rgba(0, 0, 0, 0.4);
+			}
+
+			.zone-bubble.plus:hover .zone-text {
+				border-color: rgba(255, 255, 255, 0.8);
+				color: #ffffff;
+				text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+				background: rgba(0, 0, 0, 0.8);
 			}
 
 			.zone-bubble.plus:focus .zone-text {
@@ -354,6 +362,7 @@
 				color: #ffffff;
 				text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
 				background: rgba(0, 0, 0, 0.8);
+			}
 			}
 
 			.zone-bubble.plus:hover .zone-text {
@@ -366,24 +375,24 @@
 			@keyframes pulseGlowRIP {
 				0%,
 				100% {
-					box-shadow: 0 0 30px #ffffff, 0 0 60px #ffffff,
-						inset 0 0 20px rgba(255, 255, 255, 0.1);
+					box-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000,
+						inset 0 0 20px rgba(255, 0, 0, 0.1);
 				}
 				50% {
-					box-shadow: 0 0 50px #ffffff, 0 0 100px #ffffff,
-						inset 0 0 30px rgba(255, 255, 255, 0.2);
+					box-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000,
+						inset 0 0 30px rgba(255, 0, 0, 0.2);
 				}
 			}
 
 			@keyframes pulseGlowPlus {
 				0%,
 				100% {
-					box-shadow: 0 0 30px #000000, 0 0 60px #000000,
-						inset 0 0 20px rgba(0, 0, 0, 0.1);
+					box-shadow: 0 0 30px #ffffff, 0 0 60px #ffffff,
+						inset 0 0 20px rgba(255, 255, 255, 0.1);
 				}
 				50% {
-					box-shadow: 0 0 50px #000000, 0 0 100px #000000,
-						inset 0 0 30px rgba(0, 0, 0, 0.2);
+					box-shadow: 0 0 50px #ffffff, 0 0 100px #ffffff,
+						inset 0 0 30px rgba(255, 255, 255, 0.2);
 				}
 			}
 
@@ -483,7 +492,7 @@
 			.back-button {
 				position: fixed;
 				top: 120px;
-				left: 30px;
+				left: 50px;
 				padding: 15px 25px;
 				border-radius: 25px;
 				background: linear-gradient(
@@ -761,7 +770,6 @@
 				left: 0;
 				width: 100vw;
 				height: 100vh;
-				background: rgba(0, 0, 0, 0.8);
 				backdrop-filter: blur(5px);
 				z-index: 99;
 				opacity: 0;
@@ -776,9 +784,116 @@
 
 			/* Responsive */
 			@media (max-width: 768px) {
+				body {
+					padding: 8px;
+				}
+
+				.content-container {
+					top: 120px;
+					height: calc(100vh - 120px);
+					padding: 10px;
+				}
+
 				.zone-selector {
 					gap: 1.5rem;
-					max-width: 350px;
+					max-width: 100%;
+					padding: 0 10px;
+				}
+
+				.zone-bubble {
+					width: 140px;
+					height: 140px;
+					font-size: 1rem;
+					/* Ensure minimum touch target size */
+					min-width: 44px;
+					min-height: 44px;
+				}
+
+				.zone-text {
+					padding: 12px 20px;
+					font-size: 1rem;
+					letter-spacing: 1px;
+				}
+
+				.category-bubble {
+					width: 120px;
+					height: 120px;
+					font-size: 0.85rem;
+					/* Ensure minimum touch target size */
+					min-width: 44px;
+					min-height: 44px;
+				}
+
+				.category-bubble .icon {
+					font-size: 1.8rem;
+					margin-bottom: 0.4rem;
+				}
+
+				.vendor-bubble {
+					width: 90px;
+					height: 90px;
+					font-size: 0.65rem;
+					padding: 8px;
+					/* Ensure minimum touch target size */
+					min-width: 44px;
+					min-height: 44px;
+				}
+
+				.vendor-grid {
+					max-width: 95vw;
+					max-height: 65vh;
+					padding: 15px;
+					gap: 1.2rem;
+				}
+
+				.back-button {
+					top: 90px;
+					left: 20px;
+					padding: 12px 20px;
+					font-size: 1rem;
+					/* Ensure minimum touch target size */
+					min-width: 44px;
+					min-height: 44px;
+				}
+
+				.popup {
+					width: 95vw;
+					max-width: none;
+					max-height: calc(100vh - 40px);
+					padding: 1.5rem;
+					margin: 10px;
+					border-radius: 15px;
+				}
+
+				.popup-image {
+					height: 150px;
+					margin-bottom: 1rem;
+				}
+
+				.popup h3 {
+					font-size: 1.2rem;
+				}
+
+				.popup-close {
+					font-size: 1.6rem;
+					width: 35px;
+					height: 35px;
+					/* Ensure minimum touch target size */
+					min-width: 44px;
+					min-height: 44px;
+				}
+			}
+
+			@media (max-width: 640px) {
+				.content-container {
+					top: 100px;
+					height: calc(100vh - 100px);
+				}
+
+				.zone-selector {
+					gap: 1rem;
+					flex-direction: column;
+					align-items: center;
 				}
 
 				.zone-bubble {
@@ -787,38 +902,55 @@
 					font-size: 0.9rem;
 				}
 
+				.zone-text {
+					padding: 10px 16px;
+					font-size: 0.9rem;
+					letter-spacing: 1px;
+				}
+
+				.category-selector {
+					gap: 1.5rem;
+					max-width: 100%;
+				}
+
 				.category-bubble {
 					width: 100px;
 					height: 100px;
 					font-size: 0.8rem;
 				}
 
+				.category-bubble .icon {
+					font-size: 1.6rem;
+				}
+
 				.vendor-bubble {
 					width: 80px;
 					height: 80px;
 					font-size: 0.6rem;
+					padding: 6px;
 				}
 
-				.popup {
-					width: 95vw;
-					max-width: none;
-					max-height: calc(100vh - 20px);
-					padding: 1.5rem;
-					margin: 0;
-					position: fixed;
-					top: 50%;
-					left: 50%;
-					transform: translate(-50%, -50%) scale(0);
-				}
-
-				.popup.show {
-					transform: translate(-50%, -50%) scale(1);
+				.back-button {
+					top: 80px;
+					left: 15px;
+					padding: 10px 16px;
+					font-size: 0.9rem;
 				}
 			}
 
 			@media (max-width: 480px) {
+				body {
+					padding: 4px;
+				}
+
+				.content-container {
+					top: 90px;
+					height: calc(100vh - 90px);
+					padding: 5px;
+				}
+
 				.zone-selector {
-					gap: 1rem;
+					gap: 0.8rem;
 					max-width: 280px;
 				}
 
@@ -829,124 +961,178 @@
 				}
 
 				.zone-text {
-					padding: 0.3rem 0.6rem;
-					font-size: 0.75rem;
+					padding: 8px 12px;
+					font-size: 0.8rem;
+					letter-spacing: 0.5px;
+				}
+
+				.category-selector {
+					gap: 1rem;
+				}
+
+				.category-bubble {
+					width: 80px;
+					height: 80px;
+					font-size: 0.7rem;
+				}
+
+				.category-bubble .icon {
+					font-size: 1.4rem;
+					margin-bottom: 0.3rem;
+				}
+
+				.vendor-bubble {
+					width: 70px;
+					height: 70px;
+					font-size: 0.55rem;
+					padding: 4px;
+				}
+
+				.vendor-grid {
+					gap: 1rem;
+					padding: 10px;
+					max-height: 60vh;
+				}
+
+				.back-button {
+					top: 70px;
+					left: 10px;
+					padding: 8px 12px;
+					font-size: 0.8rem;
+				}
+
+				.popup {
+					padding: 1rem;
+					margin: 5px;
+				}
+
+				.popup-image {
+					height: 120px;
+				}
+
+				.popup h3 {
+					font-size: 1.1rem;
+				}
+
+				.menu-item {
+					padding: 0.8rem;
+				}
+
+				.detail-item {
+					padding: 0.4rem;
+					gap: 0.6rem;
+				}
+			}
+
+			/* Landscape mobile optimizations */
+			@media (max-width: 768px) and (orientation: landscape) {
+				.content-container {
+					top: 70px;
+					height: calc(100vh - 70px);
+				}
+
+				.zone-selector {
+					flex-direction: row;
+					gap: 1rem;
+				}
+
+				.zone-bubble {
+					width: 100px;
+					height: 100px;
+				}
+
+				.category-selector {
+					gap: 1rem;
+				}
+
+				.category-bubble {
+					width: 80px;
+					height: 80px;
+				}
+
+				.vendor-grid {
+					max-height: 55vh;
+				}
+
+				.back-button {
+					top: 50px;
+				}
+			}
+
+			/* Touch device optimizations */
+			@media (hover: none) and (pointer: coarse) {
+				.zone-bubble:hover,
+				.category-bubble:hover,
+				.vendor-bubble:hover,
+				.back-button:hover,
+				.popup-close:hover {
+					/* Remove hover effects on touch devices */
+					transform: none;
+					box-shadow: inherit;
+				}
+
+				.zone-bubble:active,
+				.category-bubble:active,
+				.vendor-bubble:active {
+					transform: scale(0.95);
+					transition: transform 0.1s ease;
+				}
+
+				.back-button:active,
+				.popup-close:active {
+					transform: scale(0.95);
+					transition: transform 0.1s ease;
+				}
+
+				/* Better touch targets */
+				.zone-bubble,
+				.category-bubble,
+				.vendor-bubble,
+				.back-button,
+				.popup-close {
+					min-width: 44px;
+					min-height: 44px;
+				}
+			}
+
+			/* Very small screens */
+			@media (max-width: 360px) {
+				.zone-selector {
+					gap: 0.6rem;
+				}
+
+				.zone-bubble {
+					width: 90px;
+					height: 90px;
+					font-size: 0.7rem;
+				}
+
+				.zone-text {
+					padding: 6px 10px;
+					font-size: 0.7rem;
+				}
+
+				.category-bubble {
+					width: 70px;
+					height: 70px;
+					font-size: 0.65rem;
+				}
+
+				.vendor-bubble {
+					width: 60px;
+					height: 60px;
+					font-size: 0.5rem;
+				}
+
+				.popup {
+					padding: 0.8rem;
 				}
 			}
 		</style>
 	</head>
-	<body class="bg-black text-white p-4 vendors-page">
-		<header
-			class="flex flex-wrap items-center justify-between gap-2 mb-4 sm:mb-6 header-flex"
-		>
-			<div class="flex items-center gap-2 sm:gap-3 header-logo">
-				<img
-					src="assets/downloadlogo.svg"
-					alt="Download Festival"
-					class="h-8 sm:h-12"
-				/>
-				<h1 class="text-xl sm:text-2xl font-bold">Vendors</h1>
-			</div>
-
-			<div class="timer-container">
-				<div class="timer-unit">
-					<div class="timer-number" id="days">00</div>
-					<div class="timer-label">DAYS</div>
-				</div>
-				<div class="timer-unit">
-					<div class="timer-number" id="hours">00</div>
-					<div class="timer-label">HRS</div>
-				</div>
-				<div class="timer-unit">
-					<div class="timer-number" id="minutes">00</div>
-					<div class="timer-label">MINS</div>
-				</div>
-			</div>
-
-			<!-- Menu Button -->
-			<button
-				id="menu-toggle-btn"
-				class="bg-cyan-700 hover:bg-cyan-600 text-white py-1 sm:py-2 px-2 sm:px-4 rounded text-sm sm:text-base flex items-center"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-6 w-6"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M4 6h16M4 12h16M4 18h16"
-					/>
-				</svg>
-				<span class="hidden xs:inline ml-2">Menu</span>
-			</button>
-		</header>
-
-		<!-- Side Menu Overlay -->
-		<div class="menu-overlay" id="menu-overlay"></div>
-
-		<!-- Side Menu -->
-		<div class="side-menu" id="side-menu">
-			<div class="p-4 border-b border-gray-700">
-				<div class="flex justify-between items-center">
-					<h2 class="text-lg font-bold text-cyan-400">
-						Download Festival
-					</h2>
-					<button
-						class="menu-close-btn text-gray-400 hover:text-white"
-						id="menu-close-btn"
-					>
-						&times;
-					</button>
-				</div>
-			</div>
-
-			<nav class="mt-4">
-				<a href="index.html" class="menu-item" id="menu-item-timetable">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 text-cyan-400"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-						/>
-					</svg>
-					<span>Schedule</span>
-				</a>
-
-				<a
-					href="vendors.html"
-					class="menu-item active"
-					id="menu-item-food"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 text-cyan-400"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-						/>
-					</svg>
-					Vendors</a
-				>
-			</nav>
-		</div>
+	<body class="bg-black text-white p-2 sm:p-4 vendors-page">
+		<!-- Navigation Component Placeholder -->
+		<div id="navigation-placeholder"></div>
 
 		<!-- Floating particles background -->
 		<div class="particles" id="particles"></div>
@@ -1254,17 +1440,46 @@
 					if (vendor.tags) {
 						vendor.tags.forEach((tag) => {
 							// Convert tags to categories for filtering
-							if (
-								[
-									"Halal",
-									"Vegan",
-									"Vegetarian",
-									"GF_Free",
-									"Coeliac_friendly",
-									"Cheap",
-								].includes(tag)
-							) {
-								categories.add(tag);
+							if (currentType === "Drinks") {
+								// For drinks, categorize by beverage type based on vendor names
+								const name = vendor.name.toUpperCase();
+								if (
+									name.includes("BAR") &&
+									!name.includes("COFFEE")
+								) {
+									categories.add("Bar");
+								} else if (name.includes("BEER")) {
+									categories.add("Beer");
+								} else if (name.includes("COFFEE")) {
+									categories.add("Coffee");
+								} else if (name.includes("COCKTAIL")) {
+									categories.add("Cocktails");
+								} else if (name.includes("SPIRIT")) {
+									categories.add("Spirits");
+								} else if (
+									name.includes("JUICE") ||
+									name.includes("SMOOTHIE")
+								) {
+									categories.add("Juice & Smoothies");
+								} else if (name.includes("SOFT DRINKS")) {
+									categories.add("Soft Drinks");
+								} else {
+									categories.add("Other Drinks");
+								}
+							} else {
+								// For food and other types, use dietary filters
+								if (
+									[
+										"Halal",
+										"Vegan",
+										"Vegetarian",
+										"GF_Free",
+										"Coeliac_friendly",
+										"Cheap",
+									].includes(tag)
+								) {
+									categories.add(tag);
+								}
 							}
 						});
 					}
@@ -1285,6 +1500,7 @@
 						case "All":
 							categoryInfo = {icon: "🎪", name: "All Vendors"};
 							break;
+						// Food dietary categories
 						case "Halal":
 							categoryInfo = {icon: "🕌", name: "Halal"};
 							break;
@@ -1308,6 +1524,34 @@
 								icon: "💰",
 								name: "Budget Friendly",
 							};
+							break;
+						// Drink categories
+						case "Bar":
+							categoryInfo = {icon: "🍺", name: "Bars"};
+							break;
+						case "Beer":
+							categoryInfo = {icon: "🍻", name: "Beer"};
+							break;
+						case "Coffee":
+							categoryInfo = {icon: "☕", name: "Coffee"};
+							break;
+						case "Cocktails":
+							categoryInfo = {icon: "🍸", name: "Cocktails"};
+							break;
+						case "Spirits":
+							categoryInfo = {icon: "🥃", name: "Spirits"};
+							break;
+						case "Juice & Smoothies":
+							categoryInfo = {
+								icon: "🧃",
+								name: "Juice & Smoothies",
+							};
+							break;
+						case "Soft Drinks":
+							categoryInfo = {icon: "🥤", name: "Soft Drinks"};
+							break;
+						case "Other Drinks":
+							categoryInfo = {icon: "🍹", name: "Other Drinks"};
 							break;
 					}
 
@@ -1364,7 +1608,48 @@
 				let filteredVendors;
 				if (currentCategory === "All") {
 					filteredVendors = typeFilteredVendors;
+				} else if (currentType === "Drinks") {
+					// For drinks, filter by beverage type based on vendor names
+					filteredVendors = typeFilteredVendors.filter((vendor) => {
+						const name = vendor.name.toUpperCase();
+						switch (currentCategory) {
+							case "Bar":
+								return (
+									name.includes("BAR") &&
+									!name.includes("COFFEE")
+								);
+							case "Beer":
+								return name.includes("BEER");
+							case "Coffee":
+								return name.includes("COFFEE");
+							case "Cocktails":
+								return name.includes("COCKTAIL");
+							case "Spirits":
+								return name.includes("SPIRIT");
+							case "Juice & Smoothies":
+								return (
+									name.includes("JUICE") ||
+									name.includes("SMOOTHIE")
+								);
+							case "Soft Drinks":
+								return name.includes("SOFT DRINKS");
+							case "Other Drinks":
+								return (
+									!name.includes("BAR") &&
+									!name.includes("BEER") &&
+									!name.includes("COFFEE") &&
+									!name.includes("COCKTAIL") &&
+									!name.includes("SPIRIT") &&
+									!name.includes("JUICE") &&
+									!name.includes("SMOOTHIE") &&
+									!name.includes("SOFT DRINKS")
+								);
+							default:
+								return true;
+						}
+					});
 				} else {
+					// For food and other types, filter by tag
 					filteredVendors = typeFilteredVendors.filter(
 						(vendor) =>
 							vendor.tags && vendor.tags.includes(currentCategory)
@@ -1546,6 +1831,18 @@
 			document
 				.getElementById("popupOverlay")
 				.addEventListener("click", closePopup);
+		</script>
+
+		<!-- Initialize Navigation Component -->
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				// Initialize the navigation component for vendors page
+				import("./js/navigation.js").then((module) => {
+					const NavigationComponent = module.default;
+					const navigationComponent = new NavigationComponent();
+					navigationComponent.init("#navigation-placeholder");
+				});
+			});
 		</script>
 	</body>
 </html>

@@ -159,13 +159,20 @@ function renderWeather(forecast) {
 		const icon = getWeatherIcon(code);
 		const div = document.createElement("div");
 		div.className =
-			"flex flex-col items-center bg-gray-900 rounded p-2 min-w-[60px]";
+			"weather-card flex flex-col items-center bg-gradient-to-b from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-xl p-3 min-w-[80px] border border-cyan-500/20 hover:border-cyan-400/40 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 hover:scale-105";
 		div.innerHTML = `
-			<span class="font-bold text-cyan-400">${day}</span>
-			<span class="text-2xl">${icon}</span>
-			<span class="text-xs">High: ${max}°C</span>
-			<span class="text-xs">Low: ${min}°C</span>
-			<span class="text-xs text-blue-300">${rain}mm</span>
+			<span class="font-bold text-cyan-300 mb-1 text-sm">${day}</span>
+			<span class="text-3xl mb-2">${icon}</span>
+			<div class="text-center space-y-1">
+				<div class="flex flex-col">
+					<span class="text-xs text-orange-300">High: ${max}°C</span>
+					<span class="text-xs text-blue-300">Low: ${min}°C</span>
+				</div>
+				<div class="flex items-center justify-center gap-1 text-xs text-blue-400">
+					<span>💧</span>
+					<span>${rain}mm</span>
+				</div>
+			</div>
 		`;
 		container.appendChild(div);
 	}
