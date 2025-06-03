@@ -1143,6 +1143,11 @@
     padding: 1rem;
     background: #18181b;
   }
+  .vendors-page header {
+      background: none;
+      box-shadow: none;
+      border: none;
+  }
   /* #open-map-btn {
     background: #06b6d4;
     color: #fff;
