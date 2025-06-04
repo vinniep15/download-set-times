@@ -110,7 +110,7 @@ function getCurrentPersonId() {
 // --- FIX: Move createArtistRow to module scope so it is accessible everywhere ---
 function createArtistRow(set, day, stage) {
 	const artistDiv = document.createElement("div");
-	artistDiv.className = "flex items-center mb-2";
+	artistDiv.className = "flex flex-shrink-0 mb-2";
 	const setKey = getSetKey(set.artist, day, stage, set.start);
 	// Heart icon button
 	const heartBtn = document.createElement("button");
@@ -143,7 +143,7 @@ function createArtistRow(set, day, stage) {
 	artistDiv.appendChild(heartBtn);
 	// Artist name
 	const nameSpan = document.createElement("span");
-	nameSpan.className = "text-sm";
+	nameSpan.className = "text-sm flex-grow";
 	nameSpan.textContent = set.artist;
 	artistDiv.appendChild(nameSpan);
 	return artistDiv;
