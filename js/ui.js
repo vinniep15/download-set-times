@@ -347,51 +347,60 @@ function createEventBlock(set, stage, day, venue) {
 			}
 		}
 	});
+
+	let heartTouchStartX = 0;
+	let heartTouchStartY= 0;
+	const TOUCH_MOVE_THRESHOLD = 15;
+
 	// Remove heartBtn from pointer/touch event bubbling for mobile
 	heartBtn.addEventListener(
 		"touchstart",
 		function (e) {
-			e.stopPropagation();
-			e.preventDefault();
+			heartTouchStartX = e.touches[0].clientX;
+			heartTouchStartY = e.touches[0].clientY;
 		},
-		{passive: false}
+		{passive: true}
 	);
 	heartBtn.addEventListener(
 		"touchend",
 		function (e) {
-			e.stopPropagation();
-			e.preventDefault();
-			if (typeof window.toggleFavoriteSet === "function") {
-				window.toggleFavoriteSet(setKey, heartBtn.querySelector("svg"));
-			} else {
-				// Fallback: legacy inline logic
-				const idx = state.favoriteSets.findIndex(
-					(fav) => fav.setKey === setKey && fav.person === "You"
-				);
-				if (idx === -1) {
-					state.favoriteSets.push({setKey, person: "You"});
+			const moveX = Math.abs(e.changedTouches[0].clientX - hearTouchStartX);
+			const moveY = Math.abs(e.changedTouches[0].clientY - hearTouchStartY);
+			if (moveX < TOUCH_MOVE_THRESHOLD && moveY < TOUCH_MOVE_THRESHOLD) {
+				e.preventDefault();
+				e.stopPropagation();
+				if (typeof window.toggleFavoriteSet === "function") {
+					window.toggleFavoriteSet(setKey, heartBtn.querySelector("svg"));
 				} else {
-					state.favoriteSets.splice(idx, 1);
-				}
-				saveFavorites();
-				// Re-render both main grid and modal if open
-				if (
-					document.getElementById("favorites-modal") &&
-					!document
-						.getElementById("favorites-modal")
-						.classList.contains("hidden")
-				) {
-					const activeTab = document.querySelector(
-						".day-tab.active-tab"
+					// Fallback: legacy inline logic
+					const idx = state.favoriteSets.findIndex(
+						(fav) => fav.setKey === setKey && fav.person === "You"
 					);
-					const activeDay = activeTab ? activeTab.dataset.day : day;
-					showFavoritesModalWithActiveDay(activeDay);
-				}
-				// Always re-render the main grid
-				if (venue === "arena") {
-					showDay(day);
-				} else {
-					showDistrictXDay(day);
+					if (idx === -1) {
+						state.favoriteSets.push({setKey, person: "You"});
+					} else {
+						state.favoriteSets.splice(idx, 1);
+					}
+					saveFavorites();
+					// Re-render both main grid and modal if open
+					if (
+						document.getElementById("favorites-modal") &&
+						!document
+							.getElementById("favorites-modal")
+							.classList.contains("hidden")
+					) {
+						const activeTab = document.querySelector(
+							".day-tab.active-tab"
+						);
+						const activeDay = activeTab ? activeTab.dataset.day : day;
+						showFavoritesModalWithActiveDay(activeDay);
+					}
+					// Always re-render the main grid
+					if (venue === "arena") {
+						showDay(day);
+					} else {
+						showDistrictXDay(day);
+					}
 				}
 			}
 		},
