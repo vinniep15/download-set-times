@@ -281,6 +281,11 @@
   /* ============================================
      NAVIGATION AND BUTTONS
      ============================================ */
+#navigation-container {
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
   .active-btn {
     background-color: #06b6d4;
     color: black;
@@ -1343,29 +1348,6 @@
 @media (max-width: 640px) {
   .timer-unit {
     padding: 0 12px;
-  }
-  
-  .timer-number {
-    font-size: 1.25em;
-  }
-  
-  .timer-label {
-    font-size: 0.7em;
-  }
-}
-
-/* Very small screens */
-@media (max-width: 480px) {
-  .timer-unit {
-    padding: 0 8px;
-  }
-  
-  .timer-number {
-    font-size: 1.1em;
-  }
-  
-  .timer-label {
-    font-size: 0.65em;
   }
 }
 

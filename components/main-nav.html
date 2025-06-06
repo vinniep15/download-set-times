@@ -1,0 +1,111 @@
+<div
+	class="main-nav max-w-6xl mx-auto grid-rows-2 justify-center md:grid-rows-1 grid grid-cols-2 md:grid-cols-3"
+>
+	<!-- Logo section -->
+	<div class="main-nav-logo">
+		<img src="assets/downloadlogo.svg" alt="Download Festival Logo" />
+	</div>
+
+	<!-- Countdown section (desktop) -->
+	<div class="md:flex items-center hidden justify-center">
+		<div class="timer-unit text-center px-6">
+			<div class="timer-number text-3xl font-bold" id="days-desktop">
+				00
+			</div>
+			<div class="timer-label text-sm text-cyan-400">DAYS</div>
+		</div>
+		<div class="timer-unit text-center px-6">
+			<div class="timer-number text-3xl font-bold" id="hours-desktop">
+				00
+			</div>
+			<div class="timer-label text-sm text-cyan-400">HRS</div>
+		</div>
+		<div class="timer-unit text-center px-6">
+			<div class="timer-number text-3xl font-bold" id="minutes-desktop">
+				00
+			</div>
+			<div class="timer-label text-sm text-cyan-400">MINS</div>
+		</div>
+	</div>
+
+	<!-- Sidebar toggle button - adding justify-self-end to position it on the right -->
+	<button
+		id="sidebarToggle"
+		class="sidebar-toggle justify-self-end"
+		aria-label="Toggle menu"
+		aria-expanded="false"
+		aria-controls="sidebarMenu"
+	>
+		<span></span>
+		<span></span>
+		<span></span>
+	</button>
+
+	<!-- Mobile countdown - updated with unique IDs -->
+	<div
+		class="flex items-center md:hidden row-start-2 col-span-2 row-end-2 justify-center"
+	>
+		<div class="timer-unit text-center px-6">
+			<div class="timer-number text-3xl font-bold" id="days-mobile">
+				00
+			</div>
+			<div class="timer-label text-sm text-cyan-400">DAYS</div>
+		</div>
+		<div class="timer-unit text-center px-6">
+			<div class="timer-number text-3xl font-bold" id="hours-mobile">
+				00
+			</div>
+			<div class="timer-label text-sm text-cyan-400">HRS</div>
+		</div>
+		<div class="timer-unit text-center px-6">
+			<div class="timer-number text-3xl font-bold" id="minutes-mobile">
+				00
+			</div>
+			<div class="timer-label text-sm text-cyan-400">MINS</div>
+		</div>
+	</div>
+</div>
+
+<!-- Script to sync countdown values between desktop and mobile -->
+<script>
+	// Function to keep mobile and desktop countdown values in sync
+	function syncCountdown() {
+		const syncElements = [
+			{desktop: "days-desktop", mobile: "days-mobile"},
+			{desktop: "hours-desktop", mobile: "hours-mobile"},
+			{desktop: "minutes-desktop", mobile: "minutes-mobile"},
+		];
+
+		syncElements.forEach((pair) => {
+			const desktopElement = document.getElementById(pair.desktop);
+			const mobileElement = document.getElementById(pair.mobile);
+
+			if (desktopElement && mobileElement) {
+				// Watch for changes to desktop element and sync to mobile
+				const observer = new MutationObserver(() => {
+					mobileElement.textContent = desktopElement.textContent;
+				});
+
+				observer.observe(desktopElement, {
+					childList: true,
+					characterData: true,
+					subtree: true,
+				});
+
+				// Initial sync
+				mobileElement.textContent = desktopElement.textContent;
+			}
+		});
+	}
+
+	// Call after countdown script loads
+	document.addEventListener("DOMContentLoaded", function () {
+		// Try once immediately
+		syncCountdown();
+
+		// And then again after countdown might have initialized
+		setTimeout(syncCountdown, 500);
+	});
+</script>
+
+<script src="../js/countdown.js"></script>

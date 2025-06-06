@@ -69,12 +69,16 @@
    ======================================================= */
 body.vendors-page {
   margin: 0;
+  padding: 0 !important; /* Override any padding from other styles */
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)),
     url("../assets/timetable_background.png") center/cover no-repeat fixed;
-  overflow: hidden;
+  overflow: hidden !important; /* Force hidden overflow */
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: white;
   perspective: 1000px;
+  width: 100%;
+  height: 100vh;
+  position: fixed; /* Prevent body scrolling */
 }
 
 /* =======================================================
@@ -106,13 +110,17 @@ body.vendors-page {
   position: fixed;
   top: 80px;
   left: 0;
-  width: 100vw;
+  width: 100vw; /* Use viewport width */
   height: calc(100vh - 80px);
-  display: flex;
+  display: grid;
+    grid-template-columns: 1fr; 
   align-items: flex-start;
   justify-content: center;
   padding-top: 40px;
   overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  z-index: 10; /* Ensure it's above other elements */
 }
 
 /* Common selector styles for zone, category and type selectors */
@@ -127,14 +135,14 @@ body.vendors-page {
   margin: 0 auto;
   transition: var(--transition-smooth);
   z-index: var(--z-index-base);
-  padding-top: 120px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 80px;
+  box-sizing: border-box;
 }
 
 .zone-selector,
 .category-selector,
-#typeSelector {
+#typeSelector,
+#vendorGrid {
   display: none;
   grid-template-columns: repeat(4, 1fr);
   width: 100%;
@@ -149,21 +157,21 @@ body.vendors-page {
   gap: 1.5rem;
   justify-content: center;
   max-width: 90vw;
-  max-height: 70vh;
   overflow-y: auto;
   z-index: var(--z-index-base);
   animation: cascadeIn 0.6s ease forwards;
-  padding: 30px 20px;
+  padding-top: 80px;
+  max-width: 1200px;
 }
 
 /* Utility class for mobile vendor grid */
-.vendor-grid-mobile {
+/* .vendor-grid-mobile {
   display: flex !important;
   flex-direction: column !important;
   flex-wrap: nowrap !important;
   align-items: center !important;
   width: 100% !important;
-}
+} */
 
 /* =======================================================
    4. Bubble Components (Common Styles)
@@ -311,7 +319,7 @@ body.vendors-page {
   position: relative;
   z-index: var(--z-index-bubble-content);
   background: rgba(0, 0, 0, 0.8);
-  padding: 8px 14px;
+  padding: 8px 8px;
   border-radius: 10px;
   backdrop-filter: blur(15px);
   border: 2px solid rgba(35, 191, 207, 0.5);
@@ -337,8 +345,9 @@ body.vendors-page {
    7. Vendor Bubbles
    ======================================================= */
 .vendor-bubble {
-  width: 120px;
-  height: 120px;
+    width: 100%;
+  height: auto;
+  aspect-ratio: 1/1;
   border-radius: 50%;
   background: var(--black-bg);
   box-shadow: 0 0 15px var(--primary-glow),
@@ -443,53 +452,183 @@ body.vendors-page {
 /* =======================================================
    8. Navigation Elements
    ======================================================= */
-.back-button {
-  position: fixed;
-  top: 120px;
-  left: 50px;
-  padding: 15px 25px;
-  border-radius: 25px;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(34, 34, 34, 0.9) 100%
-  );
-  box-shadow: 0 0 20px rgba(0, 255, 195, 0.4),
-    0 0 40px rgba(0, 255, 195, 0.2),
-    inset 0 0 15px rgba(0, 255, 195, 0.1);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--accent-color);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: var(--z-index-back-button);
-  border: 2px solid rgba(0, 255, 195, 0.5);
-  backdrop-filter: blur(10px);
-  text-shadow: 0 0 10px rgba(0, 255, 195, 0.5);
-  letter-spacing: 1px;
-  text-transform: uppercase;
+
+/* Main Navigation Bar */
+#main-nav-placeholder {
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 195, 0.2) !important;
+    border-bottom: 1px solid rgba(35, 191, 207, 0.3) !important;
 }
 
-.back-button:hover {
-  transform: scale(1.05) translateY(-2px);
-  box-shadow: 0 0 30px rgba(0, 255, 195, 0.8),
-    0 0 60px rgba(0, 255, 195, 0.5),
-    inset 0 0 25px rgba(0, 255, 195, 0.3);
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(34, 34, 34, 1) 100%
-  );
-  border-color: rgba(0, 255, 195, 0.8);
-  text-shadow: 0 0 15px rgba(0, 255, 195, 0.8);
+.main-nav {
+  width: 100% !important;
+  height: 80px !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 20px !important;
+  z-index: 200 !important;
 }
 
-.back-button.show {
-  display: flex;
-  animation: backButtonIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+/* Logo styling */
+.main-nav-logo {
+  height: 60px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.main-nav-logo img {
+  height: 40px !important;
+  max-width: 180px !important;
+  object-fit: contain !important;
+}
+
+/* Countdown styling */
+.main-nav-countdown {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.countdown-label {
+  font-size: 0.8rem !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  font-weight: 500 !important;
+}
+
+.countdown-timer {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: var(--accent-color) !important;
+  text-shadow: 0 0 10px rgba(0, 255, 195, 0.5) !important;
+}
+
+.countdown-timer span {
+  display: inline-block !important;
+  min-width: 25px !important;
+  text-align: center !important;
+  font-weight: 800 !important;
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+  width: 50px !important;
+  height: 50px !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(35, 191, 207, 0.4) !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  padding: 10px !important;
+  z-index: 201 !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(35, 191, 207, 0.2) !important;
+}
+
+.sidebar-toggle span {
+  display: block !important;
+  width: 100% !important;
+  height: 2px !important;
+  background-color: var(--primary-color) !important;
+  margin: 3px 0 !important;
+  transition: all 0.3s ease !important;
+  border-radius: 2px !important;
+  box-shadow: 0 0 8px rgba(35, 191, 207, 0.5) !important;
+}
+
+.sidebar-toggle.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg) !important;
+  background-color: var(--accent-color) !important;
+}
+
+.sidebar-toggle.active span:nth-child(2) {
+  opacity: 0 !important;
+}
+
+.sidebar-toggle.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg) !important;
+  background-color: var(--accent-color) !important;
+}
+
+.sidebar-toggle:hover {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 
+              0 0 25px rgba(35, 191, 207, 0.4) !important;
+}
+
+.sidebar-toggle.active {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 20px var(--accent-color),
+              0 0 40px rgba(0, 255, 195, 0.2) !important;
+}
+
+/* Sidebar Menu */
+.sidebar-menu {
+  position: fixed !important;
+  top: 80px !important; /* Below the main nav */
+  right: 0 !important; /* Changed from left to right */
+  left: auto !important; 
+  width: 280px !important;
+  height: calc(100vh - 80px) !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+  z-index: 100 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  transform: translateX(100%) !important; /* Changed to slide from right */
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border-left: 1px solid rgba(35, 191, 207, 0.2) !important; /* Changed from border-right */
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5) !important; /* Changed shadow direction */
+}
+
+/* Sidebar neon edge */
+.sidebar-menu::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important; /* Changed from right to left */
+  height: 100% !important;
+  width: 3px !important;
+  background: linear-gradient(to bottom, 
+    var(--accent-color), 
+    var(--primary-color), 
+    var(--accent-color)) !important;
+  box-shadow: 0 0 20px var(--accent-color), 
+              0 0 40px var(--accent-color) !important;
+  z-index: 1 !important;
+}
+
+/* When sidebar is open */
+body:not(.sidebar-closed) .sidebar-menu {
+  transform: translateX(0) !important;
+}
+
+/* REMOVE or COMMENT OUT these margin adjustments that cause the content to shift */
+@media (min-width: 769px) {
+  .content-container {
+    margin-right: 0 !important; 
+    width: 100% !important;
+  }
+  
+  /* Remove this rule that shifts content */
+  /*
+  body:not(.sidebar-closed) .content-container {
+    margin-right: 280px !important;
+    width: calc(100vw - 280px) !important;
+  }
+  */
+  
+  /* Keep other styles as needed */
+  /* ...existing code... */
 }
 
 /* =======================================================
@@ -750,52 +889,60 @@ body.vendors-page {
 @keyframes backButtonIn {
   0% {
     opacity: 0;
-    transform: scale(0.3) translateX(-100px);
+    transform: translateX(calc(-50% + -42% - 50px)) !important;
   }
   70% {
-    transform: scale(1.1) translateX(5px);
+    transform: translateX(calc(-50% + -42% + 25px)) !important;
   }
   100% {
     opacity: 1;
-    transform: scale(1) translateX(0);
+    transform: translateX(calc(-50% + -42% + 20px)) !important;
   }
 }
 
 /* =======================================================
    11. Media Queries / Responsive Design
    ======================================================= */
-/* Larger screens */
-@media (min-width: 768px) {
-  .selector-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 3rem;
-  }
+@media (max-width: 1366px) {
+    .selector-grid {
+        padding-top: 30px;
+    }
+
+    #typeSelector {
+        padding-top:120px;
+    }
+
+    .category-selector {
+        padding-top: 120px;
+    }
 }
 
+@media (max-width: 991px) {
+    .zone-selector,
+    .category-selector,
+    #typeSelector,
+    #vendorGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
 /* Tablet-sized screens */
 @media (max-width: 768px) {
-  body {
-    padding: 8px;
+  body.vendors-page {
+    overflow: hidden; /* Prevent body scroll */
+  }
+
+  .main-nav {
+    height: 150px !important;
   }
 
   .content-container {
-    top: 120px;
+    top: 160px;
     height: calc(100vh - 120px);
     padding: 10px;
-  }
-
-  .selector-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    max-width: 100%;
-    padding: 0 10px;
-  }
-
-  .bubble {
-    width: var(--bubble-size-tablet);
-    height: var(--bubble-size-tablet);
-    min-width: 44px;
-    min-height: 44px;
+    width: 100vw; /* Use viewport width */
+    left: 0;
+    margin: 0;
+    overflow-x: hidden;
   }
 
   .bubble-text {
@@ -804,42 +951,15 @@ body.vendors-page {
     letter-spacing: 1px;
   }
 
-  .category-bubble {
-    width: 120px;
-    height: 120px;
-    font-size: 0.85rem;
-    min-width: 44px;
-    min-height: 44px;
-  }
-
   .category-bubble .icon {
     font-size: 1.8rem;
     margin-bottom: 0.4rem;
   }
 
-  .vendor-bubble {
-    width: 90px;
-    height: 90px;
-    font-size: 0.65rem;
-    padding: 8px;
-    min-width: 44px;
-    min-height: 44px;
-  }
-
   .vendor-grid {
-    max-width: 95vw;
-    max-height: 65vh;
-    padding: 15px;
+    max-width: calc(100vw - 30px); /* Prevent overflow */
+    padding-top: 80px;
     gap: 1.2rem;
-  }
-
-  .back-button {
-    top: 90px;
-    left: 20px;
-    padding: 12px 20px;
-    font-size: 1rem;
-    min-width: 44px;
-    min-height: 44px;
   }
 
   .popup {
@@ -872,245 +992,207 @@ body.vendors-page {
 /* Mobile-sized screens */
 @media (max-width: 640px) {
   .content-container {
-    top: 100px;
-    height: calc(100vh - 100px);
+    top: 132px;
+    height: calc(100vh - 80px);
+    width: 100vw;
+    padding: 0;
+    overflow-x: hidden;
   }
 
-  .selector-grid {
-    gap: 1rem;
+  .selector-grid,
+  #vendorGrid {
+    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 0;
+    box-sizing: border-box;
+    padding-top: 30px;
+  }
+
+  #vendorGrid {
+    padding-top: 100px;
   }
 
   .bubble {
-    width: 120px;
-    height: 120px;
     font-size: 0.9rem;
-  }
-
-  .bubble-text {
-    padding: 10px 16px;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-  }
-
-  .category-bubble {
-    width: 100px;
-    height: 100px;
-    font-size: 0.8rem;
-  }
-
-  .category-bubble .icon {
-    font-size: 1.6rem;
-  }
-
-  /* Critical vendor grid fixes for mobile devices */
-  .vendor-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    gap: 1.8rem !important;
-    margin: 0 auto !important;
-    max-height: 65vh;
-    padding: 15px 10px;
-    overflow-y: auto;
-  }
-
-  .vendor-bubble {
-    width: 85% !important;
-    max-width: 180px !important;
-    height: auto !important;
-    aspect-ratio: 1/1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 0 auto !important;
-    margin-bottom: 1.5rem !important;
   }
 
   .back-button {
-    top: 80px;
-    left: 15px;
+    top: 90px;
+    left: 20px;
     padding: 10px 16px;
     font-size: 0.9rem;
+    z-index: 20; /* Ensure it's above other content */
   }
 }
 
 /* Small mobile screens */
 @media (max-width: 480px) {
-  body {
-    padding: 4px;
+  body.vendors-page {
+    padding: 0 !important;
+    overflow: hidden !important;
+    width: 100vw;
+    position: fixed;
   }
 
   .content-container {
-    top: 90px;
-    height: calc(100vh - 90px);
-    padding: 5px;
+    top: 132px;
+    height: calc(100vh - 80px);
+    padding: 0;
+    width: 100vw;
+    left: 0;
+    overflow-x: hidden !important;
+    position: fixed;
   }
 
-  .selector-grid {
+  .selector-grid,
+  #vendorGrid {
     gap: 0.8rem;
-    max-width: 280px;
+    grid-template-columns: 1fr;
+    padding-top: 40px;
   }
 
-  .bubble {
-    width: var(--bubble-size-mobile);
-    height: var(--bubble-size-mobile);
-    font-size: 0.8rem;
-  }
-
-  .bubble-text {
-    padding: 8px 12px;
-    font-size: 0.8rem;
-    letter-spacing: 0.5px;
-  }
-
-  .category-bubble {
-    width: 80px;
-    height: 80px;
-    font-size: 0.7rem;
-  }
-
-  .category-bubble .icon {
-    font-size: 1.4rem;
-    margin-bottom: 0.3rem;
-  }
-
-  .vendor-grid {
-    gap: 1rem;
-    padding: 12px 8px;
-  }
-
-  .vendor-bubble {
-    width: 70%;
-    max-width: 120px;
-  }
-
-  .back-button {
-    top: 70px;
-    left: 10px;
-    padding: 8px 12px;
-    font-size: 0.8rem;
-  }
-
-  .popup {
-    padding: 1rem;
-    margin: 5px;
-  }
-
-  .popup-image {
-    height: 120px;
-  }
-
-  .popup h3 {
-    font-size: 1.1rem;
-  }
-
-  .menu-item {
-    padding: 0.8rem;
-  }
-
-  .detail-item {
-    padding: 0.4rem;
-    gap: 0.6rem;
-  }
-}
-
-/* Landscape mobile optimizations */
-@media (max-width: 768px) and (orientation: landscape) {
-  .content-container {
-    top: 70px;
-    height: calc(100vh - 70px);
-  }
-
-  .selector-grid {
-    gap: 1rem;
-  }
-
-  .bubble {
-    width: var(--bubble-size-small);
-    height: var(--bubble-size-small);
-  }
-
-  .category-bubble {
-    width: 80px;
-    height: 80px;
-  }
-
-  .vendor-grid {
-    max-height: 55vh;
-  }
-
-  .back-button {
-    top: 50px;
-  }
-}
-
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-  .bubble:hover,
-  .vendor-bubble:hover,
-  .back-button:hover,
-  .popup-close:hover {
-    /* Remove hover effects on touch devices */
-    transform: none;
-    box-shadow: inherit;
-  }
-
-  .bubble:active,
-  .vendor-bubble:active {
-    transform: scale(0.95);
-    transition: transform 0.1s ease;
-  }
-
-  .back-button:active,
-  .popup-close:active {
-    transform: scale(0.95);
-    transition: transform 0.1s ease;
-  }
-
-  /* Better touch targets */
-  .bubble,
-  .vendor-bubble,
-  .back-button,
-  .popup-close {
-    min-width: 44px;
-    min-height: 44px;
+  #vendorGrid {
+    padding-top: 100px;
   }
 }
 
 /* Very small screens */
 @media (max-width: 360px) {
-  .selector-grid {
+  .selector-grid,
+  #vendorGrid {
+    grid-template-columns: 1fr; /* Keep 2 columns */
     gap: 0.6rem;
+    padding: 10px;
+    padding-top: 60px;
+  }
+}
+
+/* Add this important fix to make sure vendor grid doesn't cause horizontal scrolling */
+#vendorGrid {
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+/* Fix header and navigation layout for vendors page */
+#navigation-placeholder {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  z-index: 100 !important;
+}
+
+/* Additional fix for the Tailwind padding that might be causing issues */
+.p-2,
+.p-4,
+.sm\:p-4 {
+  padding: 0 !important;
+}
+
+/* Back Button - Updated positioning with edge alignment */
+.back-button {
+  position: fixed !important;
+  top: 100px; /* Position below the main nav */
+  left: 20px !important; /* Align with the logo's left edge */
+  background: rgba(0, 0, 0, 0.7) !important;
+  color: var(--accent-color) !important;
+  border: 2px solid var(--accent-color) !important;
+  padding: 10px 20px !important;
+  border-radius: 30px !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  letter-spacing: 1px !important;
+  transition: all 0.3s ease !important;
+  z-index: var(--z-index-back-button) !important;
+  opacity: 0 !important;
+  box-shadow: 0 0 15px rgba(0, 255, 195, 0.3) !important;
+  text-shadow: 0 0 8px rgba(0, 255, 195, 0.5) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none !important; /* Initially not clickable */
+  font-family: 'Rajdhani', sans-serif;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  transform: translateY(-100px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.back-button::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -2px !important;
+  background: linear-gradient(45deg, var(--accent-color), transparent, var(--accent-color)) !important;
+  z-index: -1 !important;
+  filter: blur(8px) !important;
+  opacity: 0.5 !important;
+  border-radius: 30px !important;
+  transition: opacity 0.3s ease !important;
+}
+
+.back-button.show {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important; /* Make it clickable when shown */
+}
+
+.back-button:hover {
+  background-color: rgba(0, 255, 208, 0.2) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 208, 0.7) !important;
+  transform: scale(1.05) !important;
+}
+
+.back-button:hover::before {
+  opacity: 0.8 !important;
+}
+
+/* Media queries for the back button */
+@media (max-width: 768px) {
+  .back-button {
+    top: 170px;
+    left: 20px !important; /* Maintain alignment with logo */
+    padding: 10px 18px !important;
+    font-size: 0.95rem !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    z-index: 900 !important;
+  }
+}
+
+@media (max-width: 640px) {
+#typeSelector {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+#categorySelector {
+    padding-top: 120px;
+}
+
+  .back-button {
+    top: 170px; /* Position below stacked nav */
+    left: 20px !important; /* Keep consistent with logo alignment */
+    padding: 8px 16px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-button {
+    left: 20px; /* Keep consistent alignment with logo edge */
+    padding: 6px 14px !important;
+    font-size: 0.85rem !important;
   }
 
-  .bubble {
-    width: 90px;
-    height: 90px;
-    font-size: 0.7rem;
-  }
+  #typeSelector {
+    grid-template-columns: 1fr;
+}
+}
 
-  .bubble-text {
-    padding: 6px 10px;
-    font-size: 0.7rem;
-  }
+/* Add specific alignment to match the logo's edge precisely */
+@media (max-width: 400px) {
 
-  .category-bubble {
-    width: 70px;
-    height: 70px;
-    font-size: 0.65rem;
-  }
-
-  .vendor-bubble {
-    width: 60px;
-    height: 60px;
-    font-size: 0.5rem;
-  }
-
-  .popup {
-    padding: 0.8rem;
+  .back-button {
+    left: 15px; /* Fine-tune for very small screens if logo edge changes */
   }
 }

@@ -7,13 +7,9 @@
 		<script src="https://cdn.tailwindcss.com"></script>
 		<link rel="stylesheet" href="styles.css" />
 		<link rel="stylesheet" href="css/vendors.css" />
-		<script type="module" src="js/navigation.js"></script>
-		<script type="module" src="js/menu.js"></script>
-		<script type="module" src="js/countdown.js"></script>
-		<script src="check-vendors-access.js"></script>
-		<script src="verify-vendors-data.js"></script>
+		<script src="js/include-components.js"></script>
 		<script src="js/vendor-grid-responsive.js"></script>
-		<!-- Inline CSS has been refactored to css/vendors.css -->
+		<script type="module" src="js/countdown.js"></script>
 		<script>
 			// Failsafe for mobile responsiveness
 			document.addEventListener("DOMContentLoaded", function () {
@@ -30,9 +26,18 @@
 			});
 		</script>
 	</head>
-	<body class="bg-black text-white p-2 sm:p-4 vendors-page">
-		<!-- Navigation Component Placeholder -->
-		<div id="navigation-placeholder"></div>
+	<body class="bg-black text-white p-2 sm:p-4 vendors-page sidebar-closed">
+		<!-- Main Navigation Component -->
+		<div
+			id="main-nav-placeholder"
+			data-include="components/main-nav.html"
+		></div>
+
+		<!-- Sidebar Menu Component -->
+		<div
+			id="sidebar-placeholder"
+			data-include="components/sidebar-menu.html"
+		></div>
 
 		<!-- Floating particles background -->
 		<div class="particles" id="particles"></div>
@@ -54,22 +59,31 @@
 		<!-- Main content container -->
 		<div class="content-container">
 			<!-- Zone Selection (Level 1) -->
-			<div class="selector-grid zone-selector" id="zoneSelector">
+			<div
+				class="selector-grid zone-selector max-w-6xl mx-auto"
+				id="zoneSelector"
+			>
 				<!-- Location bubbles will be dynamically added here -->
 			</div>
 
 			<!-- Type Selection (Level 2) -->
-			<div class="selector-grid category-selector" id="typeSelector">
+			<div
+				class="selector-grid category-selector max-w-6xl mx-auto"
+				id="typeSelector"
+			>
 				<!-- Types will be populated dynamically -->
 			</div>
 
 			<!-- Category Selection (Level 3) -->
-			<div class="selector-grid category-selector" id="categorySelector">
+			<div
+				class="selector-grid category-selector max-w-6xl mx-auto"
+				id="categorySelector"
+			>
 				<!-- Categories will be populated dynamically -->
 			</div>
 
 			<!-- Vendor Grid (Level 4) -->
-			<div class="vendor-grid" id="vendorGrid">
+			<div class="vendor-grid max-w-6xl mx-auto" id="vendorGrid">
 				<!-- Vendors will be populated dynamically -->
 			</div>
 
@@ -170,12 +184,27 @@
 		// Show loading indicator
 		document.getElementById("loading-indicator").style.display = "flex";
 
-		// Initialize the navigation component for vendors page
-		import("./js/navigation.js").then((module) => {
-			const NavigationComponent = module.default;
-			const navigationComponent = new NavigationComponent();
-			navigationComponent.init("#navigation-placeholder");
-		});
+		// Start the app when both nav components are loaded
+		const componentsLoaded = {
+			mainNav: false,
+			sidebar: false,
+		};
+
+		document
+			.getElementById("main-nav-placeholder")
+			.addEventListener("component-loaded", function () {
+				componentsLoaded.mainNav = true;
+				// Dispatch navigationLoaded event to trigger countdown initialization
+				document.dispatchEvent(new CustomEvent("navigationLoaded"));
+				if (componentsLoaded.sidebar) init();
+			});
+
+		document
+			.getElementById("sidebar-placeholder")
+			.addEventListener("component-loaded", function () {
+				componentsLoaded.sidebar = true;
+				if (componentsLoaded.mainNav) init();
+			});
 
 		// Test direct file access to vendors-data.json
 		fetch("vendors-data.json")
@@ -214,8 +243,6 @@
 	// Initialize the app
 	async function init() {
 		try {
-			document.getElementById("loading-indicator").style.display = "flex";
-
 			// Load vendors data first
 			await loadVendorsData();
 
@@ -233,8 +260,6 @@
 				// Show the zone selector explicitly
 				const zoneSelector = document.getElementById("zoneSelector");
 				zoneSelector.style.display = "grid";
-			} else {
-				// No vendor data available or invalid structure
 			}
 
 			document.getElementById("loading-indicator").style.display = "none";
@@ -372,8 +397,8 @@
 		currentLevel = "type";
 		navigationStack.push("zone");
 
-		// Show back button
-		document.getElementById("backButton").classList.add("show");
+		// Show back button - always show once we're past the first level
+		const backButton = document.getElementById("backButton");
 		backButton.classList.add("show");
 
 		// Morph zone selector out
@@ -696,7 +721,7 @@
 		});
 
 		// Show with animation
-		vendorGrid.style.display = "flex";
+		vendorGrid.style.display = "grid";
 
 		// Apply responsive layout - this will be enhanced by our vendor-grid-responsive.js
 		if (typeof window.applyResponsiveLayout === "function") {
@@ -815,7 +840,6 @@
 	// Go back navigation
 	function goBack() {
 		if (navigationStack.length === 0) {
-			// Removed console.error
 			return;
 		}
 
@@ -862,7 +886,7 @@
 				currentType = null;
 				currentCategory = null;
 
-				// Hide back button
+				// Hide back button only at the first level (zone selection)
 				backButton.classList.remove("show");
 
 				// Show zone selector with animation
@@ -875,19 +899,25 @@
 				currentType = null;
 				currentCategory = null;
 
-				// Show type selector with animation - FIX: Display typeSelector, not zoneSelector
-				typeSelector.style.display = "grid"; // THIS LINE WAS WRONG
+				// Show type selector with animation
+				typeSelector.style.display = "grid";
 				typeSelector.style.animation =
 					"morphIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
+
+				// Keep back button visible since we're not at the first level
+				backButton.classList.add("show");
 			} else if (previousLevel === "category") {
 				// Back to category selection
 				currentLevel = "category";
 				currentCategory = null;
 
-				// Show category selector with animation - FIX: Display categorySelector, not zoneSelector
-				categorySelector.style.display = "grid"; // THIS LINE WAS WRONG
+				// Show category selector with animation
+				categorySelector.style.display = "grid";
 				categorySelector.style.animation =
 					"morphIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
+
+				// Keep back button visible since we're not at the first level
+				backButton.classList.add("show");
 			}
 		}, 400); // Match this timeout with the animation duration
 	}
@@ -899,4 +929,30 @@
 	document
 		.getElementById("popupOverlay")
 		.addEventListener("click", closePopup);
+
+	document.addEventListener("DOMContentLoaded", function () {
+		// Add decorative elements to the menu header after navigation is loaded
+		setTimeout(() => {
+			const menuHeader = document.querySelector(
+				"#navigation-placeholder .menu-header"
+			);
+			if (menuHeader) {
+				// Create decorative elements
+				const decorativeElements = document.createElement("div");
+				decorativeElements.className = "decorative-elements";
+
+				// Add random dots for subtle background texture
+				for (let i = 0; i < 20; i++) {
+					const dot = document.createElement("div");
+					dot.className = "decorative-dot";
+					dot.style.top = `${Math.random() * 100}%`;
+					dot.style.left = `${Math.random() * 100}%`;
+					dot.style.opacity = (Math.random() * 0.6 + 0.2).toString();
+					decorativeElements.appendChild(dot);
+				}
+
+				menuHeader.appendChild(decorativeElements);
+			}
+		}, 500); // Wait for navigation to be fully loaded
+	});
 </script>

@@ -2025,6 +2025,111 @@
       "type": "Experience",
       "category": [],
       "menu": []
+    },
+    {
+      "name": "Test Vendor 1",
+      "location": ["Arena"],
+      "type": "food",
+      "category": ["Burgers"],
+      "description": "A test vendor serving burgers"
+    },
+    {
+      "name": "Test Vendor 2",
+      "location": ["Arena"],
+      "type": "drinks",
+      "category": ["Bar"],
+      "description": "A test vendor serving drinks"
+    },
+    {
+      "name": "Test Vendor 3",
+      "location": ["District X"],
+      "type": "food",
+      "category": ["Pizza"],
+      "description": "A test vendor serving pizza"
+    },
+    {
+      "name": "Burger King",
+      "location": ["Arena"],
+      "type": "food",
+      "category": ["Burgers", "Meals under £10"],
+      "description": "Fast food burger restaurant"
+    },
+    {
+      "name": "Craft Beer Bar",
+      "location": ["Arena"],
+      "type": "drinks",
+      "category": ["Bar", "Beer"],
+      "description": "Serving premium craft beers"
+    },
+    {
+      "name": "Pizza Express",
+      "location": ["District X"],
+      "type": "food",
+      "category": ["Pizza", "Vegetarian Options"],
+      "description": "Pizza restaurant with vegetarian options"
+    },
+    {
+      "name": "Coffee House",
+      "location": ["District X"],
+      "type": "drinks",
+      "category": ["Coffee"],
+      "description": "Premium coffee and pastries"
+    },
+    {
+      "name": "Metal Merch",
+      "location": ["Arena"],
+      "type": "merchandise",
+      "category": ["Clothing"],
+      "description": "Metal band merchandise and clothing"
+    },
+    {
+      "name": "Festival Photos",
+      "location": ["District X"],
+      "type": "experience",
+      "category": ["Photo"],
+      "description": "Get your festival photos taken"
+    },
+    {
+      "name": "Asian Fusion",
+      "location": ["Arena"],
+      "type": "food",
+      "category": ["Asian Food", "Vegetarian Options"],
+      "description": "Asian cuisine with vegetarian options"
+    },
+    {
+      "name": "Taco Stand",
+      "location": ["District X"],
+      "type": "food",
+      "category": ["Mexican"],
+      "description": "Authentic Mexican tacos"
+    },
+    {
+      "name": "Ice Cream Paradise",
+      "location": ["Arena"],
+      "type": "food",
+      "category": ["Ice Cream", "Dessert"],
+      "description": "Premium ice cream and desserts"
+    },
+    {
+      "name": "Breakfast Club",
+      "location": ["District X"],
+      "type": "food",
+      "category": ["Breakfast", "Meals under £10"],
+      "description": "All-day breakfast options"
+    },
+    {
+      "name": "Cocktail Lounge",
+      "location": ["Arena"],
+      "type": "drinks",
+      "category": ["Cocktails"],
+      "description": "Premium cocktails and spirits"
+    },
+    {
+      "name": "Gaming Tent",
+      "location": ["District X"],
+      "type": "experience",
+      "category": ["Game"],
+      "description": "Video games and gaming competitions"
     }
   ]
 }
