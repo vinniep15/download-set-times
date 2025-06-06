@@ -2341,7 +2341,6 @@ export function setupShareFavoritesButton() {
 				// Create URL with encoded data in hash fragment
 				shortenUrl(encoded)
 					.then((hashFragment) => {
-						console.log("Successfully encoded data for URL");
 						const shortUrl = `${window.location.origin}${window.location.pathname}#${hashFragment}`;
 
 						// Copy to clipboard
@@ -2468,12 +2467,7 @@ export async function tryImportSharedFavorites() {
 	// If we have a hash fragment, use that first (new approach)
 	if (hashFragment) {
 		try {
-			console.log("Attempting to decode hash fragment");
 			const expanded = await expandUrl(hashFragment);
-			console.log(
-				"Expanded data received:",
-				expanded ? "Success" : "Not found"
-			);
 			if (expanded) {
 				encodedData = expanded;
 			} else {
@@ -2491,12 +2485,7 @@ export async function tryImportSharedFavorites() {
 	// If no hash fragment but we have a short ID, use legacy approach
 	else if (shortId) {
 		try {
-			console.log("Attempting to expand short ID:", shortId);
 			const expanded = await expandUrl(shortId);
-			console.log(
-				"Expanded data received:",
-				expanded ? "Success" : "Not found"
-			);
 			if (expanded) {
 				encodedData = expanded;
 			} else {

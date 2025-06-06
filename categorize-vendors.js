@@ -70,6 +70,3 @@ Object.keys(vendorsData.zones).forEach((zoneName) => {
 
 // Write back to file
 fs.writeFileSync("vendors-data.json", JSON.stringify(vendorsData, null, 2));
-
-console.log("Vendor categorization complete!");
-console.log("Categories added to all vendors based on their names.");

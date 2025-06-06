@@ -61,7 +61,6 @@ function categorizeDrinkVendors() {
 }
 
 // Apply the categorization
-console.log("Starting categorization...");
 let drinkVendorsFound = 0;
 let categoriesAdded = 0;
 
@@ -70,7 +69,6 @@ Object.keys(vendorsData.zones).forEach((zoneName) => {
 		// Only process vendors that have "Drinks" in their tags
 		if (vendor.tags && vendor.tags.includes("Drinks")) {
 			drinkVendorsFound++;
-			console.log(`Processing drink vendor: ${vendor.name}`);
 			const name = vendor.name.toLowerCase();
 
 			// Add specific drink categories based on name patterns
@@ -78,7 +76,6 @@ Object.keys(vendorsData.zones).forEach((zoneName) => {
 				if (!vendor.tags.includes("Cocktails")) {
 					vendor.tags.push("Cocktails");
 					categoriesAdded++;
-					console.log(`  Added Cocktails to ${vendor.name}`);
 				}
 			}
 
@@ -86,7 +83,6 @@ Object.keys(vendorsData.zones).forEach((zoneName) => {
 				if (!vendor.tags.includes("Beer")) {
 					vendor.tags.push("Beer");
 					categoriesAdded++;
-					console.log(`  Added Beer to ${vendor.name}`);
 				}
 			}
 
@@ -94,7 +90,6 @@ Object.keys(vendorsData.zones).forEach((zoneName) => {
 				if (!vendor.tags.includes("Coffee")) {
 					vendor.tags.push("Coffee");
 					categoriesAdded++;
-					console.log(`  Added Coffee to ${vendor.name}`);
 				}
 			}
 
@@ -102,7 +97,6 @@ Object.keys(vendorsData.zones).forEach((zoneName) => {
 				if (!vendor.tags.includes("Non_Alcoholic")) {
 					vendor.tags.push("Non_Alcoholic");
 					categoriesAdded++;
-					console.log(`  Added Non_Alcoholic to ${vendor.name}`);
 				}
 			}
 
@@ -117,7 +111,6 @@ Object.keys(vendorsData.zones).forEach((zoneName) => {
 				if (!vendor.tags.includes("Mixed_Bar")) {
 					vendor.tags.push("Mixed_Bar");
 					categoriesAdded++;
-					console.log(`  Added Mixed_Bar to ${vendor.name}`);
 				}
 			}
 
@@ -126,20 +119,11 @@ Object.keys(vendorsData.zones).forEach((zoneName) => {
 				if (!vendor.tags.includes("Wine")) {
 					vendor.tags.push("Wine");
 					categoriesAdded++;
-					console.log(`  Added Wine to ${vendor.name}`);
 				}
 			}
 		}
 	});
 });
 
-console.log(
-	`Found ${drinkVendorsFound} drink vendors, added ${categoriesAdded} categories`
-);
-
 // Write the updated data back to the file
 fs.writeFileSync("vendors-data.json", JSON.stringify(vendorsData, null, 2));
-
-console.log(
-	"✅ Drink vendors have been categorized with specific beverage types!"
-);

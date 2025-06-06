@@ -11,8 +11,6 @@ const VENDOR_DATA_PATH = path.join(process.cwd(), "vendors-data.json");
 
 // Check if vendor data file exists and is valid JSON
 function checkVendorDataFile() {
-	console.log("Checking vendors-data.json...");
-
 	if (!fs.existsSync(VENDOR_DATA_PATH)) {
 		console.error(
 			"ERROR: vendors-data.json file not found at",
@@ -25,9 +23,6 @@ function checkVendorDataFile() {
 		const content = fs.readFileSync(VENDOR_DATA_PATH, "utf8");
 		const data = JSON.parse(content);
 
-		console.log("✅ vendors-data.json is valid JSON");
-		console.log(`✅ File size: ${content.length} bytes`);
-
 		// Check structure
 		if (!data.zones) {
 			console.error(
@@ -37,7 +32,6 @@ function checkVendorDataFile() {
 		}
 
 		const zoneCount = Object.keys(data.zones).length;
-		console.log(`✅ Found ${zoneCount} zones`);
 
 		let vendorCount = 0;
 		for (const zone in data.zones) {
@@ -45,7 +39,6 @@ function checkVendorDataFile() {
 				vendorCount += data.zones[zone].vendors.length;
 			}
 		}
-		console.log(`✅ Found ${vendorCount} vendors`);
 
 		return true;
 	} catch (error) {
@@ -59,8 +52,6 @@ function checkVendorDataFile() {
 
 // Fix the vendors.html file data loading
 function fixVendorsHtml() {
-	console.log("Checking and fixing vendors.html...");
-
 	if (!fs.existsSync(VENDOR_HTML_PATH)) {
 		console.error(
 			"ERROR: vendors.html file not found at",
@@ -80,13 +71,11 @@ function fixVendorsHtml() {
 			loadVendorsDataRegex,
 			`async function loadVendorsData() {
         try {
-            console.log("Fetching vendors-data.json...");
             const response = await fetch("vendors-data.json");
             if (!response.ok) {
                 throw new Error(\`HTTP error! status: \${response.status}\`);
             }
             vendorsData = await response.json();
-            console.log("Vendors data loaded successfully");
         } catch (error) {
             console.error("Error loading vendors data:", error);
             // Fallback to demo data if file not found
@@ -104,7 +93,6 @@ function fixVendorsHtml() {
 		content = content.replace(
 			showVendorPopupRegex,
 			`function showVendorPopup(vendor) {
-        console.log("Opening popup for vendor:", vendor);
         // Populate popup content
         document.getElementById("popupName").textContent = vendor.name;`
 		);
@@ -114,34 +102,16 @@ function fixVendorsHtml() {
 	// Save the modified file
 	if (modified) {
 		fs.writeFileSync(VENDOR_HTML_PATH, content);
-		console.log("✅ vendors.html was fixed and saved");
 		return true;
 	} else {
-		console.log("⚠️ No changes made to vendors.html");
 		return false;
 	}
 }
 
 // Main function to run all checks and fixes
 function main() {
-	console.log("Checking vendors implementation...");
-
 	const dataValid = checkVendorDataFile();
 	const htmlFixed = fixVendorsHtml();
-
-	if (dataValid && htmlFixed) {
-		console.log(
-			"\n✅ SUCCESS: All issues fixed! The vendors.html file should now work correctly."
-		);
-	} else if (dataValid) {
-		console.log(
-			"\n⚠️ WARNING: vendors-data.json is valid but couldn't fix vendors.html automatically."
-		);
-	} else {
-		console.log(
-			"\n❌ FAILED: vendors-data.json has issues that need to be fixed first."
-		);
-	}
 }
 
 // Run the main function

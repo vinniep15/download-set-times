@@ -387,14 +387,12 @@
 						document.getElementById("debug-messages");
 					const time = new Date().toLocaleTimeString();
 					debugMessages.innerHTML += `<div class="py-1 border-t border-gray-800"><span class="text-gray-500">${time}</span> ${message}</div>`;
-					console.log(`[DEBUG] ${message}`);
 					debugMessages.scrollTop = debugMessages.scrollHeight;
 				};
 
 				// Load vendor data
 				try {
 					window.debugLog("Fetching vendor data...");
-					console.log("Fetching vendor data...");
 					const response = await fetch("vendors-data.json");
 
 					if (!response.ok) {
@@ -404,14 +402,12 @@
 					}
 
 					const text = await response.text();
-					console.log("Raw JSON data length:", text.length);
 					window.debugLog(
 						`Received ${text.length} characters of data`
 					);
 
 					try {
 						vendorData = JSON.parse(text);
-						console.log("Parsed vendor data:", vendorData);
 						window.debugLog(
 							`Successfully parsed JSON with ${
 								vendorData.zones ? vendorData.zones.length : 0
@@ -452,10 +448,6 @@
 							);
 						}
 
-						console.log(
-							`Loaded ${vendorData.zones.length} vendors`
-						);
-
 						// Count Arena vendors as a check
 						const arenaVendors = vendorData.zones.filter(
 							(vendor) =>
@@ -466,9 +458,6 @@
 										loc.trim().toLowerCase() ===
 											"arena".toLowerCase()
 								)
-						);
-						console.log(
-							`Found ${arenaVendors.length} Arena vendors in data`
 						);
 
 						// Using more flexible matching for Arena vendors for comparison
@@ -483,24 +472,9 @@
 											.includes("arena")
 								)
 						);
-						console.log(
-							`Found ${arenaVendorsFlexible.length} Arena vendors with flexible matching`
-						);
-						window.debugLog(
-							`Strict matching found ${arenaVendors.length} Arena vendors`
-						);
-						window.debugLog(
-							`Flexible matching found ${arenaVendorsFlexible.length} Arena vendors`
-						);
 
 						// Run diagnostics
-						window.debugLog("Running vendor data diagnostics...");
 						const diagnostics = runVendorDataDiagnostics();
-						window.debugLog(
-							`Diagnostics complete: ${JSON.stringify(
-								diagnostics
-							)}`
-						);
 
 						// Hide loading indicator
 						document.getElementById(
@@ -516,9 +490,6 @@
 						);
 					}
 				} catch (error) {
-					console.error("Error loading vendor data:", error);
-					window.debugLog(`Error loading data: ${error.message}`);
-
 					// Hide loading indicator even if there's an error
 					document.getElementById("loading-indicator").style.display =
 						"none";
@@ -619,22 +590,6 @@
 					}
 				});
 
-				console.log(
-					"Generated unique locations:",
-					Array.from(locations)
-				);
-				console.log("Location counts:", locationCounts);
-				window.debugLog(
-					`Found vendors by location: ${JSON.stringify(
-						locationCounts
-					)}`
-				);
-				window.debugLog(
-					`Standardized to these locations: ${Array.from(
-						locations
-					).join(", ")}`
-				);
-
 				// Add location bubbles
 				locations.forEach((location) => {
 					// Create location bubble
@@ -665,7 +620,6 @@
 
 			function selectLocation(location) {
 				currentLocation = location;
-				console.log(`Selected location: ${location}`);
 
 				// Update navigation
 				navigationStack.push({level: "location"});
@@ -691,7 +645,6 @@
 				tagsContainer.innerHTML = "";
 
 				// Add debug information
-				console.log("Generating tags for location:", location);
 
 				// Find vendors for this location using a more flexible match
 				const vendorsInLocation = vendorData.zones.filter((vendor) => {
@@ -707,10 +660,6 @@
 
 					return hasLocation;
 				});
-
-				console.log(
-					`Found ${vendorsInLocation.length} vendors in ${location}`
-				);
 
 				// Extract unique tags from vendors
 				const uniqueTags = new Set();
@@ -752,7 +701,6 @@
 
 			function selectTag(tag) {
 				currentTag = tag;
-				console.log(`Selected tag: ${tag}`);
 
 				// Update navigation
 				navigationStack.push({level: "tag", location: currentLocation});
@@ -785,8 +733,6 @@
 				`;
 
 				// Log what we're looking for
-				console.log("Looking for vendors in location:", location);
-				console.log("Looking for vendors with tag:", tag);
 
 				// Find vendors matching location and tag
 				let matchingVendors = [];
@@ -805,10 +751,6 @@
 				try {
 					// Filter vendors by location and tag
 					if (Array.isArray(vendorData.zones)) {
-						console.log(
-							`Total vendors in data: ${vendorData.zones.length}`
-						);
-
 						// Enhanced location debugging before filtering
 						if (location === "Arena") {
 							const arenaVendorsDebug = vendorData.zones.filter(
@@ -822,30 +764,9 @@
 												.includes("arena")
 									)
 							);
-							console.log(
-								`DEBUG: Found ${arenaVendorsDebug.length} potential Arena vendors before tag filtering`
-							);
 
 							// Show the first few
-							arenaVendorsDebug
-								.slice(0, 3)
-								.forEach((vendor, i) => {
-									console.log(
-										`DEBUG: Arena vendor ${i + 1}: ${
-											vendor.name || "Unknown"
-										}`
-									);
-									console.log(
-										`DEBUG:   Location: ${JSON.stringify(
-											vendor.location
-										)}`
-									);
-									console.log(
-										`DEBUG:   Tags: ${JSON.stringify(
-											vendor.tags
-										)}`
-									);
-								});
+							arenaVendorsDebug.slice(0, 3);
 						}
 
 						matchingVendors = vendorData.zones.filter((vendor) => {
@@ -862,15 +783,6 @@
 										.trim();
 									const isMatch = locStr.includes(searchLoc);
 
-									// Only log for Arena to avoid excessive logging
-									if (location === "Arena" && isMatch) {
-										console.log(
-											`DEBUG: Location match for "${
-												vendor.name || "Unknown"
-											}": ${locStr}`
-										);
-									}
-
 									return isMatch;
 								});
 
@@ -880,25 +792,6 @@
 								(Array.isArray(vendor.tags) &&
 									vendor.tags.includes(tag));
 
-							// For Arena vendors, log when they don't match the tag
-							if (
-								location === "Arena" &&
-								locationMatch &&
-								!tagMatch &&
-								tag !== "All"
-							) {
-								console.log(
-									`DEBUG: Arena vendor "${
-										vendor.name || "Unknown"
-									}" doesn't match tag "${tag}"`
-								);
-								console.log(
-									`DEBUG:   Tags: ${JSON.stringify(
-										vendor.tags
-									)}`
-								);
-							}
-
 							return locationMatch && tagMatch;
 						});
 					} else {
@@ -907,17 +800,9 @@
 							typeof vendorData.zones
 						);
 					}
-
-					console.log(
-						`Found ${matchingVendors.length} matching vendors for ${location} with tag ${tag}`
-					);
 				} catch (error) {
 					console.error("Error filtering vendors:", error);
 				}
-
-				console.log(
-					`Found ${matchingVendors.length} vendors in ${location} with tag ${tag}`
-				);
 
 				// If no vendors found
 				if (matchingVendors.length === 0) {
@@ -982,19 +867,6 @@
 							dietaryOptions = vendor.tags.filter((tag) =>
 								dietaryTags.includes(tag)
 							);
-						}
-
-						// Log details for Arena vendors for debugging
-						if (location === "Arena") {
-							console.log(
-								`Adding card for Arena vendor: ${vendorName}`
-							);
-							console.log(
-								`  Location data: ${JSON.stringify(
-									vendor.location
-								)}`
-							);
-							console.log(`  Processed location: ${locationStr}`);
 						}
 
 						// Create card HTML
@@ -1066,8 +938,6 @@
 			// Vendor Details
 			// ----------------------
 			function showVendorDetails(vendor) {
-				console.log("Showing vendor details:", vendor);
-
 				try {
 					// Validate vendor data
 					if (!vendor) {

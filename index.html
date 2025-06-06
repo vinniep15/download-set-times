@@ -98,6 +98,21 @@
 					transform: rotate(360deg);
 				}
 			}
+
+			.dropdown-active {
+				z-index: 60 !important;
+			}
+
+			/* Stage dropdowns should always be above day dropdowns when both are open */
+			#stage-dropdown-mobile.dropdown-active,
+			#districtx-stage-dropdown-mobile.dropdown-active {
+				z-index: 60 !important;
+			}
+
+			#day-dropdown-mobile.dropdown-active,
+			#districtx-day-dropdown-mobile.dropdown-active {
+				z-index: 30 !important;
+			}
 		</style>
 	</head>
 	<body
@@ -225,7 +240,7 @@
 					</button>
 					<div
 						id="stage-dropdown-mobile"
-						class="hidden absolute z-30 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
+						class="hidden absolute z-50 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
 					>
 						<div class="py-1" role="menu">
 							<!-- Menu items will be here -->
@@ -259,7 +274,7 @@
 					</button>
 					<div
 						id="day-dropdown-mobile"
-						class="hidden absolute z-10 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
+						class="hidden absolute z-30 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
 					>
 						<div class="py-1" role="menu">
 							<button
@@ -494,7 +509,7 @@
 					</button>
 					<div
 						id="districtx-stage-dropdown-mobile"
-						class="hidden absolute z-30 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
+						class="hidden absolute z-50 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
 					>
 						<div class="py-1" role="menu">
 							<!-- Menu items will be populated by JavaScript -->
@@ -530,7 +545,7 @@
 					</button>
 					<div
 						id="districtx-day-dropdown-mobile"
-						class="hidden absolute z-10 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
+						class="hidden absolute z-30 mt-1 w-full rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
 					>
 						<div class="py-1" role="menu">
 							<button
@@ -875,5 +890,114 @@
 				mapImg.style.cursor = "";
 			});
 		}
+
+		document.addEventListener("DOMContentLoaded", function () {
+			// For Arena bands
+			document
+				.getElementById("stage-dropdown-btn-mobile")
+				.addEventListener("click", function () {
+					const dropdown = document.getElementById(
+						"stage-dropdown-mobile"
+					);
+					if (dropdown.classList.contains("hidden")) {
+						// Close any other dropdowns first
+						document
+							.querySelectorAll(".dropdown-active")
+							.forEach((el) => {
+								el.classList.add("hidden");
+								el.classList.remove("dropdown-active");
+							});
+						// Open this dropdown
+						dropdown.classList.remove("hidden");
+						dropdown.classList.add("dropdown-active");
+					} else {
+						dropdown.classList.add("hidden");
+						dropdown.classList.remove("dropdown-active");
+					}
+				});
+
+			document
+				.getElementById("day-dropdown-btn-mobile")
+				.addEventListener("click", function () {
+					const dropdown = document.getElementById(
+						"day-dropdown-mobile"
+					);
+					if (dropdown.classList.contains("hidden")) {
+						// Close any other day dropdowns, but keep stage dropdowns if open
+						document
+							.querySelectorAll(
+								"#day-dropdown-mobile.dropdown-active, #districtx-day-dropdown-mobile.dropdown-active"
+							)
+							.forEach((el) => {
+								el.classList.add("hidden");
+								el.classList.remove("dropdown-active");
+							});
+						// Open this dropdown
+						dropdown.classList.remove("hidden");
+						dropdown.classList.add("dropdown-active");
+					} else {
+						dropdown.classList.add("hidden");
+						dropdown.classList.remove("dropdown-active");
+					}
+				});
+
+			// For District X
+			// Similar logic for District X dropdowns
+			document
+				.getElementById("districtx-stage-dropdown-btn-mobile")
+				.addEventListener("click", function () {
+					const dropdown = document.getElementById(
+						"districtx-stage-dropdown-mobile"
+					);
+					if (dropdown.classList.contains("hidden")) {
+						document
+							.querySelectorAll(".dropdown-active")
+							.forEach((el) => {
+								el.classList.add("hidden");
+								el.classList.remove("dropdown-active");
+							});
+						dropdown.classList.remove("hidden");
+						dropdown.classList.add("dropdown-active");
+					} else {
+						dropdown.classList.add("hidden");
+						dropdown.classList.remove("dropdown-active");
+					}
+				});
+
+			document
+				.getElementById("districtx-day-dropdown-btn-mobile")
+				.addEventListener("click", function () {
+					const dropdown = document.getElementById(
+						"districtx-day-dropdown-mobile"
+					);
+					if (dropdown.classList.contains("hidden")) {
+						document
+							.querySelectorAll(
+								"#day-dropdown-mobile.dropdown-active, #districtx-day-dropdown-mobile.dropdown-active"
+							)
+							.forEach((el) => {
+								el.classList.add("hidden");
+								el.classList.remove("dropdown-active");
+							});
+						dropdown.classList.remove("hidden");
+						dropdown.classList.add("dropdown-active");
+					} else {
+						dropdown.classList.add("hidden");
+						dropdown.classList.remove("dropdown-active");
+					}
+				});
+
+			// Close dropdowns when clicking outside
+			document.addEventListener("click", function (e) {
+				if (!e.target.closest('[id$="-dropdown-btn-mobile"]')) {
+					document
+						.querySelectorAll(".dropdown-active")
+						.forEach((el) => {
+							el.classList.add("hidden");
+							el.classList.remove("dropdown-active");
+						});
+				}
+			});
+		});
 	</script>
 </html>

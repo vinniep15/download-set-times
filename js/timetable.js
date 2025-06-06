@@ -423,7 +423,6 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 	await new Promise((resolve) => setTimeout(resolve, 100));
 
 	try {
-		console.log("Starting HTML to Canvas conversion...");
 		const canvas = await html2canvas(timetableCaptureArea, {
 			width: TARGET_PNG_WIDTH,
 			height: TARGET_PNG_HEIGHT,
@@ -432,7 +431,6 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 			useCORS: true,
 			backgroundColor: "#000000",
 		});
-		console.log("Canvas generated successfully");
 
 		// --- Create the image and download it ---
 		const imgDataUrl = canvas.toDataURL("image/png");
@@ -447,7 +445,6 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 		downloadLink.click();
 		document.body.removeChild(downloadLink);
 
-		console.log("Download initiated");
 		customAlert.alert("Your timetable wallpaper is downloading.");
 	} catch (error) {
 		console.error("Error generating timetable PNG:", error);

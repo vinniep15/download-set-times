@@ -2,8 +2,6 @@
 // Run this in the browser console or Node.js to check the file
 
 async function verifyVendorsData() {
-	console.log("Verifying vendors-data.json file...");
-
 	try {
 		// In browser
 		if (typeof window !== "undefined") {
@@ -13,35 +11,22 @@ async function verifyVendorsData() {
 			}
 
 			const text = await response.text();
-			console.log(`File size: ${text.length} bytes`);
 
 			try {
 				const data = JSON.parse(text);
-				console.log("JSON structure is valid");
 
 				// Validate structure
 				if (!data.zones) {
 					console.error("Missing 'zones' property in data");
 				} else {
 					const zoneNames = Object.keys(data.zones);
-					console.log(
-						`Found ${zoneNames.length} zones: ${zoneNames.join(
-							", "
-						)}`
-					);
 
 					// Check each zone for vendors
 					let totalVendors = 0;
 					for (const zoneName of zoneNames) {
 						const vendors = data.zones[zoneName].vendors || [];
-						console.log(
-							`Zone "${zoneName}" has ${vendors.length} vendors`
-						);
 						totalVendors += vendors.length;
 					}
-					console.log(
-						`Total vendors across all zones: ${totalVendors}`
-					);
 				}
 
 				return {
@@ -50,7 +35,6 @@ async function verifyVendorsData() {
 				};
 			} catch (parseError) {
 				console.error("JSON parsing error:", parseError);
-				console.log("First 100 characters:", text.substring(0, 100));
 				return {
 					valid: false,
 					message: `JSON parsing error: ${parseError.message}`,
@@ -62,7 +46,6 @@ async function verifyVendorsData() {
 			const path = require("path");
 
 			const filePath = path.join(process.cwd(), "vendors-data.json");
-			console.log(`Checking file at: ${filePath}`);
 
 			if (!fs.existsSync(filePath)) {
 				return {
@@ -72,22 +55,15 @@ async function verifyVendorsData() {
 			}
 
 			const text = fs.readFileSync(filePath, "utf8");
-			console.log(`File size: ${text.length} bytes`);
 
 			try {
 				const data = JSON.parse(text);
-				console.log("JSON structure is valid");
 
 				// Validate structure
 				if (!data.zones) {
 					console.error("Missing 'zones' property in data");
 				} else {
 					const zoneNames = Object.keys(data.zones);
-					console.log(
-						`Found ${zoneNames.length} zones: ${zoneNames.join(
-							", "
-						)}`
-					);
 				}
 
 				return {
@@ -109,13 +85,6 @@ async function verifyVendorsData() {
 			message: `Error accessing file: ${error.message}`,
 		};
 	}
-}
-
-// Auto-execute in browser
-if (typeof window !== "undefined") {
-	verifyVendorsData().then((result) => {
-		console.log("Verification result:", result);
-	});
 }
 
 // Export for Node.js

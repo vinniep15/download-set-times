@@ -2,8 +2,6 @@
 // This script should be included directly in the HTML to test file access
 
 document.addEventListener("DOMContentLoaded", function () {
-	console.log("Running vendors-data.json access check...");
-
 	// Create a visible status indicator
 	const statusDiv = document.createElement("div");
 	statusDiv.style.position = "fixed";

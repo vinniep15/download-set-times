@@ -71,18 +71,12 @@ async function fetchWeather() {
 
 	// Check if festival dates are too far in the future
 	if (daysToStart > maxForecastDays) {
-		console.log(
-			`Weather API: Festival is ${daysToStart} days away. Forecast only available within ${maxForecastDays} days.`
-		);
 		return null;
 	}
 
 	// Check if festival dates are too far in the past
 	const daysPast = Math.floor((today - festEnd) / (1000 * 60 * 60 * 24));
 	if (daysPast > 365) {
-		console.log(
-			`Weather API: Festival was ${daysPast} days ago. Historical data only available for past year.`
-		);
 		return null;
 	}
 
@@ -111,10 +105,6 @@ async function fetchWeather() {
 				if (!res.ok) throw new Error("Weather fetch failed");
 				const data = await res.json();
 				if (!data.daily || !data.daily.time) {
-					console.warn(
-						"Weather API returned unexpected structure:",
-						data
-					);
 					return null;
 				}
 				return data.daily;

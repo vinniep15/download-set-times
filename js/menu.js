@@ -17,8 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
  * Initialize the side menu functionality
  */
 function initializeMenu() {
-	console.log("Initializing menu...");
-
 	// Get menu elements
 	const menuBtn = document.getElementById("menu-toggle-btn");
 	const menuBtnMobile = document.getElementById("menu-toggle-btn-mobile");
@@ -52,7 +50,6 @@ function initializeMenu() {
 	// Toggle menu visibility
 	function openMenu(e) {
 		e.preventDefault();
-		console.log("Opening menu");
 		if (overlay && sideMenu) {
 			overlay.classList.add("active");
 			sideMenu.classList.add("active");
@@ -66,17 +63,14 @@ function initializeMenu() {
 
 	// Attach click events to menu buttons
 	if (menuBtn) {
-		console.log("Attaching event to main menu button");
 		menuBtn.addEventListener("click", openMenu);
 	}
 
 	if (menuBtnMobile) {
-		console.log("Attaching event to mobile menu button");
 		menuBtnMobile.addEventListener("click", openMenu);
 	}
 
 	if (menuBtnDesktop) {
-		console.log("Attaching event to desktop menu button");
 		menuBtnDesktop.addEventListener("click", openMenu);
 	} else {
 		console.warn("Desktop menu button not found");
@@ -85,7 +79,6 @@ function initializeMenu() {
 	// Close menu
 	function closeMenu(e) {
 		if (e) e.preventDefault();
-		console.log("Closing menu");
 		if (overlay && sideMenu) {
 			overlay.classList.remove("active");
 			sideMenu.classList.remove("active");
@@ -94,7 +87,6 @@ function initializeMenu() {
 	}
 
 	if (closeBtn) {
-		console.log("Attaching event to close button");
 		closeBtn.addEventListener("click", closeMenu);
 	} else {
 		console.warn("Close button not found");

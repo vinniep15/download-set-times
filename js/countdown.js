@@ -78,8 +78,6 @@ function initializeCountdown() {
 
 	// Then set interval to update every second
 	setInterval(timer, 1000);
-
-	console.log("Countdown initialized successfully");
 }
 
 // Listen for navigation loaded event

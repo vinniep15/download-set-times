@@ -13,33 +13,15 @@
 					const response = await fetch("vendors-data.json");
 					const vendorsData = await response.json();
 
-					console.log("Full data structure:", vendorsData);
-					console.log(
-						"Available zones:",
-						Object.keys(vendorsData.zones || {})
-					);
-
 					const districtXVendors =
 						vendorsData.zones["District X"]?.vendors || [];
-					console.log(
-						"District X vendors count:",
-						districtXVendors.length
-					);
-					console.log("District X vendors:", districtXVendors);
 
 					// Get unique categories based on tags
 					const categories = new Set();
 
 					districtXVendors.forEach((vendor) => {
-						console.log(
-							"Processing vendor:",
-							vendor.name,
-							"with tags:",
-							vendor.tags
-						);
 						if (vendor.tags) {
 							vendor.tags.forEach((tag) => {
-								console.log("Checking tag:", tag);
 								// Convert tags to categories for filtering
 								if (
 									[
@@ -51,7 +33,6 @@
 										"Cheap",
 									].includes(tag)
 								) {
-									console.log("Adding category:", tag);
 									categories.add(tag);
 								}
 							});
@@ -62,11 +43,6 @@
 					if (districtXVendors.length > 0) {
 						categories.add("All");
 					}
-
-					console.log(
-						"Final categories found:",
-						Array.from(categories)
-					);
 
 					// Display results
 					document.getElementById("output").innerHTML = `

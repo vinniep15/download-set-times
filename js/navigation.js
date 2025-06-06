@@ -203,8 +203,6 @@ class NavigationComponent {
 		// Replace the placeholder with our navigation
 		targetElement.innerHTML = "";
 		targetElement.appendChild(navContainer);
-
-		console.log("Navigation HTML injected");
 	}
 
 	/**
@@ -216,7 +214,6 @@ class NavigationComponent {
 
 		// Wait a short moment to ensure DOM is updated
 		setTimeout(() => {
-			console.log("Navigation loaded, dispatching event");
 			// Dispatch an event to let other modules know navigation is loaded
 			document.dispatchEvent(new CustomEvent("navigationLoaded"));
 		}, 50);
