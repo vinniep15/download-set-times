@@ -32,7 +32,8 @@ function checkAndEnableDownloadButton(buttonId) {
 		if (
 			window.state &&
 			window.state.data &&
-			Array.isArray(window.state.favoriteSets)
+			Array.isArray(window.state.favoriteSets) &&
+			window.state.favoriteSets.length > 0
 		) {
 			btn.disabled = false;
 		} else {

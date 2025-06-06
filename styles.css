@@ -33,6 +33,58 @@
     margin-bottom: 0.25rem;
   }
 
+  /* Now PLaying and Upnext */
+
+  .last-updated {
+    text-align: right;
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 20px;
+}
+
+#stagesContainer {
+    display: flex;
+    flex-wrap: wrap; /* Allows sections to wrap to the next line */
+    gap: 20px; /* Space between stage sections */
+    justify-content: center; /* Center the stage sections */
+}
+
+.stage-section {
+    flex: 1; /* Allow sections to grow and shrink */
+    min-width: 280px; /* Minimum width before wrapping */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #00535375;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stage-section h2 {
+    text-align: center;
+    color: #0056b3;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #0056b3;
+}
+
+.stage-section h3 {
+    color: #555;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.stage-info p {
+    margin: 5px 0;
+    font-size: 0.95em;
+}
+
+.stage-info span {
+    font-weight: bold;
+    color: #be2a2a;
+}
+
   /* ============================================
    SLIDE-OUT MENU
    ============================================ */
@@ -48,6 +100,7 @@
     transition: opacity 0.3s ease;
     z-index: 40;
   }
+  
   
   .index-only {
     display: none;

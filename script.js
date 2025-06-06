@@ -60,6 +60,124 @@ window.populateArenaStageDropdown = populateArenaStageDropdown;
 window.showFavoritesOnly = showFavoritesOnly;
 window.toggleFavoriteSet = toggleFavoriteSet;
 
+// --- Now Playing ---
+
+document.addEventListener('DOMContentLoaded', () => {
+    let bandSchedule = []; // Initialize as an empty array
+    const stagesContainerElem = document.getElementById('stagesContainer'); // New element to target
+    const lastUpdatedElem = document.getElementById('lastUpdated');
+
+    let currentPlayingBandsPerStage = {}; // Object to track current bands per stage to detect changes
+
+    function formatTime(dateString) {
+        const options = { hour: '2-digit', minute: '2-digit', hour12: false };
+        return new Date(dateString).toLocaleTimeString('en-GB', options);
+    }
+
+    function updateStageDisplays() {
+        const now = new Date();
+        const stagesData = {}; // Object to hold currently playing and next up for each stage
+
+        // Group and sort bands by stage
+        bandSchedule.forEach(band => {
+            if (!stagesData[band.stage]) {
+                stagesData[band.stage] = {
+                    currentlyPlaying: null,
+                    upNext: null,
+                    bands: [] // Store all bands for the stage to sort later
+                };
+            }
+            stagesData[band.stage].bands.push(band);
+        });
+
+        // Process each stage
+        Object.keys(stagesData).sort().forEach(stageName => { // Sort stage names for consistent display order
+            const stage = stagesData[stageName];
+            stage.bands.sort((a, b) => new Date(a.startTime) - new Date(b.startTime)); // Sort bands within the stage by time
+
+            let foundCurrentForStage = null;
+            let foundNextForStage = null;
+
+            for (let i = 0; i < stage.bands.length; i++) {
+                const band = stage.bands[i];
+                const startTime = new Date(band.startTime);
+                const endTime = new Date(band.endTime);
+
+                if (now >= startTime && now < endTime) {
+                    foundCurrentForStage = band;
+                    // Find the very next band for this stage
+                    if (i + 1 < stage.bands.length) {
+                        foundNextForStage = stage.bands[i + 1];
+                    }
+                    break; // Found current band for this stage, move to next stage
+                } else if (now < startTime) {
+                    // If no band is currently playing on this stage, the first upcoming band is 'up next'
+                    foundNextForStage = band;
+                    break; // Found the next upcoming, no need to check further for this stage
+                }
+            }
+
+            stage.currentlyPlaying = foundCurrentForStage;
+            stage.upNext = foundNextForStage;
+        });
+
+        // Now, render or update the HTML based on stagesData
+        renderStageDisplays(stagesData);
+
+        lastUpdatedElem.textContent = new Date().toLocaleTimeString('en-GB');
+    }
+
+    function renderStageDisplays(stagesData) {
+        stagesContainerElem.innerHTML = ''; // Clear previous content
+
+        // Sort stage names for consistent order
+        const sortedStageNames = Object.keys(stagesData).sort();
+
+        sortedStageNames.forEach(stageName => {
+            const stage = stagesData[stageName];
+
+            const stageDiv = document.createElement('div');
+            stageDiv.classList.add('stage-section'); // Add a class for styling
+            stageDiv.innerHTML = `
+                <h2>${stageName}</h2>
+                <div class="stage-info">
+                    <h3>Currently Playing:</h3>
+                    <p>Artist: <span class="current-artist">${stage.currentlyPlaying ? stage.currentlyPlaying.artist : 'No band currently playing.'}</span></p>
+                    <p>Time: <span class="current-time">${stage.currentlyPlaying ? `${formatTime(stage.currentlyPlaying.startTime)} - ${formatTime(stage.currentlyPlaying.endTime)}` : ''}</span></p>
+                </div>
+                <div class="stage-info">
+                    <h3>Up Next:</h3>
+                    <p>Artist: <span class="next-artist">${stage.upNext ? stage.upNext.artist : 'No upcoming bands.'}</span></p>
+                    <p>Time: <span class="next-time">${stage.upNext ? `${formatTime(stage.upNext.startTime)} - ${formatTime(stage.upNext.endTime)}` : ''}</span></p>
+                </div>
+            `;
+            stagesContainerElem.appendChild(stageDiv);
+        });
+    }
+
+
+    async function loadBandSchedule() {
+        try {
+            const response = await fetch('set-times.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            bandSchedule = await response.json();
+            console.log('Band schedule loaded:', bandSchedule);
+            updateStageDisplays(); // Initial display after data is loaded
+        } catch (error) {
+            console.error('Error loading band schedule:', error);
+            stagesContainerElem.innerHTML = '<p>Error loading schedule. Please refresh the page.</p>';
+        }
+    }
+
+    // Load the schedule when the page loads
+    loadBandSchedule();
+
+    // Update every 5 seconds (5000 milliseconds)
+    setInterval(updateStageDisplays, 5000);
+});
+
 // --- Download Festival Weather Forecast ---
 async function fetchWeather() {
 	// Check if festival is within API data availability
