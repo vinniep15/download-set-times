@@ -490,7 +490,7 @@
     },
     {
       "name": "Duck Container",
-      "location": ["Arena`"],
+      "location": ["Arena"],
       "type": "Food",
       "category": [
         "Fast Food",
@@ -2280,8 +2280,8 @@
       "menu" : []
     },
     {
-      "name": "Walter",
-      "location": ["DistrictX"],
+      "name": "Waltzers",
+      "location": ["District X"],
       "type": ["Funfair"],
       "category": [],
       "menu" : []
