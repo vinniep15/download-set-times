@@ -760,22 +760,21 @@
 		// Populate details
 		const detailsContainer = document.getElementById("popupDetails");
 
-		// Get dietary info from categories
-		const dietaryTags = vendor.category
-			? vendor.category.filter((cat) =>
-					[
-						"Halal",
-						"Vegan Options",
-						"Vegetarian Options",
-						"Gluten Free Options",
-						"Totally Vegan",
-					].includes(cat)
-			  )
-			: [];
+		// --- NEW: Show all categories as "Categories" ---
+		let categoriesHTML = "";
+		if (vendor.category && vendor.category.length > 0) {
+			categoriesHTML = `
+				<div class="detail-item">
+					<span class="detail-icon">🏷️</span>
+					<span><strong>Categories:</strong> ${vendor.category.join(", ")}</span>
+				</div>
+			`;
+		}
 
 		// Check if vendor is affordable
 		const isAffordable = vendor.category
-			? vendor.category.includes("Meals under £10")
+			? vendor.category.includes("Meals under £10") ||
+			  vendor.category.includes("Meals Under £10")
 			: false;
 
 		// Build details HTML
@@ -794,18 +793,7 @@
         `
 				: ""
 		}
-        ${
-			dietaryTags.length > 0
-				? `
-        <div class="detail-item">
-            <span class="detail-icon">🌱</span>
-            <span><strong>Dietary Options:</strong> ${dietaryTags.join(
-				", "
-			)}</span>
-        </div>
-        `
-				: ""
-		}
+		${categoriesHTML}
     `;
 
 		// Check if menu exists

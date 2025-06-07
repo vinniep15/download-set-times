@@ -16,6 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	const timetableCaptureArea = document.getElementById(
 		"timetableCaptureArea"
 	);
+	console.log(
+		"[Wallpaper] DOMContentLoaded. timetableCaptureArea:",
+		timetableCaptureArea
+	);
 	if (!timetableCaptureArea) {
 		console.error(
 			"Timetable capture area element (#timetableCaptureArea) not found on DOMContentLoaded!"
@@ -49,11 +53,15 @@ window.checkAndEnableDownloadButton = checkAndEnableDownloadButton;
 
 // --- Display Modal to select day ---
 export function showDaySelectionModal() {
+	console.log("[Wallpaper] showDaySelectionModal called");
 	if (
 		!window.state ||
 		!Array.isArray(window.state.favoriteSets) ||
 		!window.state.favoriteSets.length
 	) {
+		console.warn(
+			"[Wallpaper] No favorite sets found for wallpaper generation."
+		);
 		customAlert.alert("Please add some favorite artists first!");
 		return;
 	}
@@ -175,9 +183,14 @@ export function showDaySelectionModal() {
  * @param {string | null} selectedDay The day to filter artists by (e.g., 'friday', 'saturday'), or null for all days.
  */
 async function generateVerticalTimetablePNG(selectedDay = null) {
+	console.log(
+		"[Wallpaper] generateVerticalTimetablePNG called for day:",
+		selectedDay
+	);
 	const timetableCaptureArea = document.getElementById(
 		"timetableCaptureArea"
 	);
+	console.log("[Wallpaper] timetableCaptureArea:", timetableCaptureArea);
 	timetableCaptureArea.innerHTML = "";
 	timetableCaptureArea.style.width = "";
 	timetableCaptureArea.style.height = "";
@@ -191,6 +204,8 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 
 	// --- Data Validation (Simple backup, as soon have been checked before loading Modal) ---
 	const state = window.state;
+	console.log("[Wallpaper] State:", state);
+
 	const favoriteArtistsArray = [];
 	const favoriteSetKeys = new Set(
 		state.favoriteSets.map((fav) => fav.setKey)
@@ -199,9 +214,17 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 		`${artist}|${day}|${stage}|${start}`;
 
 	["arena", "districtX"].forEach((venueKey) => {
-		if (!state.data[venueKey]) return;
+		if (!state.data[venueKey]) {
+			console.log(`[Wallpaper] No data for venue: ${venueKey}`);
+			return;
+		}
 		Object.keys(state.data[venueKey]).forEach((dayKey) => {
-			if (!state.data[venueKey][dayKey]) return;
+			if (!state.data[venueKey][dayKey]) {
+				console.log(
+					`[Wallpaper] No data for day: ${dayKey} in venue: ${venueKey}`
+				);
+				return;
+			}
 			if (
 				selectedDay &&
 				dayKey.toLowerCase() !== selectedDay.toLowerCase()
@@ -209,8 +232,12 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 				return;
 			}
 			Object.keys(state.data[venueKey][dayKey]).forEach((stageKey) => {
-				if (!Array.isArray(state.data[venueKey][dayKey][stageKey]))
+				if (!Array.isArray(state.data[venueKey][dayKey][stageKey])) {
+					console.log(
+						`[Wallpaper] No array for stage: ${stageKey} on day: ${dayKey} in venue: ${venueKey}`
+					);
 					return;
+				}
 				state.data[venueKey][dayKey][stageKey].forEach((set) => {
 					const setKey = getSetKey(
 						set.artist,
@@ -235,7 +262,7 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 							});
 						} else {
 							console.warn(
-								`Skipping incomplete favorite artist data for setKey: ${setKey} due to missing properties.`,
+								`[Wallpaper] Skipping incomplete favorite artist data for setKey: ${setKey} due to missing properties.`,
 								set
 							);
 						}
@@ -244,6 +271,8 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 			});
 		});
 	});
+
+	console.log("[Wallpaper] favoriteArtistsArray:", favoriteArtistsArray);
 
 	if (favoriteArtistsArray.length === 0) {
 		let message = "";
@@ -258,6 +287,7 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 					: "the selected days"
 			} to generate a timetable.`;
 		}
+		console.warn("[Wallpaper] " + message);
 		customAlert.alert(message);
 		return;
 	}
@@ -293,6 +323,8 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 		const timeB = timeToMinutes(b.start);
 		return timeA - timeB;
 	});
+
+	console.log("[Wallpaper] Sorted artists for PNG:", sortedArtists);
 
 	// --- Generate HTML Structure (Vertical List) ---
 	let htmlContent = "";
@@ -423,6 +455,7 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 	await new Promise((resolve) => setTimeout(resolve, 100));
 
 	try {
+		console.log("[Wallpaper] Calling html2canvas...");
 		const canvas = await html2canvas(timetableCaptureArea, {
 			width: TARGET_PNG_WIDTH,
 			height: TARGET_PNG_HEIGHT,
@@ -431,6 +464,7 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 			useCORS: true,
 			backgroundColor: "#000000",
 		});
+		console.log("[Wallpaper] html2canvas completed. Canvas:", canvas);
 
 		// --- Create the image and download it ---
 		const imgDataUrl = canvas.toDataURL("image/png");
@@ -445,9 +479,10 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 		downloadLink.click();
 		document.body.removeChild(downloadLink);
 
+		console.log("[Wallpaper] Download triggered for timetable PNG.");
 		customAlert.alert("Your timetable wallpaper is downloading.");
 	} catch (error) {
-		console.error("Error generating timetable PNG:", error);
+		console.error("[Wallpaper] Error generating timetable PNG:", error);
 		customAlert.alert(
 			"Could not generate the timetable image. An error occurred during capture. Check the console for details."
 		);
@@ -466,6 +501,7 @@ async function generateVerticalTimetablePNG(selectedDay = null) {
 		timetableCaptureArea.style.overflow = "";
 		timetableCaptureArea.style.display = "";
 		timetableCaptureArea.style.fontSize = "";
+		console.log("[Wallpaper] Clean up complete.");
 	}
 }
 

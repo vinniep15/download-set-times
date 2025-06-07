@@ -657,18 +657,16 @@ function showVendorModal(vendor) {
     </div>
   `;
 
-	// Add dietary information if available
-	if (vendor.dietaryOptions && vendor.dietaryOptions.length > 0) {
+	// --- CHANGE: Show all categories as "Categories" ---
+	if (vendor.category && vendor.category.length > 0) {
 		contentHTML += `
       <div class="mb-4">
-        <h3 class="text-lg font-semibold mb-2">Dietary Options</h3>
+        <h3 class="text-lg font-semibold mb-2">Categories</h3>
         <div class="flex flex-wrap gap-2">
-          ${vendor.dietaryOptions
+          ${vendor.category
 				.map(
 					(option) =>
-						`<span class="px-2 py-1 bg-green-900 text-green-200 text-sm rounded">${formatDietaryOption(
-							option
-						)}</span>`
+						`<span class="px-2 py-1 bg-green-900 text-green-200 text-sm rounded">${option}</span>`
 				)
 				.join("")}
         </div>

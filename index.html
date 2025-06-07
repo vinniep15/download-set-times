@@ -680,12 +680,12 @@
 			<!-- Add this button for poster generation if not present -->
 			<button
 				data-action="generate-poster"
-				style="display:none"
+				style="display: none"
 			></button>
 			<!-- Add this button for wallpaper generation if not present -->
 			<button
 				data-action="generate-wallpaper"
-				style="display:none"
+				style="display: none"
 			></button>
 		</div>
 		<!-- Overlay Management UI: Shared Favorites Legend and Controls -->
@@ -1055,11 +1055,31 @@
 		});
 
 		document.addEventListener("generateWallpaper", function () {
-			const wallpaperBtn = document.querySelector("[data-action='generate-wallpaper']");
+			const wallpaperBtn = document.querySelector(
+				"[data-action='generate-wallpaper']"
+			);
 			if (wallpaperBtn) {
 				wallpaperBtn.click();
 			} else {
 				console.warn("Wallpaper Generator button not found in DOM.");
+			}
+		});
+
+		// Add this handler to trigger the wallpaper modal
+		document.addEventListener("DOMContentLoaded", function () {
+			const wallpaperBtn = document.querySelector(
+				"[data-action='generate-wallpaper']"
+			);
+			if (wallpaperBtn) {
+				wallpaperBtn.addEventListener("click", function (e) {
+					if (typeof window.showDaySelectionModal === "function") {
+						window.showDaySelectionModal();
+					} else {
+						console.warn(
+							"showDaySelectionModal function not found."
+						);
+					}
+				});
 			}
 		});
 
