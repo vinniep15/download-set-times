@@ -3,7 +3,11 @@
  * Handles side menu functionality
  */
 document.addEventListener("DOMContentLoaded", function () {
-	initializeMenu();
+	// Wait for a short time to ensure elements are loaded
+	setTimeout(initializeMenu, 100);
+
+	// Also listen for navigation loaded event
+	document.addEventListener("navigationLoaded", initializeMenu);
 
 	// Re-initialize after dynamic content loads
 	document.addEventListener("contentLoaded", initializeMenu);
@@ -15,12 +19,16 @@ document.addEventListener("DOMContentLoaded", function () {
 function initializeMenu() {
 	// Get menu elements
 	const menuBtn = document.getElementById("menu-toggle-btn");
+	const menuBtnMobile = document.getElementById("menu-toggle-btn-mobile");
+	const menuBtnDesktop = document.getElementById("menu-toggle-btn-desktop");
 	const closeBtn = document.getElementById("menu-close-btn");
 	const overlay = document.getElementById("menu-overlay");
 	const sideMenu = document.getElementById("side-menu");
 	const menuFavorites = document.getElementById("menu-favorites");
 	const menuPosterGenerate = document.getElementById("menu-poster-generate");
-	const menuTimetableGenerate = document.getElementById("menu-timetable-generate");
+	const menuTimetableGenerate = document.getElementById(
+		"menu-timetable-generate"
+	);
 	const menuMapBtn = document.getElementById("menu-map-btn");
 
 	// Check if we're on the index page
@@ -40,27 +48,54 @@ function initializeMenu() {
 	});
 
 	// Toggle menu visibility
-	if (menuBtn) {
-		menuBtn.addEventListener("click", function () {
+	function openMenu(e) {
+		e.preventDefault();
+		if (overlay && sideMenu) {
 			overlay.classList.add("active");
 			sideMenu.classList.add("active");
 			document.body.style.overflow = "hidden"; // Prevent scrolling
-		});
+		} else {
+			console.error(
+				"Menu elements not found: overlay or sideMenu missing"
+			);
+		}
+	}
+
+	// Attach click events to menu buttons
+	if (menuBtn) {
+		menuBtn.addEventListener("click", openMenu);
+	}
+
+	if (menuBtnMobile) {
+		menuBtnMobile.addEventListener("click", openMenu);
+	}
+
+	if (menuBtnDesktop) {
+		menuBtnDesktop.addEventListener("click", openMenu);
+	} else {
+		console.warn("Desktop menu button not found");
 	}
 
 	// Close menu
-	function closeMenu() {
-		overlay.classList.remove("active");
-		sideMenu.classList.remove("active");
-		document.body.style.overflow = ""; // Restore scrolling
+	function closeMenu(e) {
+		if (e) e.preventDefault();
+		if (overlay && sideMenu) {
+			overlay.classList.remove("active");
+			sideMenu.classList.remove("active");
+			document.body.style.overflow = ""; // Restore scrolling
+		}
 	}
 
 	if (closeBtn) {
 		closeBtn.addEventListener("click", closeMenu);
+	} else {
+		console.warn("Close button not found");
 	}
 
 	if (overlay) {
 		overlay.addEventListener("click", closeMenu);
+	} else {
+		console.warn("Overlay element not found");
 	}
 
 	// Handle menu item clicks
@@ -96,11 +131,8 @@ function initializeMenu() {
 
 	if (menuMapBtn) {
 		menuMapBtn.addEventListener("click", function () {
-			// Directly open the map modal
-			const mapModal = document.getElementById("map-modal");
-			if (mapModal) {
-				mapModal.classList.remove("hidden");
-			}
+			// Navigate to the dedicated map page in the same tab
+			window.location.href = "map.html";
 			closeMenu();
 		});
 	}

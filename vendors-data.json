@@ -1,247 +1,2290 @@
 {
-  "vendors": {
-    "arena": [
-      {
-        "id": "a1",
-        "name": "Metal Burger Co.",
-        "description": "Gourmet burgers with rock n' roll attitude",
-        "type": "food",
-        "location": "arena",
-        "locationDetail": "Near Main Stage",
-        "dietaryOptions": ["vegetarian", "glutenfree"],
-        "menu": [
-          {
-            "name": "Black Sabbath Burger",
-            "price": "£10.00",
-            "description": "Double beef patty with cheese and bacon",
-            "dietary": []
-          },
-          {
-            "name": "Veggie Maiden",
-            "price": "£9.00",
-            "description": "Plant-based patty with vegan cheese",
-            "dietary": ["vegetarian", "vegan"]
-          },
-          {
-            "name": "GF Metallica",
-            "price": "£10.00",
-            "description": "Gluten free bun with beef patty",
-            "dietary": ["glutenfree"]
-          }
-        ],
-        "paymentOptions": ["cash", "card"],
-        "openingTimes": "11:00-00:00",
-        "image": "burger.jpg"
-      },
-      {
-        "id": "a2",
-        "name": "Headbanger's Pizza",
-        "description": "Wood-fired pizzas with big flavors",
-        "type": "food",
-        "location": "arena",
-        "locationDetail": "Food Court",
-        "dietaryOptions": ["vegetarian", "vegan"],
-        "menu": [
-          {
-            "name": "Meat Lover's Mayhem",
-            "price": "£12.00",
-            "description": "Loaded with pepperoni, ham, and sausage",
-            "dietary": []
-          },
-          {
-            "name": "Vegan Vendetta",
-            "price": "£11.00",
-            "description": "Plant-based cheese and veggies",
-            "dietary": ["vegetarian", "vegan"]
-          }
-        ],
-        "paymentOptions": ["cash", "card"],
-        "openingTimes": "12:00-23:00",
-        "image": "pizza.jpg"
-      }
+  "zones": [
+    {
+      "name": "3CZ BBQ",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Carribian & African",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "A Taste of Jamrock Ltd",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Carribian & African",
+        "Kids Meal",
+        "Festival Favourites",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
     ],
-    "districtX": [
-      {
-        "id": "d1",
-        "name": "Punk Pancakes",
-        "description": "Sweet and savory pancakes with attitude",
-        "type": "food",
-        "location": "districtX",
-        "locationDetail": "Near District X Stage",
-        "dietaryOptions": ["vegetarian", "glutenfree"],
-        "menu": [
-          {
-            "name": "Classic Stack",
-            "price": "£8.00",
-            "description": "American style with maple syrup",
-            "dietary": ["vegetarian"]
-          },
-          {
-            "name": "GF Rock Stack",
-            "price": "£9.00",
-            "description": "Gluten free pancakes with berries",
-            "dietary": ["vegetarian", "glutenfree"]
-          }
-        ],
-        "paymentOptions": ["cash", "card"],
-        "openingTimes": "08:00-16:00",
-        "image": "pancakes.jpg"
-      },
-      {
-        "id": "d2",
-        "name": "Mosh Pit Bar",
-        "description": "Craft beers and festival drinks",
-        "type": "drinks",
-        "location": "districtX",
-        "locationDetail": "Center of District X",
-        "menu": [
-          {
-            "name": "Festival Lager",
-            "price": "£6.00",
-            "description": "Cold and refreshing"
-          },
-          {
-            "name": "Heavy Metal IPA",
-            "price": "£7.00",
-            "description": "Strong and hoppy"
-          },
-          {
-            "name": "Alcohol-Free Rocker",
-            "price": "£5.00",
-            "description": "Zero alcohol beer"
-          }
-        ],
-        "paymentOptions": ["cash", "card"],
-        "openingTimes": "11:00-02:00",
-        "image": "bar.jpg"
-      }
-    ],
-    "village": [
-      {
-        "id": "v1",
-        "name": "Rock Climbing Wall",
-        "description": "Test your climbing skills",
-        "type": "activity",
-        "location": "village",
-        "locationDetail": "Village Center",
-        "prices": "£5 per climb",
-        "openingTimes": "10:00-20:00",
-        "image": "climbing.jpg"
-      },
-      {
-        "id": "v2",
-        "name": "Merch Central",
-        "description": "Official Download Festival merchandise",
-        "type": "merchandise",
-        "location": "village",
-        "locationDetail": "Main Village Area",
-        "products": [
-          {
-            "name": "Festival T-Shirt",
-            "price": "£25.00"
-          },
-          {
-            "name": "Hoodie",
-            "price": "£45.00"
-          },
-          {
-            "name": "Poster",
-            "price": "£15.00"
-          }
-        ],
-        "paymentOptions": ["cash", "card"],
-        "openingTimes": "10:00-23:00",
-        "image": "merch.jpg"
-      },
-      {
-        "id": "v3",
-        "name": "Vegan Viking",
-        "description": "100% plant-based street food",
-        "type": "food",
-        "location": "village",
-        "locationDetail": "Food Market",
-        "dietaryOptions": ["vegan", "glutenfree", "nutfree"],
-        "menu": [
-          {
-            "name": "Seitan Kebab",
-            "price": "£9.00",
-            "description": "Plant-based kebab with salad and sauce",
-            "dietary": ["vegan"]
-          },
-          {
-            "name": "Buddha Bowl",
-            "price": "£10.00",
-            "description": "Fresh veggies, quinoa, and tahini dressing",
-            "dietary": ["vegan", "glutenfree", "nutfree"]
-          }
-        ],
-        "paymentOptions": ["cash", "card"],
-        "openingTimes": "11:00-22:00",
-        "image": "vegan.jpg"
-      }
-    ],
-    "campsite": [
-      {
-        "id": "c1",
-        "name": "Breakfast Club",
-        "description": "Morning fuel for festival goers",
-        "type": "food",
-        "location": "campsite",
-        "locationDetail": "Main Campsite Entrance",
-        "dietaryOptions": ["vegetarian", "glutenfree"],
-        "menu": [
-          {
-            "name": "Full English",
-            "price": "£9.00",
-            "description": "Eggs, bacon, sausage, beans, toast",
-            "dietary": []
-          },
-          {
-            "name": "Veggie Breakfast",
-            "price": "£8.00",
-            "description": "Veggie sausage, eggs, beans, mushrooms, toast",
-            "dietary": ["vegetarian"]
-          },
-          {
-            "name": "GF Breakfast",
-            "price": "£9.00",
-            "description": "Gluten free version of the Full English",
-            "dietary": ["glutenfree"]
-          }
-        ],
-        "paymentOptions": ["cash", "card"],
-        "openingTimes": "06:00-12:00",
-        "image": "breakfast.jpg"
-      },
-      {
-        "id": "c2",
-        "name": "Campsite Store",
-        "description": "Essentials for campers",
-        "type": "merchandise",
-        "location": "campsite",
-        "locationDetail": "Center of Campsite",
-        "products": [
-          {
-            "name": "Water (1.5L)",
-            "price": "£2.50"
-          },
-          {
-            "name": "Toilet Paper",
-            "price": "£1.50"
-          },
-          {
-            "name": "Wet Wipes",
-            "price": "£3.00"
-          },
-          {
-            "name": "Portable Charger",
-            "price": "£15.00"
-          }
-        ],
-        "paymentOptions": ["cash", "card"],
-        "openingTimes": "08:00-22:00",
-        "image": "store.jpg"
-      }
-    ]
-  }
+      "menu": []
+    },
+    {
+      "name": "Alpine Hot Dogs",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Breakfast",
+        "Fast Food",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Amen Jerk BBQ",
+      "location": ["Unknown"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Carribian & African",
+        "Breakfast",
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Amore Pizzetta",
+      "location": ["Plus"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Amore Pizzetta - Breakfast and Lunch",
+      "location": ["RIP"],
+      "type": "Food",
+      "category": [
+        "Meals under £10",
+        "Pizza & Pasta",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Arancina Pizzeria",
+      "location": ["Guest"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Aroma Grill",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals under £10",
+        "Coeliac Friendly",
+        "Gluten Free",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Authentic German Sausages",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Big Mouth Gyoza",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Festival Favourites",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Brothers Bond Burgers",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Breakfast",
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Brownies",
+      "location": ["Guest"],
+      "type": "Deserts & Sweet Treats",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Bunnymans",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Festival Favourites",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Burger & Fries",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Burger & Fries",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Fast Food",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Burger Bus",
+      "location": ["Campervans"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Breakfast",
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Burger N Fries",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Burger Shack",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Meals under £10",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Burger and Beyond",
+      "location": ["Metal Meadows", "Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Breakfast",
+        "Fast Food",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Burrito Boys",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Festival Favourites",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Burrito and Nachos",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Carvery Kitchen",
+      "location": ["Plus"],
+      "type": "Food",
+      "category": [
+        "Classic British",
+        "Breakfast",
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Cest Cheese",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Meals under £10",
+        "Festival Favourites",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Ceylon and Beyond",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Kids Meal",
+        "Festival Favourites",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Chargrilled",
+      "location": ["Arena (Access Platform)"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Cheesecake and Coffee",
+      "location": ["Arena"],
+      "type": ["Coffee & Hot Drinks", "Deserts & Sweet Treats"],
+      "category": [
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Chick N Plant Based",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Totally Vegan",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Chicken Chips and Dip Marquee",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Meals under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Chicken Shack",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Meals under £10",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Chicken Shop",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Breakfast",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Chicken Wraps",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Chickenish - Vegan Fried Chicken",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Totally Vegan",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Chilli Kitchen",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Pan Asian"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Churros",
+      "location": ["Arena"],
+      "type": ["Coffee & Hot Drinks", "Deserts & Sweet Treats"],
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Cookie Dough and Pancakes Container",
+      "location": ["Arena"],
+      "type": ["Coffee & Hot Drinks", "Deserts & Sweet Treats"],
+      "category": [
+        "Meals Under £10",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Custard and Crumble",
+      "location": ["District X"],
+      "type": "Deserts & Sweet Treats",
+      "category": [
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Deliah's Donuts",
+      "location": ["Arena"],
+      "type": "Deserts & Sweet Treats",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Duck Container",
+      "location": ["Arena`"],
+      "type": "Food",
+      "category": [
+        "Fast Food",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Duck Hut",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Eat Greek",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Eat Kebab",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Every Fish Bar",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Classic British",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Fire and Dough",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Fish & Chips",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Classic British",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Fish N Chips",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Classic British",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Forno Pizza",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "GF Mexitaco",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Coeliac Friendly",
+        "Vegan",
+        "Totally Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Game and Flames",
+      "location": ["Unknown"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Kebabs, Wraps & Gyros",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Good Slice Pizza",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Goodness Gracious Healthy Foods",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Gourmet Noodles",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Greek Marquee",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Vegetarian"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Griddle Guys",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Gyros",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Halloumination",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Fast Food",
+        "Meals Under £10",
+        "Coeliac Friendly",
+        "Gluten Free",
+        "Vegetarian"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Hannah's Toast Box",
+      "location": ["Purple"],
+      "type": "Food",
+      "category": [
+        "Classic British",
+        "Kids Meal",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Happy Crepes",
+      "location": ["Arena"],
+      "type": "Deserts & Sweet Treats",
+      "category": [
+        "Meals Under £10",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Happy Maki - VShushi",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Kids Meal",
+        "Totally Vegan",
+        "Coeliac Friendly",
+        "Gluten Free",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Hide & Greek",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Holy Duck",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "HunkyDoryCoffee",
+      "location": ["Metal Meadows"],
+      "type": "Coffee & Hot Drinks",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "I Love Burger",
+      "location": ["Blue"],
+      "type": "Food",
+      "category": [
+        "Fast Food",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "I Love Ostrich",
+      "location": ["Guest"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Meals Under £10",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "In For A Penne",
+      "location": ["Unknown"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Kids Meal",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Indonesian Coconut Curry",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Coeliac Friendly",
+        "Gluten Free",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Japanese Fried Chicken",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Kebab Cartel",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Ken's Barbi",
+      "location": ["Guest"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Vegetarian"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Korean Street Feast",
+      "location": ["Unknown"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Loaded Dogs",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Fast Food",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Loaded Fries",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Fast Food",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Loaded Fries and Nachos",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Spud Gun Loaded Fries",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Fast Food",
+        "Meals Under £10",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Loaded Hash Browns",
+      "location": ["Unknown"],
+      "type": "Food",
+      "category": [
+        "Breakfast",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Loaded Shack",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Loaded Spuds Chips Wedges",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Classic British",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"],
+      "menu": []
+    },
+    {
+      "name": "Lovin' The Oven",
+      "location": ["Unknown"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Breakfast",
+        "Kids Meal",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Mandala Himalayan Dumplings",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Festival Favourites",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Mario's Chicken and Fries",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Mexican",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Mexitaco",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Monks Hood Coffee",
+      "location": ["Guest"],
+      "type": "Coffee & Hot Drinks",
+      "category": [
+        "Vegetarian"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Mr Churros",
+      "location": ["Arena"],
+      "type": "Deserts & Sweet Treats",
+      "category": [
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Nugs",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Coeliac Friendly",
+        "Gluten Free",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "New York Fries",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Fast Food",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Noble's Kitchen",
+      "location": ["Metal Meadows"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Noodle City",
+      "location": ["District X", "Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Noodle King",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Oats My Goodness",
+      "location": ["District X"],
+      "type": "Coffee & Hot Drinks",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Ohala Gourmet Loaded Fries",
+      "location": ["Guest"],
+      "type": "Food",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Oink BBQ",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "One Pan Noodles",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Paella",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Meals Under £10",
+        "Coeliac Friendly",
+        "Gluten Free",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Pantha Coffee",
+      "location": ["Unknown"],
+      "type": ["Coffee & Hot Drinks", "Deserts & Sweet Treats"],
+      "category": [
+        "Kids Meal",
+        "Gluten Free",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Persian Delights",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Breakfast",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Phat Khao",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Pho Nation",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Totally Vegan",
+        "Coeliac Friendly",
+        "Gluten Free",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Pizza Pasta",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Pizzatopia",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Breakfast",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Pizzeria - Fries Fries Fries",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Fast Food",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Quenchers Smoothies & Toasties",
+      "location": ["Unknown"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Redheads Mac N Cheese",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Fast Food",
+        "Festival Favourites",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Risotti and Arancini",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Rosto Steak Frites",
+      "location": ["Unknown"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Routes Coffee",
+      "location": ["Arena"],
+      "type": "Coffee & Hot Drinks",
+      "category": [
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Salt & Chilli Chicken",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Salt & Chilli Chicken",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Senor Churro",
+      "location": ["Arena"],
+      "type": "Deserts & Sweet Treats",
+      "category": [
+        "Vegan",
+        "Vegetarian"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Smokehouse",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Breakfast",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Supermacs",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Meals Under £10"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Taiga Burger Kitchen Ltd",
+      "location": ["Purple"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Taiga Mexican",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Teabag Chihuahua's Streetfood Mexican",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "That's Nacho Burrito",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Mexican & South American",
+        "Kids Meal",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "The Alpine Pizza Co",
+      "location": ["District X", "Arena"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "The Fruit Cup",
+      "location": ["Unknown"],
+      "type": "Food",
+      "category": [
+        "Breakfast",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "The Garden Restaurants",
+      "location": ["Guest"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "The Greek",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Breakfast",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "The Mac Shac",
+      "location": ["Unknown"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Fast Food",
+        "Vegan",
+        "Vegetarian"
+      ],
+      "menu": []
+    },
+    {
+      "name": "The Real Banger Co",
+      "location": ["Orange"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Breakfast",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "The Roaming Rotisserie",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Festival Favourites",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "The Roasted Martini",
+      "location": ["Arena"],
+      "type": "Coffee & Hot Drinks",
+      "category": [
+        "Vegetarian"
+      ],
+      "menu": []
+    },
+    {
+      "name": "The Rock 'n' Roll Toastie",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Festival Favourites",
+        "Fast Food",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "The Tasty Shack",
+      "location": ["Yellow"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Tikka Wrap",
+      "location": ["Welders Yard"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Pan Asian",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Toastie",
+      "location": ["Yellow"],
+      "type": "Food",
+      "category": [
+        "Classic British",
+        "Meals Under £10",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Tori and Ben's Kitchen",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Vegan and Vegetarian",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Veggie Republic",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Vegan",
+        "Totally Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Vintage Coffee",
+      "location": ["Arena"],
+      "type": "Coffee & Hot Drinks",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Voodoo Rays",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pizza & Pasta",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Wildfire - Burgers and Breakfast",
+      "location": ["Orange", "Purple"],
+      "type": "Food",
+      "category": [
+        "Breakfast",
+        "American BBQ",
+        "Meals Under £10",
+        "Festival Favourites",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Wing Theory",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Wings and Fries",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Fast Food",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Wok Boy",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Kids Meal",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Wok Plant - Vegan",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "Pan Asian",
+        "Vegan",
+        "Totally Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Woodwards Farm Burger Shack",
+      "location": ["Arena"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Wraps and Baps",
+      "location": ["District X"],
+      "type": "Food",
+      "category": [
+        "Kebabs, Wraps & Gyros",
+        "Vegan",
+        "Vegetarian",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Yay Churros",
+      "location": ["District X"],
+      "type": "Deserts & Sweet Treats",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Yellow Bus Burgers",
+      "location": ["Red"],
+      "type": "Food",
+      "category": [
+        "American BBQ",
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Axe Head by The Axe House",
+      "location": ["District X"],
+      "type": "Experience",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Hair Of The Dog",
+      "location": ["District X"],
+      "type": ["Experience", "Bar"],
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Bar 1",
+      "location":["Arena"],
+      "type":"Bar",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Bar 2",
+      "location":["Arena"],
+      "type":"Bar",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Bar 3",
+      "location":["Arena"],
+      "type":"Bar",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Bar 4",
+      "location":["Arena"],
+      "type":"Bar",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Beer Hall",
+      "location":["Arena"],
+      "type":"Bar",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Caffe Lambro Cocktails",
+      "location": ["Welders Yard"],
+      "type":"Bar",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Rocktail Cocktails",
+      "location": ["Arena"],
+      "type":"Bar",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Canny Coffees",
+      "location": ["Unknown"],
+      "type":"Drinks",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Carnival Coffee",
+      "location": ["Unknown"],
+      "type":"Drinks",
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Caffe Lambro Cocktails",
+      "location": ["Arena"],
+      "type":"Drinks",
+      "category": [
+        "Bar"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Camel Shisha",
+      "location": ["District X"],
+      "type": "Experience", 
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Churros And Coffee Hut",
+      "location": ["Arena"],
+      "type": ["Coffee & Hot Drinks"], 
+      "category": [
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": []
+    },
+    {
+      "name": "Churros & Coffee",
+      "location": ["Arena"],
+      "type":["Coffee & Hot Drinks"],
+      "category": [
+        "Meals Under £10",
+        "Vegan",
+        "Vegetarian",
+        "Halal",
+        "Gluten Free"
+      ],
+      "menu": [
+        "Churros & Chocolate - £8.00 - Veg H",
+        "Chocolate Sauce - £1.00 - Veg H Gf",
+        "Espresso - £3.20",
+        "Americano - £4.00",
+        "Flat White - £4.00",
+        "Latte - £4.00",
+        "Chai Latte - £4.50",
+        "Cappuccino - £4.00",
+        "Mocha - £4.50",
+        "Hot Chocolate - £4.50",
+        "Tea - £3.00",
+        "Syrup - £0.75",
+        "Iced Latte - £4.50",
+        "Matcha Latte - £5.00",
+        "Smoothies - £5.00",
+        "Juice - £4.00",
+        "Soft Drink",
+        "Water - £2.80"
+      ]
+    },
+    {
+      "name": "Cloud Nine Coffee",
+      "location": ["Purple"],
+      "type":["Drinks"],
+      "category": [
+        "Coffee & Hot Drinks",
+        "Dessert & Sweet treats"
+      ],
+      "menu": [
+        "Espresso - £3.00",
+        "Cortado - £3.50",
+        "Americano - £3.50",
+        "Flat White - £3.80",
+        "Cappuccino - £3.80",
+        "Latte - £3.80",
+        "Mocha - £4.00",
+        "Hot Choc - £3.60",
+        "Tea - £2.50",
+        "Iced Black - £4.00",
+        "Iced Latte - £4.00",
+        "Iced Hot Chocolate - £4.00",
+        "Chai Latte - £4.00",
+        "Matcha Latte - £4.50",
+        "Cake - £3.50 Veg",
+        "Chocolate Bar - £1.50 Veg Gf H",
+        "Oat Milk - £0.50",
+        "Syrup - £0.50",
+        "Orange Juice - £4.50",
+        "Milkshake - £5.00",
+        "Smoothie - £5.00"
+      ]
+    },
+    {
+      "name": "Coffee & Brunch Baps",
+      "location": [""],
+      "type":["Food", "Drinks"],
+      "category":[
+        "Coffee & Hot Drinks",
+        "Breakfast",
+        "Dessert & Sweet treats"
+      ],
+      "menu": [
+        "Espresso - £3.10",
+        "Americano - £3.50",
+        "Flat White - £4.00",
+        "Latte - £4.00",
+        "Cappuccino - £4.00",
+        "Mocha - £4.50",
+        "Chai Latte - £4.20",
+        "Tea - £2.95",
+        "Hot Chocolate - £4.50",
+        "Add Cream - £0.50",
+        "Add Marshmallows - £0.50",
+        "Cream & Marshmallows - £1.00",
+        "Syrup - £0.60",
+        "Oat Milk - £0.60",
+        "Nutella Latte - £5.95",
+        "Biscoff Latte - £5.95",
+        "Terry's Orange Hot Chocolate - £5.95",
+        "Aero Mint Hot Chocolate - £5.95",
+        "Iced Chocolate - £4.50",
+        "Iced Latte - £4.65",
+        "Iced Americano - £3.50",
+        "Iced Mocha - £4.95",
+        "Dirty Chai - £4.65",
+        "Iced Biscoff Latte - £5.95",
+        "Iced Nutella Latte - £5.95",
+        "Iced Terrys Orange - £5.95",
+        "Iced Aero Mint Choc - £5.95",
+        "Iced Flat White - £4.15",
+        "Iced Cappuccino - £4.65",
+        "Iced Chai - £4.20",
+        "Iced Dirty Chai - £4.65",
+        "Traditional Sausage - £7.00",
+        "Bacon Bap - £7.00",
+        "Double Sausage - £8.50",
+        "Brunch Bap - £10.00",
+        "Pork and Apple - £9.00",
+        "Vegan Sausage Bap - £7.00"
+      ]
+    },
+    {
+      "name": "District X Pub",
+      "location": ["District X"],
+      "type": "Bar",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Espresso Coffee House",
+      "location": ["Purple"],
+      "type":["Food", "Drinks"],
+      "category": [
+        "Coffee & Hot Drinks"
+      ],
+      "menu": [
+        "Latte - £4.00",
+        "Espresso - £3.20",
+        "Cappuccino - £4.00",
+        "Macchiato - £3.40",
+        "Mocha - £4.25",
+        "White Mocha - £4.25",
+        "Dirty Chai - £4.25",
+        "Chai Latte - £4.25",
+        "Flat White - £4.00",
+        "Americano - £4.00",
+        "Hot Choc - £4.00",
+        "Decaf Coffee - £4.00",
+        "Espresso Macchiato - £3.40",
+        "Espresso Conpana - £4.00",
+        "Chai Tea Latte - £4.25",
+        "Tea - £3.00",
+        "Decaf Tea - £3.00",
+        "Green Tea - £3.00",
+        "Iced Americano - £4.95",
+        "Iced Mocha - £4.95",
+        "Iced White Mocha - £4.95",
+        "Iced Latte - £4.95",
+        "Iced Chai - £4.95",
+        "Blended White Mocha - £4.95",
+        "Blended Mocha - £4.95"
+      ]
+    },
+    {
+      "name": "Grind & Griddle",
+      "location": ["Unknown"],
+      "type":["Coffee & Hot Drinks"],
+      "category": [
+        "Coffee & Hot Drinks"
+      ],
+      "menu": [
+        "Espresso - £3.10",
+        "Americano - £3.50",
+        "Flat White - £4.00",
+        "Latte - £4.00",
+        "Cappuccino - £4.00",
+        "Mocha - £4.50",
+        "Chai Latte - £4.20",
+        "Biscoff Latte - £5.95",
+        "Nutella Latte - £5.95",
+        "Terry's Orange Hot Choc - £5.95",
+        "Aero Mint Hot Choc - £5.95",
+        "Iced Chocolate - £4.50",
+        "Iced Latte - £4.65",
+        "Iced Americano - £3.50",
+        "Iced Mocha - £4.95",
+        "Tea - £2.95",
+        "Hot Choc - £4.50",
+        "Add Cream - £0.50",
+        "Marshmallows - £0.50",
+        "Cream & Marshmallows - £1.00",
+        "Syrup - £0.60",
+        "Oat Milk - £0.60",
+        "Bacon Bap - £7.00",
+        "Double Sausage - £8.50",
+        "Brunch Bap - £10.00",
+        "Pork and Apple Bap - £9.00",
+        "Add Egg - £1.50 Veg Gf H",
+        "Add Bacon - £1.50",
+        "Vegan Sausage Bap - £7.00 Veg V H"
+      ]
+    },
+    {
+      "name": "Guest Bar",
+      "location": ["Guest"],
+      "type":["Bar"],
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "No & Low Bar",
+      "location": ["Arena"],
+      "type":["Bar"],
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Guicha Coffee Bus",
+      "location": ["Access"],
+      "type": "Coffee & Hot Drinks",
+      "category": [
+        "Coffee & Hot Drinks",
+        "Breakfast",
+        "Dessert & Sweet treats",
+        "Meals under £10"
+      ],
+      "menu": [
+        "Double Espresso - £2.75",
+        "Black Americano - £3.00",
+        "White Americano- £3.50",
+        "Cappucino, Latte, Flat White - £4.00",
+        "Hot Chocolate - £4.00",
+        "Cafe Mocha - £4.50",
+        "Chai Latte - £4.00",
+        "Tea or Infusions - £2.75",
+        "Iced Americano - £4.00",
+        "Iced Latte - £4.50",
+        "Ice Cream Shake - £6.00",
+        "Fruit smoothie - £6.00",
+        "Additional items (Syrups, flake) - £0.50",
+        "Additional items (Cream, Marshmallows, Hot water) - £1.00",
+        "Orange Juice  - £3.50",
+        "Milk  - £0.50",
+        "Almost Famous brownies  - £3.50",
+        "Breakfast Bar/flapjack - £3.00",
+        "Croissant - £2.00",
+        "Pain aux choc/raisin - £2.50",
+        "Overnight Oats, or Bircher Muesli - £7.00",
+        "Avocado on Toast -£4.50",
+        "Toast or Crumpets & Butter - £3.00",
+        "Bacon, sausage or Halloumi Roll - £6.00",
+        "Baked Potato with beans and cheese - £7.00"
+      ]
+    },
+    {
+      "name": "Old Sarum Tattoo",
+      "location": ["District X", "Guest", "Arena"],
+      "type": "Experience",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Raven Records",
+      "location": ["District X"],
+      "type": ["Experience", "Coffee & Hot Drinks"],
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Showsmith",
+      "location": ["District X"],
+      "type": "Experience",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "The Gooseneck Inn",
+      "location": ["Arena"],
+      "type": "Bar",
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "The Iron Harp",
+      "location": ["Arena"],
+      "type": ["Bar", "Experience"],
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "The Mercian Axe",
+      "location": ["District X"],
+      "type": ["Experience", "Bar"],
+      "category": [],
+      "menu": []
+    },
+    {
+      "name": "Craft Beer Bar",
+      "location": ["Arena"],
+      "type": ["Bar"],
+      "category": ["Bar", "Beer"],
+      "description": "Serving premium craft beers"
+    },
+    {
+      "name": "Spirit Bar",
+      "location": ["Arena"],
+      "type": ["Bar"],
+      "category": [],
+      "menu" : []
+    },
+    {
+      "name": "VIP Nation Bar",
+      "location": ["Arena - VIP Area"],
+      "type": ["Bar"],
+      "category": [],
+      "menu" : []
+    },
+    {
+      "name": "Atmosfear",
+      "location": ["District X"],
+      "type": ["Funfair"],
+      "category": [],
+      "menu" : []
+    },
+    {
+      "name": "Dodgeums",
+      "location": ["District X"],
+      "type": ["Funfair"],
+      "category": [],
+      "menu" : []
+    },
+    {
+      "name": "Fun House",
+      "location": ["District X"],
+      "type": ["Funfair"],
+      "category": [],
+      "menu" : []
+    },
+    {
+      "name": "Ghost Train",
+      "location": ["District X"],
+      "type": ["Funfair"],
+      "category": [],
+      "menu" : []
+    },
+    {
+      "name": "Giant Wheel",
+      "location": ["Arena"],
+      "type": ["Funfair"],
+      "category": [],
+      "menu" : []
+    },
+    {
+      "name": "Reverse Bungee",
+      "location": ["Arena"],
+      "type": ["Funfair"],
+      "category": [],
+      "menu" : []
+    },
+    {
+      "name": "Star Flyer",
+      "location": ["Arena"],
+      "type": ["Funfair"],
+      "category": [],
+      "menu" : []
+    },
+    {
+      "name": "Walter",
+      "location": ["DistrictX"],
+      "type": ["Funfair"],
+      "category": [],
+      "menu" : []
+    }
+  ]
 }

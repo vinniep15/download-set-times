@@ -3,320 +3,945 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Download Festival - Food & Activities</title>
+		<title>Download Vendors</title>
 		<script src="https://cdn.tailwindcss.com"></script>
 		<link rel="stylesheet" href="styles.css" />
-		<script type="module" src="script.js"></script>
-		<script type="module" src="js/menu.js"></script>
-		<script type="module" src="js/vendors.js"></script>
+		<link rel="stylesheet" href="css/vendors.css" />
+		<script src="js/include-components.js"></script>
+		<script src="js/vendor-grid-responsive.js"></script>
+		<script type="module" src="js/countdown.js"></script>
+		<script src="js/vendor-data-normalizer.js"></script>
+		<script>
+			// Failsafe for mobile responsiveness
+			document.addEventListener("DOMContentLoaded", function () {
+				const checkResponsive = function () {
+					const vendorGrid = document.getElementById("vendorGrid");
+					if (vendorGrid && window.innerWidth <= 640) {
+						vendorGrid.classList.add("vendor-grid-mobile");
+					}
+				};
+
+				// Run on load and resize
+				checkResponsive();
+				window.addEventListener("resize", checkResponsive);
+			});
+		</script>
 	</head>
-	<body class="bg-black text-white p-4">
-		<header
-			class="flex flex-wrap items-center justify-between gap-2 mb-4 sm:mb-6 header-flex"
+	<body class="bg-black text-white p-2 sm:p-4 vendors-page sidebar-closed">
+		<!-- Main Navigation Component -->
+		<div
+			id="main-nav-placeholder"
+			data-include="components/main-nav.html"
+		></div>
+
+		<!-- Sidebar Menu Component -->
+		<div
+			id="sidebar-placeholder"
+			data-include="components/sidebar-menu.html"
+		></div>
+
+		<!-- Floating particles background -->
+		<div class="particles" id="particles"></div>
+
+		<!-- Loading Indicator -->
+		<div
+			id="loading-indicator"
+			class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+			style="display: none"
 		>
-			<div class="flex items-center gap-2 sm:gap-3 header-logo">
-				<img
-					src="assets/downloadlogo.svg"
-					alt="Download Festival"
-					class="h-8 sm:h-12"
-				/>
-				<h1 class="text-xl sm:text-2xl font-bold">Food & Activities</h1>
+			<div class="text-center">
+				<div
+					class="inline-block animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-cyan-400 mb-4"
+				></div>
+				<p class="text-cyan-400 text-lg">Loading vendor data...</p>
 			</div>
-
-			<!-- Menu Button -->
-			<button
-				id="menu-toggle-btn"
-				class="bg-cyan-700 hover:bg-cyan-600 text-white py-1 sm:py-2 px-2 sm:px-4 rounded text-sm sm:text-base flex items-center"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-6 w-6"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M4 6h16M4 12h16M4 18h16"
-					/>
-				</svg>
-				<span class="hidden xs:inline ml-2">Menu</span>
-			</button>
-		</header>
-
-		<!-- Side Menu Overlay -->
-		<div class="menu-overlay" id="menu-overlay"></div>
-
-		<!-- Side Menu -->
-		<div class="side-menu" id="side-menu">
-			<div class="p-4 border-b border-gray-700">
-				<div class="flex justify-between items-center">
-					<h2 class="text-lg font-bold text-cyan-400">
-						Download Festival
-					</h2>
-					<button
-						class="menu-close-btn text-gray-400 hover:text-white"
-						id="menu-close-btn"
-					>
-						&times;
-					</button>
-				</div>
-			</div>
-
-			<nav class="mt-4">
-				<a href="index.html" class="menu-item" id="menu-item-timetable">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 text-cyan-400"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-						/>
-					</svg>
-					<span>Schedule</span>
-				</a>
-
-				<a
-					href="vendors.html"
-					class="menu-item active"
-					id="menu-item-food"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 text-cyan-400"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-						/>
-					</svg>
-					<span>Food & Activities</span>
-				</a>
-			</nav>
 		</div>
 
-		<div class="mb-6">
-			<!-- Search and filter section -->
-			<div class="bg-gray-800 p-4 rounded-lg mb-4">
-				<div class="flex flex-col md:flex-row gap-4">
-					<!-- Search -->
-					<div class="flex-1">
-						<div class="relative">
-							<input
-								type="text"
-								id="vendor-search"
-								class="bg-gray-700 text-white rounded px-4 py-2 w-full pl-10"
-								placeholder="Search vendors..."
-							/>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5 text-gray-400 absolute left-3 top-2.5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-								/>
-							</svg>
-						</div>
-					</div>
-
-					<!-- Location Filter -->
-					<div class="flex-1">
-						<select
-							id="location-filter"
-							class="bg-gray-700 text-white rounded px-4 py-2 w-full"
-						>
-							<option value="all">All Locations</option>
-							<option value="arena">Arena</option>
-							<option value="districtX">District X</option>
-							<option value="village">Village</option>
-							<option value="campsite">Campsite</option>
-						</select>
-					</div>
-
-					<!-- Type Filter -->
-					<div class="flex-1">
-						<select
-							id="type-filter"
-							class="bg-gray-700 text-white rounded px-4 py-2 w-full"
-						>
-							<option value="all">All Types</option>
-							<option value="food">Food</option>
-							<option value="drinks">Drinks</option>
-							<option value="merchandise">Merchandise</option>
-							<option value="activity">Activities</option>
-						</select>
-					</div>
-				</div>
-
-				<!-- Dietary Requirements Filters -->
-				<div class="mt-4 flex flex-wrap gap-3" id="dietary-filters">
-					<div class="flex items-center">
-						<input
-							type="checkbox"
-							id="filter-vegan"
-							class="dietary-filter mr-2"
-							value="vegan"
-						/>
-						<label for="filter-vegan">Vegan</label>
-					</div>
-					<div class="flex items-center">
-						<input
-							type="checkbox"
-							id="filter-vegetarian"
-							class="dietary-filter mr-2"
-							value="vegetarian"
-						/>
-						<label for="filter-vegetarian">Vegetarian</label>
-					</div>
-					<div class="flex items-center">
-						<input
-							type="checkbox"
-							id="filter-glutenfree"
-							class="dietary-filter mr-2"
-							value="glutenfree"
-						/>
-						<label for="filter-glutenfree">Gluten Free</label>
-					</div>
-					<div class="flex items-center">
-						<input
-							type="checkbox"
-							id="filter-dairyfree"
-							class="dietary-filter mr-2"
-							value="dairyfree"
-						/>
-						<label for="filter-dairyfree">Dairy Free</label>
-					</div>
-					<div class="flex items-center">
-						<input
-							type="checkbox"
-							id="filter-nutfree"
-							class="dietary-filter mr-2"
-							value="nutfree"
-						/>
-						<label for="filter-nutfree">Nut Free</label>
-					</div>
-					<div class="flex items-center">
-						<input
-							type="checkbox"
-							id="filter-emergency"
-							class="dietary-filter mr-2"
-							value="emergency"
-						/>
-						<label for="filter-emergency"
-							>Likely to make you shit yourself</label
-						>
-					</div>
-				</div>
-			</div>
-
-			<!-- View Toggle -->
-			<div class="flex justify-end mb-4">
-				<div class="inline-flex bg-gray-700 rounded">
-					<button
-						id="grid-view-btn"
-						class="px-4 py-2 rounded-l bg-cyan-600 text-white"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-5 w-5"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-							/>
-						</svg>
-					</button>
-					<button
-						id="list-view-btn"
-						class="px-4 py-2 rounded-r text-white"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-5 w-5"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M4 6h16M4 12h16M4 18h16"
-							/>
-						</svg>
-					</button>
-				</div>
-			</div>
-
-			<!-- Results Count -->
-			<div class="text-gray-400 mb-4">
-				Showing <span id="results-count">0</span> vendors
-			</div>
-
-			<!-- Vendors Container -->
+		<!-- Main content container -->
+		<div class="content-container">
+			<!-- Zone Selection (Level 1) -->
 			<div
-				id="vendors-container"
-				class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+				class="selector-grid zone-selector max-w-6xl mx-auto"
+				id="zoneSelector"
 			>
-				<!-- Vendors will be loaded here -->
-				<div class="bg-gray-800 p-4 rounded-lg animate-pulse h-48">
-					<div class="h-6 bg-gray-700 rounded w-3/4 mb-3"></div>
-					<div class="h-4 bg-gray-700 rounded w-1/2 mb-2"></div>
-					<div class="h-4 bg-gray-700 rounded w-5/6 mb-2"></div>
-					<div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
-					<div class="h-8 bg-gray-700 rounded w-full mt-4"></div>
+				<!-- Location bubbles will be dynamically added here -->
+			</div>
+
+			<!-- Type Selection (Level 2) -->
+			<div
+				class="selector-grid category-selector max-w-6xl mx-auto"
+				id="typeSelector"
+			>
+				<!-- Types will be populated dynamically -->
+			</div>
+
+			<!-- Category Selection (Level 3) -->
+			<div
+				class="selector-grid category-selector max-w-6xl mx-auto"
+				id="categorySelector"
+			>
+				<!-- Categories will be populated dynamically -->
+			</div>
+
+			<!-- Vendor Grid (Level 4) -->
+			<div class="vendor-grid max-w-6xl mx-auto" id="vendorGrid">
+				<!-- Vendors will be populated dynamically -->
+			</div>
+
+			<!-- Back Button -->
+			<div class="back-button" id="backButton" onclick="goBack()">
+				← Back
+			</div>
+		</div>
+
+		<!-- Popup -->
+		<div
+			class="popup-overlay"
+			id="popupOverlay"
+			onclick="closePopup()"
+		></div>
+		<div class="popup" id="vendorPopup">
+			<div class="popup-header">
+				<h3 id="popupName"></h3>
+				<button class="popup-close" onclick="closePopup()">
+					&times;
+				</button>
+			</div>
+
+			<img
+				id="popupImage"
+				class="popup-image"
+				src=""
+				alt="Vendor Image"
+			/>
+
+			<div class="popup-section">
+				<p id="popupDescription" class="popup-description"></p>
+			</div>
+
+			<div class="popup-section">
+				<div class="popup-details" id="popupDetails">
+					<!-- Details will be populated dynamically -->
 				</div>
-				<div class="bg-gray-800 p-4 rounded-lg animate-pulse h-48">
-					<div class="h-6 bg-gray-700 rounded w-3/4 mb-3"></div>
-					<div class="h-4 bg-gray-700 rounded w-1/2 mb-2"></div>
-					<div class="h-4 bg-gray-700 rounded w-5/6 mb-2"></div>
-					<div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
-					<div class="h-8 bg-gray-700 rounded w-full mt-4"></div>
-				</div>
-				<div class="bg-gray-800 p-4 rounded-lg animate-pulse h-48">
-					<div class="h-6 bg-gray-700 rounded w-3/4 mb-3"></div>
-					<div class="h-4 bg-gray-700 rounded w-1/2 mb-2"></div>
-					<div class="h-4 bg-gray-700 rounded w-5/6 mb-2"></div>
-					<div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
-					<div class="h-8 bg-gray-700 rounded w-full mt-4"></div>
+			</div>
+
+			<div class="popup-section" id="menuSection">
+				<h4><span class="detail-icon">🍽️</span> Menu</h4>
+				<div class="menu-grid" id="menuGrid">
+					<!-- Menu items will be populated dynamically -->
 				</div>
 			</div>
 		</div>
 
-		<footer class="w-full mt-12 text-center text-xs text-gray-400 pb-4">
-			Looking for more gigs and festivals? Discover and track your next
-			events at
-			<a
-				href="https://www.yournextshow.co.uk"
-				class="underline hover:text-cyan-400"
-				target="_blank"
-				rel="noopener"
-				>Your Next Show</a
+		<!-- Vendor Detail Modal -->
+		<div
+			id="vendor-modal"
+			class="fixed inset-0 z-50 flex items-center justify-center hidden"
+		>
+			<div
+				class="absolute inset-0 bg-black bg-opacity-75"
+				id="vendor-modal-backdrop"
+			></div>
+			<div
+				class="relative z-10 bg-gray-900 border border-cyan-800 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto"
 			>
-		</footer>
+				<div
+					class="sticky top-0 bg-gray-900 p-4 border-b border-gray-700 flex justify-between items-center"
+				>
+					<h2
+						id="vendor-modal-title"
+						class="text-2xl font-bold text-white"
+					></h2>
+					<button
+						id="vendor-modal-close"
+						class="text-gray-400 hover:text-white"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-6 w-6"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M6 18L18 6M6 6l12 12"
+							/>
+						</svg>
+					</button>
+				</div>
+				<div id="vendor-modal-content" class="p-4">
+					<!-- Content will be populated by JavaScript -->
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		// Show loading indicator
+		document.getElementById("loading-indicator").style.display = "flex";
+
+		// Start the app when both nav components are loaded
+		const componentsLoaded = {
+			mainNav: false,
+			sidebar: false,
+		};
+
+		document
+			.getElementById("main-nav-placeholder")
+			.addEventListener("component-loaded", function () {
+				componentsLoaded.mainNav = true;
+				// Dispatch navigationLoaded event to trigger countdown initialization
+				document.dispatchEvent(new CustomEvent("navigationLoaded"));
+				if (componentsLoaded.sidebar) init();
+			});
+
+		document
+			.getElementById("sidebar-placeholder")
+			.addEventListener("component-loaded", function () {
+				componentsLoaded.sidebar = true;
+				if (componentsLoaded.mainNav) init();
+			});
+
+		// Test direct file access to vendors-data.json
+		fetch("vendors-data.json")
+			.then((response) => {
+				return response.text();
+			})
+			.then((text) => {
+				// Test if JSON is valid
+				try {
+					JSON.parse(text);
+				} catch (error) {}
+			})
+			.catch((error) => {
+				// File access error occurred
+			});
+	});
+
+	// State management
+	let currentLevel = "location";
+	let currentZone = "";
+	let currentType = null;
+	let currentCategory = "";
+	let vendorsData = {};
+	let navigationStack = [];
+	let currentVendors = [];
+
+	// Category mappings with icons
+	const categoryMappings = {
+		food: {icon: "🍕", name: "Food"},
+		beverage: {icon: "🍹", name: "Beverages"},
+		drinks: {icon: "🍺", name: "Drinks"},
+		merch: {icon: "👕", name: "Merchandise"},
+		other: {icon: "🎪", name: "Other"},
+	};
+
+	// Initialize the app
+	async function init() {
+		try {
+			// Load vendors data first
+			await loadVendorsData();
+
+			// Create particles in parallel with bubbles
+			createParticles();
+
+			// Make sure we have the vendor data before creating bubbles
+			if (
+				vendorsData &&
+				vendorsData.zones &&
+				vendorsData.zones.length > 0
+			) {
+				createLocationBubbles();
+
+				// Show the zone selector explicitly
+				const zoneSelector = document.getElementById("zoneSelector");
+				zoneSelector.style.display = "grid";
+			}
+
+			document.getElementById("loading-indicator").style.display = "none";
+		} catch (error) {
+			// Error initializing page
+			document.getElementById("loading-indicator").style.display = "none";
+
+			// Display error to user
+			alert("Error loading vendor data. Please try refreshing the page.");
+		}
+	}
+
+	// Load vendors data from JSON
+	async function loadVendorsData() {
+		try {
+			const response = await fetch("vendors-data.json");
+
+			if (!response.ok) {
+				throw new Error(`Failed to load data: ${response.status}`);
+			}
+
+			const data = await response.json();
+
+			// Validate data structure
+			if (!data || !data.zones || !Array.isArray(data.zones)) {
+				throw new Error("Invalid vendor data structure");
+			}
+
+			vendorsData = data;
+
+			return data;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	// Create animated particle background
+	function createParticles() {
+		const container = document.getElementById("particles");
+		const particleCount = 50;
+
+		for (let i = 0; i < particleCount; i++) {
+			const particle = document.createElement("div");
+			particle.className = "particle";
+
+			// Random position and animation delay
+			const left = Math.random() * 100;
+			const delay = Math.random() * 5;
+
+			particle.style.left = `${left}%`;
+			particle.style.animationDelay = `${delay}s`;
+
+			container.appendChild(particle);
+		}
+	}
+
+	// Create dynamic location bubbles
+	function createLocationBubbles() {
+		const zoneSelector = document.getElementById("zoneSelector");
+		zoneSelector.innerHTML = ""; // Clear any existing content
+
+		if (
+			!vendorsData ||
+			!vendorsData.zones ||
+			vendorsData.zones.length === 0
+		) {
+			zoneSelector.innerHTML =
+				"<p style='color:white;text-align:center;'>No location data available</p>";
+			return;
+		}
+
+		// Extract all unique locations from vendor data
+		const locations = new Set();
+		vendorsData.zones.forEach((vendor) => {
+			if (vendor.location) {
+				if (Array.isArray(vendor.location)) {
+					vendor.location.forEach((loc) => {
+						if (loc && loc.trim()) {
+							locations.add(loc.trim());
+						}
+					});
+				} else if (typeof vendor.location === "string") {
+					// Handle case where location might be a string
+					locations.add(vendor.location.trim());
+				}
+			}
+		});
+
+		if (locations.size === 0) {
+			zoneSelector.innerHTML =
+				"<p style='color:white;text-align:center;'>No locations found in data</p>";
+			return;
+		}
+
+		// Style mapping for specific locations
+		const locationStyles = {
+			Arena: "arena",
+			"District X": "districtx",
+			RIP: "rip",
+			Plus: "plus",
+			Guest: "guest",
+			Purple: "purple",
+			Access: "access",
+			Blue: "blue",
+			Orange: "orange",
+			Yellow: "yellow",
+			Red: "red",
+		};
+
+		// Create bubble for each location
+		locations.forEach((location) => {
+			const bubble = document.createElement("div");
+
+			// Add appropriate class based on location name
+			const locationClass = locationStyles[location] || "";
+			bubble.className = `bubble zone-bubble ${locationClass}`;
+			bubble.onclick = () => selectZone(location);
+
+			// Add random animation delay to each bubble's ::after element
+			const randomDelay = Math.random() * 3; // Random delay between 0 and 3 seconds
+			bubble.style.setProperty("--animation-delay", `${randomDelay}s`);
+
+			const textDiv = document.createElement("div");
+			textDiv.className = "bubble-text zone-text";
+			textDiv.textContent = location;
+
+			bubble.appendChild(textDiv);
+			zoneSelector.appendChild(bubble);
+		});
+	}
+
+	// Zone selection
+	function selectZone(zone) {
+		currentZone = zone;
+		currentLevel = "type";
+		navigationStack.push("zone");
+
+		// Show back button - always show once we're past the first level
+		const backButton = document.getElementById("backButton");
+		backButton.classList.add("show");
+
+		// Morph zone selector out
+		const zoneSelector = document.getElementById("zoneSelector");
+		zoneSelector.style.animation =
+			"slideOut 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
+
+		setTimeout(() => {
+			zoneSelector.style.display = "none";
+			typeSelector.style.display = "grid";
+
+			showTypes();
+		}, 600);
+	}
+
+	// Show types for selected zone
+	function showTypes() {
+		const typeSelector = document.getElementById("typeSelector");
+
+		// Filter vendors by the selected zone
+		const vendors = vendorsData.zones.filter(
+			(vendor) =>
+				Array.isArray(vendor.location) &&
+				vendor.location.some(
+					(loc) =>
+						loc.trim().toLowerCase() ===
+						currentZone.trim().toLowerCase()
+				)
+		);
+
+		// Get unique types
+		const types = new Set();
+
+		vendors.forEach((vendor) => {
+			if (vendor.type) {
+				if (Array.isArray(vendor.type)) {
+					vendor.type.forEach((t) => types.add(t));
+				} else {
+					types.add(vendor.type);
+				}
+			}
+		});
+
+		// Add default type
+		if (vendors.length > 0) {
+			types.add("All");
+		}
+
+		// Clear and populate types
+		typeSelector.innerHTML = "";
+
+		// Convert set to array
+		const typesArray = Array.from(types);
+
+		typesArray.forEach((type) => {
+			let typeInfo = {icon: "🎪", name: type};
+
+			switch (type.toLowerCase()) {
+				case "all":
+					typeInfo = {icon: "🎪", name: "All Types"};
+					break;
+				case "food":
+					typeInfo = {icon: "🍕", name: "Food"};
+					break;
+				case "drinks":
+					typeInfo = {icon: "🍻", name: "Drinks & Bars"};
+					break;
+				case "experience":
+					typeInfo = {icon: "🎠", name: "Experience"};
+					break;
+			}
+
+			const bubble = document.createElement("div");
+			bubble.className = "bubble category-bubble";
+
+			// Add random animation delay
+			const randomDelay = Math.random() * 3;
+			bubble.style.setProperty("--animation-delay", `${randomDelay}s`);
+
+			bubble.onclick = () => selectType(type);
+
+			bubble.innerHTML = `
+      <div class="icon">${typeInfo.icon}</div>
+      <div class="type-text">${typeInfo.name}</div>
+    `;
+
+			typeSelector.appendChild(bubble);
+		});
+
+		// Show with grid display instead of flex
+		typeSelector.style.display = "grid";
+	}
+
+	// Type selection
+	function selectType(type) {
+		currentType = type;
+		currentLevel = "category";
+		navigationStack.push("type");
+
+		// Morph type selector out
+		const typeSelector = document.getElementById("typeSelector");
+		typeSelector.style.animation =
+			"slideOut 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
+
+		setTimeout(() => {
+			typeSelector.style.display = "none";
+			categorySelector.style.display = "grid";
+
+			showCategories();
+		}, 600);
+	}
+
+	// Show categories for selected zone and type
+	function showCategories() {
+		const categorySelector = document.getElementById("categorySelector");
+
+		// Filter vendors by the selected zone
+		const allVendors = vendorsData.zones.filter(
+			(vendor) =>
+				Array.isArray(vendor.location) &&
+				vendor.location.some(
+					(loc) =>
+						loc.trim().toLowerCase() ===
+						currentZone.trim().toLowerCase()
+				)
+		);
+
+		// Filter vendors by type
+		let vendors;
+		if (currentType === "All") {
+			vendors = allVendors;
+		} else {
+			vendors = allVendors.filter((vendor) => {
+				if (Array.isArray(vendor.type)) {
+					return vendor.type.some((t) => t === currentType);
+				} else {
+					return vendor.type === currentType;
+				}
+			});
+		}
+
+		// Get unique categories from the category arrays
+		const categories = new Set();
+
+		vendors.forEach((vendor) => {
+			if (vendor.category && Array.isArray(vendor.category)) {
+				vendor.category.forEach((cat) => categories.add(cat));
+			}
+		});
+
+		// Add default category if there are vendors
+		if (vendors.length > 0) {
+			categories.add("All");
+		}
+
+		// Clear and populate categories
+		categorySelector.innerHTML = "";
+		Array.from(categories).forEach((category) => {
+			let categoryInfo = {icon: "🎪", name: category};
+
+			// Map known categories to better icons
+			switch (category) {
+				case "All":
+					categoryInfo = {icon: "🎪", name: "All Vendors"};
+					break;
+				case "Halal":
+					categoryInfo = {icon: "🕌", name: "Halal"};
+					break;
+				case "Vegan Options":
+					categoryInfo = {icon: "🌱", name: "Vegan Options"};
+					break;
+				case "Vegetarian Options":
+					categoryInfo = {icon: "🥗", name: "Vegetarian"};
+					break;
+				case "Gluten Free Options":
+					categoryInfo = {icon: "🌾", name: "Gluten Free"};
+					break;
+				case "Meals under £10":
+					categoryInfo = {icon: "💰", name: "Budget Friendly"};
+					break;
+				case "Bar":
+					categoryInfo = {icon: "🍺", name: "Bars"};
+					break;
+				// Add more category mappings as needed
+			}
+
+			const bubble = document.createElement("div");
+			bubble.className = "bubble category-bubble";
+
+			// Add random animation delay
+			const randomDelay = Math.random() * 3;
+			bubble.style.setProperty("--animation-delay", `${randomDelay}s`);
+
+			bubble.onclick = () => selectCategory(category);
+			bubble.innerHTML = `
+            <div class="icon">${categoryInfo.icon}</div>
+            <div class="type-text">${categoryInfo.name}</div>
+        `;
+			categorySelector.appendChild(bubble);
+		});
+
+		// Show with animation
+		categorySelector.style.display = "grid";
+	}
+
+	// Category selection
+	function selectCategory(category) {
+		currentCategory = category;
+		currentLevel = "vendor";
+		navigationStack.push("category");
+
+		// Morph category selector out
+		const categorySelector = document.getElementById("categorySelector");
+		categorySelector.style.animation =
+			"slideOut 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
+
+		setTimeout(() => {
+			categorySelector.style.display = "none";
+			showVendors();
+		}, 600);
+	}
+
+	// Show vendors for selected zone, type, and category
+	// Replace the showVendors function with this improved version
+	function showVendors() {
+		const vendorGrid = document.getElementById("vendorGrid");
+
+		// Filter vendors by the selected zone
+		const allVendors = vendorsData.zones.filter(
+			(vendor) =>
+				Array.isArray(vendor.location) &&
+				vendor.location.some(
+					(loc) =>
+						loc.trim().toLowerCase() ===
+						currentZone.trim().toLowerCase()
+				)
+		);
+
+		// Filter by type first
+		let typeFilteredVendors;
+		if (currentType === "All") {
+			typeFilteredVendors = allVendors;
+		} else {
+			typeFilteredVendors = allVendors.filter((vendor) => {
+				if (Array.isArray(vendor.type)) {
+					return vendor.type.some((t) => t === currentType);
+				} else {
+					return vendor.type === currentType;
+				}
+			});
+		}
+
+		// Then filter by category
+		let filteredVendors;
+		if (currentCategory === "All") {
+			filteredVendors = typeFilteredVendors;
+		} else {
+			filteredVendors = typeFilteredVendors.filter(
+				(vendor) =>
+					vendor.category &&
+					Array.isArray(vendor.category) &&
+					vendor.category.includes(currentCategory)
+			);
+		}
+
+		// Store current vendors for reference
+		currentVendors = filteredVendors;
+
+		// Clear and populate vendors
+		vendorGrid.innerHTML = "";
+
+		filteredVendors.forEach((vendor, index) => {
+			const bubble = document.createElement("div");
+			bubble.className = "bubble vendor-bubble";
+
+			// Add random animation delay
+			const randomDelay = Math.random() * 3;
+			bubble.style.setProperty("--animation-delay", `${randomDelay}s`);
+
+			// Add animation delay for staggered appearance
+			bubble.style.animationDelay = `${index * 0.1}s`;
+
+			bubble.onclick = () => showVendorPopup(vendor);
+
+			// Create icon based on vendor type
+			let vendorIcon = "🍽️"; // Default icon
+
+			if (vendor.type) {
+				const type = Array.isArray(vendor.type)
+					? vendor.type[0].toLowerCase()
+					: vendor.type.toLowerCase();
+
+				switch (type) {
+					case "food":
+						vendorIcon = "🍕";
+						break;
+					case "drinks":
+					case "bar":
+						vendorIcon = "🍸";
+						break;
+					case "merchandise":
+					case "merch":
+						vendorIcon = "👕";
+						break;
+					case "experience":
+						vendorIcon = "🎭";
+						break;
+				}
+			}
+
+			// Create bubble content with icon and name
+			bubble.innerHTML = `
+            <div class="vendor-content">
+                <div class="vendor-icon">${vendorIcon}</div>
+                <div class="vendor-name">${vendor.name}</div>
+            </div>
+        `;
+
+			vendorGrid.appendChild(bubble);
+		});
+
+		// Show with animation
+		vendorGrid.style.display = "grid";
+
+		// Apply responsive layout - this will be enhanced by our vendor-grid-responsive.js
+		if (typeof window.applyResponsiveLayout === "function") {
+			window.applyResponsiveLayout(vendorGrid);
+		} else if (window.innerWidth <= 640) {
+			// Fallback mobile styling if the JS isn't loaded
+			vendorGrid.classList.add("vendor-grid-mobile");
+		}
+	}
+
+	// Show vendor popup
+	function showVendorPopup(vendor) {
+		// Populate popup content
+		document.getElementById("popupName").textContent = vendor.name;
+
+		// Determine vendor type
+		let vendorTypeDisplay = Array.isArray(vendor.type)
+			? vendor.type[0]
+			: vendor.type;
+
+		// Set the description
+		document.getElementById(
+			"popupDescription"
+		).textContent = `${vendorTypeDisplay} vendor`;
+
+		// Set image
+		const image = document.getElementById("popupImage");
+		if (vendor.image) {
+			image.src = `assets/vendors/${vendor.image}`;
+			image.style.display = "block";
+		} else {
+			image.style.display = "none";
+		}
+
+		// Populate details
+		const detailsContainer = document.getElementById("popupDetails");
+
+		// --- NEW: Show all categories as "Categories" ---
+		let categoriesHTML = "";
+		if (vendor.category && vendor.category.length > 0) {
+			categoriesHTML = `
+				<div class="detail-item">
+					<span class="detail-icon">🏷️</span>
+					<span><strong>Categories:</strong> ${vendor.category.join(", ")}</span>
+				</div>
+			`;
+		}
+
+		// Check if vendor is affordable
+		const isAffordable = vendor.category
+			? vendor.category.includes("Meals under £10") ||
+			  vendor.category.includes("Meals Under £10")
+			: false;
+
+		// Build details HTML
+		detailsContainer.innerHTML = `
+        <div class="detail-item">
+            <span class="detail-icon">📍</span>
+            <span><strong>Zone:</strong> ${vendor.location.join(", ")}</span>
+        </div>
+        ${
+			isAffordable
+				? `
+        <div class="detail-item">
+            <span class="detail-icon">💰</span>
+            <span><strong>Budget Friendly</strong></span>
+        </div>
+        `
+				: ""
+		}
+		${categoriesHTML}
+    `;
+
+		// Check if menu exists
+		const menuSection = document.getElementById("menuSection");
+		const menuGrid = document.getElementById("menuGrid");
+
+		if (vendor.menu && vendor.menu.length > 0) {
+			menuSection.style.display = "block";
+			menuGrid.innerHTML = "";
+
+			// Add menu items
+			vendor.menu.forEach((item) => {
+				const menuItem = document.createElement("div");
+				menuItem.className = "menu-item";
+				menuItem.innerHTML = `<div class="menu-item-name">${item}</div>`;
+				menuGrid.appendChild(menuItem);
+			});
+		} else {
+			menuSection.style.display = "none";
+		}
+
+		// Show popup
+		document.getElementById("popupOverlay").classList.add("show");
+		document.getElementById("vendorPopup").classList.add("show");
+	}
+
+	// Close popup
+	function closePopup() {
+		document.getElementById("popupOverlay").classList.remove("show");
+		document.getElementById("vendorPopup").classList.remove("show");
+	}
+
+	// Go back navigation
+	function goBack() {
+		if (navigationStack.length === 0) {
+			return;
+		}
+
+		const previousLevel = navigationStack.pop();
+
+		// Get all container elements
+		const zoneSelector = document.getElementById("zoneSelector");
+		const typeSelector = document.getElementById("typeSelector");
+		const categorySelector = document.getElementById("categorySelector");
+		const vendorGrid = document.getElementById("vendorGrid");
+		const backButton = document.getElementById("backButton");
+
+		// First hide current view with animation
+		let currentContainer;
+		if (currentLevel === "type") {
+			currentContainer = typeSelector;
+		} else if (currentLevel === "category") {
+			currentContainer = categorySelector;
+		} else if (currentLevel === "vendor") {
+			currentContainer = vendorGrid;
+		}
+
+		if (currentContainer) {
+			currentContainer.style.animation =
+				"slideOut 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
+		}
+
+		// After animation completes, update state and show previous view
+		setTimeout(() => {
+			// Hide all containers first
+			typeSelector.style.display = "none";
+			categorySelector.style.display = "none";
+			vendorGrid.style.display = "none";
+
+			// Reset animation
+			if (currentContainer) {
+				currentContainer.style.animation = "";
+			}
+
+			if (previousLevel === "zone") {
+				// Back to zone selection
+				currentLevel = "zone";
+				currentZone = null;
+				currentType = null;
+				currentCategory = null;
+
+				// Hide back button only at the first level (zone selection)
+				backButton.classList.remove("show");
+
+				// Show zone selector with animation
+				zoneSelector.style.display = "grid";
+				zoneSelector.style.animation =
+					"morphIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
+			} else if (previousLevel === "type") {
+				// Back to type selection
+				currentLevel = "type";
+				currentType = null;
+				currentCategory = null;
+
+				// Show type selector with animation
+				typeSelector.style.display = "grid";
+				typeSelector.style.animation =
+					"morphIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
+
+				// Keep back button visible since we're not at the first level
+				backButton.classList.add("show");
+			} else if (previousLevel === "category") {
+				// Back to category selection
+				currentLevel = "category";
+				currentCategory = null;
+
+				// Show category selector with animation
+				categorySelector.style.display = "grid";
+				categorySelector.style.animation =
+					"morphIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
+
+				// Keep back button visible since we're not at the first level
+				backButton.classList.add("show");
+			}
+		}, 400); // Match this timeout with the animation duration
+	}
+
+	// Initialize app when page loads
+	document.addEventListener("DOMContentLoaded", init);
+
+	// Close popup when clicking overlay
+	document
+		.getElementById("popupOverlay")
+		.addEventListener("click", closePopup);
+
+	document.addEventListener("DOMContentLoaded", function () {
+		// Add decorative elements to the menu header after navigation is loaded
+		setTimeout(() => {
+			const menuHeader = document.querySelector(
+				"#navigation-placeholder .menu-header"
+			);
+			if (menuHeader) {
+				// Create decorative elements
+				const decorativeElements = document.createElement("div");
+				decorativeElements.className = "decorative-elements";
+
+				// Add random dots for subtle background texture
+				for (let i = 0; i < 20; i++) {
+					const dot = document.createElement("div");
+					dot.className = "decorative-dot";
+					dot.style.top = `${Math.random() * 100}%`;
+					dot.style.left = `${Math.random() * 100}%`;
+					dot.style.opacity = (Math.random() * 0.6 + 0.2).toString();
+					decorativeElements.appendChild(dot);
+				}
+
+				menuHeader.appendChild(decorativeElements);
+			}
+		}, 500); // Wait for navigation to be fully loaded
+	});
+</script>

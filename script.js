@@ -39,9 +39,11 @@ import {
 	populateArenaStageDropdown,
 } from "./js/dropdowns.js";
 import {setupShareFavoritesButton, tryImportSharedFavorites} from "./js/ui.js";
+import {showDaySelectionModal} from "./js/timetable.js";
 
 // Export functions to window for backward compatibility with inline event handlers
 window.showDay = showDay;
+window.showDaySelectionModal = showDaySelectionModal;
 window.showDistrictXDay = showDistrictXDay;
 window.filterStage = filterStage;
 window.filterDistrictXStage = filterDistrictXStage;
@@ -69,18 +71,12 @@ async function fetchWeather() {
 
 	// Check if festival dates are too far in the future
 	if (daysToStart > maxForecastDays) {
-		console.log(
-			`Weather API: Festival is ${daysToStart} days away. Forecast only available within ${maxForecastDays} days.`
-		);
 		return null;
 	}
 
 	// Check if festival dates are too far in the past
 	const daysPast = Math.floor((today - festEnd) / (1000 * 60 * 60 * 24));
 	if (daysPast > 365) {
-		console.log(
-			`Weather API: Festival was ${daysPast} days ago. Historical data only available for past year.`
-		);
 		return null;
 	}
 
@@ -109,10 +105,6 @@ async function fetchWeather() {
 				if (!res.ok) throw new Error("Weather fetch failed");
 				const data = await res.json();
 				if (!data.daily || !data.daily.time) {
-					console.warn(
-						"Weather API returned unexpected structure:",
-						data
-					);
 					return null;
 				}
 				return data.daily;
@@ -157,13 +149,20 @@ function renderWeather(forecast) {
 		const icon = getWeatherIcon(code);
 		const div = document.createElement("div");
 		div.className =
-			"flex flex-col items-center bg-gray-900 rounded p-2 min-w-[60px]";
+			"weather-card flex flex-col items-center bg-gradient-to-b from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-xl p-3 min-w-[80px] border border-cyan-500/20 hover:border-cyan-400/40 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 hover:scale-105";
 		div.innerHTML = `
-			<span class="font-bold text-cyan-400">${day}</span>
-			<span class="text-2xl">${icon}</span>
-			<span class="text-xs">High: ${max}°C</span>
-			<span class="text-xs">Low: ${min}°C</span>
-			<span class="text-xs text-blue-300">${rain}mm</span>
+			<span class="font-bold text-cyan-300 mb-1 text-sm">${day}</span>
+			<span class="text-3xl mb-2">${icon}</span>
+			<div class="text-center space-y-1">
+				<div class="flex flex-col">
+					<span class="text-xs text-orange-300">High: ${max}°C</span>
+					<span class="text-xs text-blue-300">Low: ${min}°C</span>
+				</div>
+				<div class="flex items-center justify-center gap-1 text-xs text-blue-400">
+					<span>💧</span>
+					<span>${rain}mm</span>
+				</div>
+			</div>
 		`;
 		container.appendChild(div);
 	}
@@ -395,6 +394,15 @@ const CAMP_AREAS = {
 			{x: 2636, y: 1334},
 		],
 	],
+	mini_moshers: [
+		[
+			{x: 770, y: 1098},
+			{x: 1088, y: 1058},
+			{x: 1098, y: 1118},
+			{x: 903, y: 1145},
+			{x: 904, y: 1102},
+		],
+	],
 };
 
 // Map ticket types to allowed areas
@@ -408,6 +416,7 @@ const TICKET_AREAS = {
 	ready_to_rock: ["ready_to_rock"],
 	campervan: ["campervan"],
 	campervan_plus: ["campervan_plus"],
+	mini_moshers: ["mini_moshers"],
 };
 
 const mapImage = document.getElementById("map-image");
@@ -476,6 +485,8 @@ function areaColor(area) {
 		case "quiet":
 			return "#818cf8";
 		case "plus":
+			return "#f472b6";
+		case "mini_moshers":
 			return "#f472b6";
 		default:
 			return "#fff";
