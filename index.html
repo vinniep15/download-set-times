@@ -677,6 +677,16 @@
 				</svg>
 				Share My Favorites
 			</button>
+			<!-- Add this button for poster generation if not present -->
+			<button
+				data-action="generate-poster"
+				style="display:none"
+			></button>
+			<!-- Add this button for wallpaper generation if not present -->
+			<button
+				data-action="generate-wallpaper"
+				style="display:none"
+			></button>
 		</div>
 		<!-- Overlay Management UI: Shared Favorites Legend and Controls -->
 		<div
@@ -1045,10 +1055,11 @@
 		});
 
 		document.addEventListener("generateWallpaper", function () {
-			// This should trigger whatever function handles wallpaper generation
-			const shareFavBtn = document.getElementById("share-favorites-btn");
-			if (shareFavBtn) {
-				shareFavBtn.click();
+			const wallpaperBtn = document.querySelector("[data-action='generate-wallpaper']");
+			if (wallpaperBtn) {
+				wallpaperBtn.click();
+			} else {
+				console.warn("Wallpaper Generator button not found in DOM.");
 			}
 		});
 
@@ -1059,6 +1070,8 @@
 			);
 			if (posterBtn) {
 				posterBtn.click();
+			} else {
+				console.warn("Poster Generator button not found in DOM.");
 			}
 		});
 

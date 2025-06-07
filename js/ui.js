@@ -313,7 +313,7 @@ function createEventBlock(set, stage, day, venue) {
 		</svg>
 	`;
 	heartBtn.addEventListener("click", function (e) {
-		e.stopPropagation();
+		// e.stopPropagation();
 		e.preventDefault(); // Prevent triggering parent click/hover
 		if (typeof window.toggleFavoriteSet === "function") {
 			window.toggleFavoriteSet(setKey, heartBtn.querySelector("svg"));
