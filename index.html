@@ -6,23 +6,17 @@
 		<title>Download Set Times</title>
 		<script src="https://cdn.tailwindcss.com"></script>
 		<link rel="stylesheet" href="styles.css" />
+		<!-- Add vendors.css to use the same navbar styling -->
+		<link rel="stylesheet" href="css/vendors.css" />
 		<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+		<!-- Add include-components.js to load navigation components -->
+		<script src="js/include-components.js"></script>
 		<script type="module" src="js/navigation.js"></script>
 		<script type="module" src="js/ui.js"></script>
 		<script type="module" src="js/countdown.js"></script>
 		<script type="module" src="script.js"></script>
 		<script type="module" src="js/menu.js"></script>
 		<script type="module" src="js/timetable.js"></script>
-		<script>
-			// Initialize navigation component
-			document.addEventListener("DOMContentLoaded", function () {
-				import("./js/navigation.js").then((module) => {
-					const NavigationComponent = module.default;
-					const nav = new NavigationComponent();
-					nav.init("#navigation-placeholder");
-				});
-			});
-		</script>
 		<style>
 			/* Floating particles background */
 			.particles {
@@ -116,7 +110,7 @@
 		</style>
 	</head>
 	<body
-		class="bg-black text-white p-4"
+		class="bg-black text-white p-2 sm:p-4 sidebar-closed"
 		style="
 			background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)),
 				url('assets/timetable_background.png') center/cover no-repeat
@@ -126,8 +120,17 @@
 		<!-- Floating particles background -->
 		<div class="particles" id="particles"></div>
 
-		<!-- Navigation will be injected here by navigation.js -->
-		<div id="navigation-placeholder"></div>
+		<!-- Main Navigation Component -->
+		<div
+			id="main-nav-placeholder"
+			data-include="components/main-nav.html"
+		></div>
+
+		<!-- Sidebar Menu Component -->
+		<div
+			id="sidebar-placeholder"
+			data-include="components/sidebar-menu.html"
+		></div>
 
 		<!-- Artist Favorites Modal -->
 		<div
@@ -189,7 +192,7 @@
 		</div>
 
 		<!-- Arena Bands Section -->
-		<div class="mb-8">
+		<div class="my-8 px-4">
 			<h2 class="text-xl font-bold mb-3 border-b border-gray-700 pb-2">
 				Arena Bands
 			</h2>
@@ -474,7 +477,7 @@
 		</div>
 
 		<!-- District X Bands Section -->
-		<div class="mt-12">
+		<div class="mt-12 px-4">
 			<h2 class="text-xl font-bold mb-3 border-b border-gray-700 pb-2">
 				District X
 			</h2>
@@ -999,5 +1002,102 @@
 				}
 			});
 		});
+
+		// Add this code to initialize the navigation components
+		document.addEventListener("DOMContentLoaded", function () {
+			// Start the app when both nav components are loaded
+			const componentsLoaded = {
+				mainNav: false,
+				sidebar: false,
+			};
+
+			document
+				.getElementById("main-nav-placeholder")
+				.addEventListener("component-loaded", function () {
+					componentsLoaded.mainNav = true;
+					// Dispatch navigationLoaded event to trigger countdown initialization
+					document.dispatchEvent(new CustomEvent("navigationLoaded"));
+					if (componentsLoaded.sidebar) initPage();
+				});
+
+			document
+				.getElementById("sidebar-placeholder")
+				.addEventListener("component-loaded", function () {
+					componentsLoaded.sidebar = true;
+					if (componentsLoaded.mainNav) initPage();
+				});
+
+			// Initialize the page content after navigation is loaded
+			function initPage() {
+				// Your existing initialization code can go here
+				createParticles();
+
+				// Any other initialization needed for the main page
+			}
+		});
+
+		// Add listeners for the custom events from the sidebar menu
+		document.addEventListener("openFavoritesModal", function () {
+			const favModal = document.getElementById("favorites-modal");
+			if (favModal) {
+				favModal.classList.remove("hidden");
+			}
+		});
+
+		document.addEventListener("generateWallpaper", function () {
+			// This should trigger whatever function handles wallpaper generation
+			const shareFavBtn = document.getElementById("share-favorites-btn");
+			if (shareFavBtn) {
+				shareFavBtn.click();
+			}
+		});
+
+		document.addEventListener("generatePoster", function () {
+			// This should trigger whatever function handles poster generation
+			const posterBtn = document.querySelector(
+				"[data-action='generate-poster']"
+			);
+			if (posterBtn) {
+				posterBtn.click();
+			}
+		});
+
+		// Direct method to set active class on page load and when sidebar loads
+		function setActiveMenuItem() {
+			// Get current page filename from window location
+			const currentPath = window.location.pathname;
+			const currentPage =
+				currentPath.substring(currentPath.lastIndexOf("/") + 1) ||
+				"index.html";
+			console.log("Current page:", currentPage);
+
+			// Find and set the active class on the matching menu item
+			const menuItems = document.querySelectorAll(
+				"#sidebarMenu .menu-item"
+			);
+			menuItems.forEach((item) => {
+				// Remove any existing active class
+				item.classList.remove("active");
+
+				// For links, check href attribute
+				if (item.tagName === "A") {
+					const href = item.getAttribute("href");
+					if (
+						href === currentPage ||
+						(currentPage === "" && href === "index.html") ||
+						(currentPage === "/" && href === "index.html")
+					) {
+						console.log("Setting active on:", item);
+						item.classList.add("active");
+					}
+				}
+			});
+		}
+
+		// Call this after components are loaded
+		document.addEventListener("component-loaded", setActiveMenuItem);
+
+		// Also try setting it directly after a short delay
+		setTimeout(setActiveMenuItem, 1000);
 	</script>
 </html>

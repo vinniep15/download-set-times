@@ -6,6 +6,10 @@
 		<title>Download Festival Camp Map</title>
 		<script src="https://cdn.tailwindcss.com"></script>
 		<link rel="stylesheet" href="styles.css" />
+		<!-- Add vendors.css to use the same navbar styling -->
+		<link rel="stylesheet" href="css/vendors.css" />
+		<!-- Add include-components.js to load navigation components -->
+		<script src="js/include-components.js"></script>
 		<script type="module" src="js/navigation.js"></script>
 		<script type="module" src="js/menu.js"></script>
 		<script type="module" src="js/countdown.js"></script>
@@ -133,7 +137,7 @@
 		</style>
 	</head>
 	<body
-		class="bg-black text-white p-4"
+		class="bg-black text-white p-2 sm:p-4 sidebar-closed"
 		style="
 			background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)),
 				url('assets/timetable_background.png') center/cover no-repeat
@@ -143,11 +147,20 @@
 		<!-- Floating particles background -->
 		<div class="particles" id="particles"></div>
 
-		<!-- Navigation Component -->
-		<div id="navigation-placeholder"></div>
+		<!-- Main Navigation Component -->
+		<div
+			id="main-nav-placeholder"
+			data-include="components/main-nav.html"
+		></div>
+
+		<!-- Sidebar Menu Component -->
+		<div
+			id="sidebar-placeholder"
+			data-include="components/sidebar-menu.html"
+		></div>
 
 		<!-- Page Title -->
-		<div class="mb-8">
+		<div class="my-8 px-4">
 			<h1
 				class="text-2xl sm:text-3xl pl-6 font-bold mb-3 border-b border-gray-700 pb-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
 			>
@@ -342,7 +355,6 @@
 			</div>
 		</main>
 
-		<script src="js/menu.js"></script>
 		<script>
 			// Define camp area polygons (image pixel coordinates)
 			const CAMP_AREAS = {
@@ -601,8 +613,8 @@
 			// Canvas functions for area highlighting
 			function resizeCanvasToImage() {
 				if (!mapImage.complete) {
-                    return;
-                }
+					return;
+				}
 				mapCanvas.width = mapImage.offsetWidth;
 				mapCanvas.height = mapImage.offsetHeight;
 				mapCanvas.style.width = mapImage.offsetWidth + "px";
@@ -647,7 +659,9 @@
 				const allowed = TICKET_AREAS[ticket] || [];
 
 				if (!mapImage.naturalWidth || !mapImage.naturalHeight) {
-					mapImage.onload = () => { drawHighlights(); }; // Set onload for one-time redraw
+					mapImage.onload = () => {
+						drawHighlights();
+					}; // Set onload for one-time redraw
 					return;
 				}
 
@@ -663,7 +677,14 @@
 				let matrix = new DOMMatrixReadOnly(imageTransform);
 
 				// Apply the exact transformation matrix from the image to the canvas context
-				ctx.transform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
+				ctx.transform(
+					matrix.a,
+					matrix.b,
+					matrix.c,
+					matrix.d,
+					matrix.e,
+					matrix.f
+				);
 
 				// Draw each allowed area with a bold, glowing style
 				allowed.forEach((area) => {
@@ -747,18 +768,28 @@
 				const zoomedImageWidth = currentImageWidth * currentZoom;
 				const zoomedImageHeight = currentImageHeight * currentZoom;
 
-				const maxTranslateX = Math.max(0, (zoomedImageWidth - containerWidth) / 2);
-				const maxTranslateY = Math.max(0, (zoomedImageHeight - containerHeight) / 2);
+				const maxTranslateX = Math.max(
+					0,
+					(zoomedImageWidth - containerWidth) / 2
+				);
+				const maxTranslateY = Math.max(
+					0,
+					(zoomedImageHeight - containerHeight) / 2
+				);
 
 				// These clamp translateX/Y. If transform-origin is center, these values are relative to center.
 				// Mouse/touch move handlers already compute translateX/Y based on center origin.
-				translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, translateX));
-				translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, translateY));
-
+				translateX = Math.max(
+					-maxTranslateX,
+					Math.min(maxTranslateX, translateX)
+				);
+				translateY = Math.max(
+					-maxTranslateY,
+					Math.min(maxTranslateY, translateY)
+				);
 
 				// Apply transform to map image
 				mapImage.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`;
-
 
 				/* Redraw highlights on canvas with current zoom and pan
 				 resizeCanvasToImage() is called inside syncCanvas, which is triggered by image load/resize
@@ -772,7 +803,6 @@
 			let initialMouseY = 0;
 			let initialTranslateX = 0;
 			let initialTranslateY = 0;
-
 
 			mapImage.addEventListener("mousedown", (e) => {
 				if (currentZoom > 1) {
@@ -876,7 +906,11 @@
 
 					const newZoom = Math.max(
 						minZoom,
-						Math.min(maxZoom, initialZoom * (currentDistance / initialTouchDistance))
+						Math.min(
+							maxZoom,
+							initialZoom *
+								(currentDistance / initialTouchDistance)
+						)
 					);
 
 					const mapRect = mapContainer.getBoundingClientRect();
@@ -895,14 +929,22 @@
 
 					// Adjust translation to keep the pinch midpoint fixed relative to the content under the zoom
 					// Only if zoom actually changed
-					if (Math.abs(newZoom - currentZoom) > 0.01) { // Threshold for actual zoom change
+					if (Math.abs(newZoom - currentZoom) > 0.01) {
+						// Threshold for actual zoom change
 						// Calculate the new translateX/Y that keeps the initialMidpoint under the initialMidpoint
 						// (initialMidpoint - initialTranslateX) / initialZoom * newZoom = (initialMidpoint - newTranslateX)
 						// -> newTranslateX = initialMidpoint - (initialMidpoint - initialTranslateX) / initialZoom * newZoom
-						translateX = initialMidpoint.x - (initialMidpoint.x - initialTranslateX) / initialZoom * newZoom;
-						translateY = initialMidpoint.y - (initialMidpoint.y - initialTranslateY) / initialZoom * newZoom;
+						translateX =
+							initialMidpoint.x -
+							((initialMidpoint.x - initialTranslateX) /
+								initialZoom) *
+								newZoom;
+						translateY =
+							initialMidpoint.y -
+							((initialMidpoint.y - initialTranslateY) /
+								initialZoom) *
+								newZoom;
 					}
-
 
 					currentZoom = newZoom; // Update current zoom
 
@@ -987,29 +1029,96 @@
 			});
 
 			if (mapImage) {
-    			mapImage.addEventListener("load", syncCanvas); // syncCanvas calls resizeCanvasToImage and drawHighlights
-    			window.addEventListener("resize", syncCanvas);
-    			// If image is already in browser cache, it might fire 'load' immediately or already be complete.
-    			// A small delay with a check for 'complete' ensures it runs even if loaded from cache.
-    			if (mapImage.complete) {
-       			    syncCanvas(); // Call it if already loaded
-    			} else {
-        			console.log("Image not yet complete. Waiting for 'load' event.");
-    			}
+				mapImage.addEventListener("load", syncCanvas); // syncCanvas calls resizeCanvasToImage and drawHighlights
+				window.addEventListener("resize", syncCanvas);
+				// If image is already in browser cache, it might fire 'load' immediately or already be complete.
+				// A small delay with a check for 'complete' ensures it runs even if loaded from cache.
+				if (mapImage.complete) {
+					syncCanvas(); // Call it if already loaded
+				} else {
+					console.log(
+						"Image not yet complete. Waiting for 'load' event."
+					);
+				}
 			} else {
-    			console.error("Map image element not found!");
+				console.error("Map image element not found!");
 			}
 		</script>
 
 		<!-- Initialize Navigation -->
 		<script>
 			document.addEventListener("DOMContentLoaded", function () {
-				import("./js/navigation.js").then((module) => {
-					const NavigationComponent = module.default;
-					const navigation = new NavigationComponent();
-					navigation.init("#navigation-placeholder");
-				});
+				// Start the app when both nav components are loaded
+				const componentsLoaded = {
+					mainNav: false,
+					sidebar: false,
+				};
+
+				document
+					.getElementById("main-nav-placeholder")
+					.addEventListener("component-loaded", function () {
+						componentsLoaded.mainNav = true;
+						// Dispatch navigationLoaded event to trigger countdown initialization
+						document.dispatchEvent(
+							new CustomEvent("navigationLoaded")
+						);
+						if (componentsLoaded.sidebar) initPage();
+					});
+
+				document
+					.getElementById("sidebar-placeholder")
+					.addEventListener("component-loaded", function () {
+						componentsLoaded.sidebar = true;
+						if (componentsLoaded.mainNav) initPage();
+					});
+
+				// Initialize the page content after navigation is loaded
+				function initPage() {
+					// Your existing initialization code can go here
+					createParticles();
+
+					// Set active menu item
+					setActiveMenuItem();
+				}
 			});
+
+			// Direct method to set active class on page load and when sidebar loads
+			function setActiveMenuItem() {
+				// Get current page filename from window location
+				const currentPath = window.location.pathname;
+				const currentPage =
+					currentPath.substring(currentPath.lastIndexOf("/") + 1) ||
+					"index.html";
+				console.log("Current page:", currentPage);
+
+				// Find and set the active class on the matching menu item
+				const menuItems = document.querySelectorAll(
+					"#sidebarMenu .menu-item"
+				);
+				menuItems.forEach((item) => {
+					// Remove any existing active class
+					item.classList.remove("active");
+
+					// For links, check href attribute
+					if (item.tagName === "A") {
+						const href = item.getAttribute("href");
+						if (
+							href === currentPage ||
+							(currentPage === "" && href === "index.html") ||
+							(currentPage === "/" && href === "index.html")
+						) {
+							console.log("Setting active on:", item);
+							item.classList.add("active");
+						}
+					}
+				});
+			}
+
+			// Call this after components are loaded
+			document.addEventListener("component-loaded", setActiveMenuItem);
+
+			// Also try setting it directly after a short delay
+			setTimeout(setActiveMenuItem, 1000);
 		</script>
 	</body>
 </html>

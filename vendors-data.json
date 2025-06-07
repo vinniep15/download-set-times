@@ -13,7 +13,7 @@
       "menu": []
     },
     {
-      "name": "A Taste of Jamrock Ltd (K)",
+      "name": "A Taste of Jamrock Ltd",
       "location": ["Unknown"],
       "type": "Food",
       "category": [
@@ -1579,7 +1579,7 @@
     {
       "name": "Axe Head by The Axe House",
       "location": ["District X"],
-      "type":"Experience",
+      "type": "Experience",
       "category": [
       ],
       "menu": []
@@ -1641,7 +1641,7 @@
     {
       "name": "Camel Shisha",
       "location": ["District X"],
-      "type":"Experience",
+      "type": "Experience", 
       "category": [],
       "menu": []
     },
@@ -1760,10 +1760,8 @@
     {
       "name": "District X Pub",
       "location": ["District X"],
-      "type":["Drinks"],
-      "category": [
-        "Bar"
-      ],
+      "type": "Drinks",
+      "category": ["Bar"],
       "menu": []
     },
     {
@@ -1852,8 +1850,8 @@
     {
       "name": "Guicha Coffee Bus",
       "location": ["Access"],
-      "tags": [
-        "Food",
+      "type": "Drinks",
+      "category": [
         "Coffee & Hot Drinks",
         "Breakfast",
         "Dessert & Sweet treats",
@@ -1864,270 +1862,145 @@
         "Black Americano - £3.00",
         "White Americano- £3.50",
         "Cappucino, Latte, Flat White - £4.00",
-        "Hot Chocolate - £4.00",
-        "Cafe Mocha - £4.50",
-        "Chai Latte - £4.00",
+        "Hot Chocolate - £4.00",
+        "Cafe Mocha - £4.50",
+        "Chai Latte - £4.00",
         "Tea or Infusions - £2.75",
-        "Iced Americano - £4.00",
-        "Iced Latte - £4.50",
-        "Ice Cream Shake - £6.00",
-        "Fruit smoothie - £6.00",
-        "Additional items (Syrups, flake) - £0.50",
-        "Additional items (Cream, Marshmallows, Hot water)) - £1.00",
-        "Orange Juice  - £3.50",
-        "Milk  - £0.50",
-        "Almost Famous brownies  - £3.50",
-        "Breakfast Bar/flapjack - £3.00",
-        "Croissant - £2.00",
-        "Pain aux choc/raisin - £2.50",
-        "Overnight Oats, or Bircher Muesli - £7.00",
+        "Iced Americano - £4.00",
+        "Iced Latte - £4.50",
+        "Ice Cream Shake - £6.00",
+        "Fruit smoothie - £6.00",
+        "Additional items (Syrups, flake) - £0.50",
+        "Additional items (Cream, Marshmallows, Hot water) - £1.00",
+        "Orange Juice  - £3.50",
+        "Milk  - £0.50",
+        "Almost Famous brownies  - £3.50",
+        "Breakfast Bar/flapjack - £3.00",
+        "Croissant - £2.00",
+        "Pain aux choc/raisin - £2.50",
+        "Overnight Oats, or Bircher Muesli - £7.00",
         "Avocado on Toast -£4.50",
-        "Toast or Crumpets & Butter - £3.00",
-        "Bacon, sausage or Halloumi Roll - £6.00",
-        "Baked Potato with beans and cheese - £7.00"
+        "Toast or Crumpets & Butter - £3.00",
+        "Bacon, sausage or Halloumi Roll - £6.00",
+        "Baked Potato with beans and cheese - £7.00"
       ]
     },
     {
       "name": "Old Sarum Tattoo",
       "location": ["District X", "Guest", "Arena"],
-      "type":["Experience"],
+      "type": "Experience",
       "category": [],
       "menu": []
     },
     {
       "name": "Raven Records",
       "location": ["District X"],
-      "type":["Experience"],
+      "type": "Experience",
       "category": [],
       "menu": []
     },
     {
       "name": "Showsmith",
       "location": ["District X"],
-      "type":["Experience"],
+      "type": "Experience",
       "category": [],
       "menu": []
     },
     {
       "name": "The Gooseneck Inn",
       "location": ["Arena"],
-      "type":["Drinks", "Experience"],
-      "category": [],
+      "type": "Drinks",
+      "category": ["Bar"],
       "menu": []
     },
     {
       "name": "The Iron Harp",
       "location": ["Arena"],
-      "type":["Drinks", "Experience"],
-      "category": [],
+      "type": "Drinks",
+      "category": ["Bar"],
       "menu": []
     },
     {
       "name": "The Mercian Axe",
       "location": ["District X"],
-      "type":["Drinks", "Experience"],
-      "category": [],
-      "menu": []
-    },
-    {
-      "name": "Yellow Bus Burgers (£10)",
-      "location": ["Unknown"],
-      "type": "Food",
-      "category": [],
-      "menu": []
-    },
-    {
-      "name": "Canny Coffees (K)",
-      "location": ["Unknown"],
       "type": "Drinks",
-      "category": [],
-      "menu": []
-    },
-    {
-      "name": "Carnival Coffee (£10)",
-      "location": ["Unknown"],
-      "type": "Drinks",
-      "category": [
-        "Under £10",
-        "Vegetarian",
-        "Halal",
-        "Gluten Free"
-      ],
-      "menu": []
-    },
-    {
-      "name": "Dark Arts Coffee",
-      "location": ["Unknown"],
-      "type": "Drinks",
-      "category": [],
-      "menu": []
-    },
-    {
-      "name": "Hunkydory Coffee",
-      "location": ["Unknown"],
-      "type": "Drinks",
-      "category": [],
-      "menu": []
-    },
-    {
-      "name": "Monkswood Coffee",
-      "location": ["Unknown"],
-      "type": "Drinks",
-      "category": [],
-      "menu": []
-    },
-    {
-      "name": "Pantha Coffee",
-      "location": ["Unknown"],
-      "type": "Drinks",
-      "category": [
-        "Under £10",
-        "Vegan",
-        "Vegetarian",
-        "Halal",
-        "Gluten Free"
-      ],
-      "menu": []
-    },
-    {
-      "name": "Quenchers",
-      "location": ["Unknown"],
-      "type": "Drinks",
-      "category": [],
-      "menu": []
-    },
-    {
-      "name": "Routes Coffee",
-      "location": ["Unknown"],
-      "type": "Drinks",
-      "category": [
-        "Under £10"
-      ],
-      "menu": []
-    },
-    {
-      "name": "The Fruit Cup",
-      "location": ["Unknown"],
-      "type": "Drinks",
-      "category": [],
-      "menu": []
-    },
-    {
-      "name": "The Roasted Martini Vintage Coffee",
-      "location": ["Unknown"],
-      "type": "Drinks",
-      "category": [],
-      "menu": []
-    },
-    {
-      "name": "Hair Of The Dog",
-      "location": ["Unknown"],
-      "type": "Experience",
-      "category": [],
-      "menu": []
-    },
-    {
-      "name": "Test Vendor 1",
-      "location": ["Arena"],
-      "type": "food",
-      "category": ["Burgers"],
-      "description": "A test vendor serving burgers"
-    },
-    {
-      "name": "Test Vendor 2",
-      "location": ["Arena"],
-      "type": "drinks",
       "category": ["Bar"],
-      "description": "A test vendor serving drinks"
-    },
-    {
-      "name": "Test Vendor 3",
-      "location": ["District X"],
-      "type": "food",
-      "category": ["Pizza"],
-      "description": "A test vendor serving pizza"
-    },
-    {
-      "name": "Burger King",
-      "location": ["Arena"],
-      "type": "food",
-      "category": ["Burgers", "Meals under £10"],
-      "description": "Fast food burger restaurant"
+      "menu": []
     },
     {
       "name": "Craft Beer Bar",
       "location": ["Arena"],
-      "type": "drinks",
+      "type": "Drinks",
       "category": ["Bar", "Beer"],
       "description": "Serving premium craft beers"
     },
     {
       "name": "Pizza Express",
       "location": ["District X"],
-      "type": "food",
+      "type": "Food",
       "category": ["Pizza", "Vegetarian Options"],
       "description": "Pizza restaurant with vegetarian options"
     },
     {
       "name": "Coffee House",
       "location": ["District X"],
-      "type": "drinks",
+      "type": "Drinks",
       "category": ["Coffee"],
       "description": "Premium coffee and pastries"
     },
     {
       "name": "Metal Merch",
       "location": ["Arena"],
-      "type": "merchandise",
+      "type": "Merchandise",
       "category": ["Clothing"],
       "description": "Metal band merchandise and clothing"
     },
     {
       "name": "Festival Photos",
       "location": ["District X"],
-      "type": "experience",
+      "type": "Experience",
       "category": ["Photo"],
       "description": "Get your festival photos taken"
     },
     {
       "name": "Asian Fusion",
       "location": ["Arena"],
-      "type": "food",
+      "type": "Food",
       "category": ["Asian Food", "Vegetarian Options"],
       "description": "Asian cuisine with vegetarian options"
     },
     {
       "name": "Taco Stand",
       "location": ["District X"],
-      "type": "food",
+      "type": "Food",
       "category": ["Mexican"],
       "description": "Authentic Mexican tacos"
     },
     {
       "name": "Ice Cream Paradise",
       "location": ["Arena"],
-      "type": "food",
+      "type": "Food",
       "category": ["Ice Cream", "Dessert"],
       "description": "Premium ice cream and desserts"
     },
     {
       "name": "Breakfast Club",
       "location": ["District X"],
-      "type": "food",
+      "type": "Food",
       "category": ["Breakfast", "Meals under £10"],
       "description": "All-day breakfast options"
     },
     {
       "name": "Cocktail Lounge",
       "location": ["Arena"],
-      "type": "drinks",
+      "type": "Drinks",
       "category": ["Cocktails"],
       "description": "Premium cocktails and spirits"
     },
     {
       "name": "Gaming Tent",
       "location": ["District X"],
-      "type": "experience",
+      "type": "Experience",
       "category": ["Game"],
       "description": "Video games and gaming competitions"
     }
